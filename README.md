@@ -1,1 +1,2 @@
-# CSCI3100-Group-Project
+# CSCI3100 Group Project
+## WIP
