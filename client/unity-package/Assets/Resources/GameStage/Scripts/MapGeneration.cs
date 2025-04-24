@@ -5,8 +5,10 @@ using DelaunatorSharp.Unity.Extensions;
 using UnityEngine.U2D;
 using UnityEngine;
 
+
 public class MapGeneration : MonoBehaviour
 {
+    const int DEFAULT_HP = 100;
     struct MapPolygonMesh
     {
         public List<int> trangles;
@@ -55,6 +57,9 @@ public class MapGeneration : MonoBehaviour
         polygons = new List<MapPolygonMesh>();
         GenerateGrid();
         GenerateVoloni();
+
+        GameState gamestate = GameState.GetGameState();
+
     }
 
 
@@ -135,15 +140,27 @@ public class MapGeneration : MonoBehaviour
 
 
         };
+        GameState gameState = GameState.GetGameState();
+        int territoryID = 0, territoryHP = DEFAULT_HP;
         foreach (var poly in polygons)
         {
-            GameObject territoeyShape = ClosedShapeBuilder.AddShapeAsChild(
+            GameObject territoryShape = ClosedShapeBuilder.AddShapeAsChild(
                 poly.vertices.ToArray(),
                 this,
                 shapeInnerEdge
             );
-            SpriteShapeRenderer shapeRender = territoeyShape.GetComponent<SpriteShapeRenderer>();
+            Vector2 center = new(0,0);
+            poly.vertices.ForEach((vert) => {
+                center.x += vert.x;
+                center.y += vert.y;
+            });
+            center.x /= poly.vertices.Count;
+            center.y /= poly.vertices.Count;
+
+            SpriteShapeRenderer shapeRender = territoryShape.GetComponent<SpriteShapeRenderer>();
             shapeRender.SetMaterials(shapeMaterials);
+
+            gameState.AddTerritory(new Territory(territoryID++, territoryHP, center, territoryShape));
         }
 
     }
