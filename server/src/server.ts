@@ -1,9 +1,9 @@
-const http = require('http');
+import http from 'http';
 
-const express = require('express');
+import express from 'express';
 const app = express();
-const bodyParser = require('body-parser');
-const accountModule = require('./modlues/account');
+import bodyParser from 'body-parser';
+import accountModule from './modlues/account';
 
 const port = 3000;
 

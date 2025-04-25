@@ -1,15 +1,15 @@
-const my_db = require('./my_db');
+import UserDatabase, {UserDB, StatementWarper} from './userDatabase.ts';
 
 
-let newUserStmt;
-let loginStmt;
+let newUserStmt: StatementWarper;
+let loginStmt: StatementWarper;
 
-let test_DBwarp;
+let test_DBwarp: UserDB;
 
 
 const openDB = async ()=>{
-    test_DBwarp = my_db.myDB();
-    await test_DBwarp.initDB_1(false);
+    test_DBwarp = UserDatabase.getDB();
+    test_DBwarp.initDB(false);
 
     newUserStmt = test_DBwarp.makePstmt("INSERT INTO accounts VALUES (?, ?, ?, ?, ?)");
     loginStmt = test_DBwarp.makePstmt("SELECT userID AS userid, * FROM accounts WHERE username = ? AND password = ?");

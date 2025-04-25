@@ -1,20 +1,17 @@
-const database = require('./database');
-const auth = require('./auth');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+import UserDatabase, {UserDB, StatementWarper} from './userDatabase.ts';
 
-let newUserStmt = null;
-let loginStmt = null;
+import auth from './auth';
+import dotenv from "dotenv";
+dotenv.config();
 
-let test_DBwarp = null;
 
-test_DBwarp = database.serverDB;
+let test_DBwarp : UserDB = UserDatabase.getDB();
 test_DBwarp.initDB(false);
-    
-newUserStmt = test_DBwarp.makePstmt(
+
+let newUserStmt : StatementWarper= test_DBwarp.makePstmt(
     "INSERT INTO accounts VALUES (?, ?, ?, ?, ?)"
 );
-loginStmt = test_DBwarp.makePstmt(
+let loginStmt = test_DBwarp.makePstmt(
     "SELECT userID AS userid, * FROM accounts \
     WHERE username = ? AND password = ?"
 );
@@ -24,7 +21,6 @@ loginStmt = test_DBwarp.makePstmt(
 const closeAccountStmt = ()=>{
     newUserStmt.close();
     loginStmt.close();
-    test_DBwarp = null;
 }
 
 
@@ -38,7 +34,7 @@ const userReg = async (req, res)=>{
         return res.status(400).json({ 'message': 'Bad request' });
     }
     // TODO: hash the password
-    pwdHash = pwd;
+    let pwdHash = pwd;
     
     try {
         newUserStmt.run(
@@ -64,7 +60,7 @@ const userReg = async (req, res)=>{
         rows = debugStmt.getAll();
         rows.forEach(row => {
             let resultStr = '';
-            for(it in  row){
+            for(let it in  row){
                 resultStr +=`${it}: ${row[it]}, `;
             }
             console.log(resultStr);
@@ -90,7 +86,7 @@ const userLogin = async (req, res)=>{
         return res.status(400).json({ 'message': 'Bad request' });
     }
     // TODO: hash the password
-    pwdHash = pwd;
+    let pwdHash = pwd;
 
     try {
         let rows = loginStmt.getAll(
@@ -101,11 +97,12 @@ const userLogin = async (req, res)=>{
             res.status(401).json({ 'message': `Username/Password does not match` });
         }else{
             // TODO: create and return JWT sessions
-            let accessToken = "";
-            let refreshToken = "";
+            let accessToken: string | null;
+            let refreshToken: string | null;
             try {
                 accessToken = auth.createAccessToken(rows[0].userid, rows[0].username);
                 refreshToken = auth.createRefreshToken(rows[0].userid, rows[0].username);
+                if (!accessToken || !refreshToken) throw Error("cannot create token");
             } catch (err) {
                 console.error(`DB error: ${err.message}`);
                 res.status(500).json({ 'message': `Server error` });
@@ -135,7 +132,7 @@ const userLogin = async (req, res)=>{
         let rows = debugStmt.getAll();
         rows.forEach(row => {
             let resultStr = '';
-            for(it in  row){
+            for(let it in  row){
                 resultStr +=`${it}: ${row[it]}, `;
             }
             console.log(resultStr);
@@ -196,5 +193,5 @@ const handleAccountsReq = async (req, res)=>{
 
 //newUserStmt.finalize();
 
-module.exports = { closeAccountStmt, handleAccountsReq};
+export default { closeAccountStmt, handleAccountsReq};
 
