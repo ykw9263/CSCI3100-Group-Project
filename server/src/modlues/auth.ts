@@ -1,13 +1,12 @@
-import UserDatabase, {UserDB} from './userDatabase.ts';
-
 import jwt from 'jsonwebtoken';
 import ms, {StringValue as MsStringValue} from "ms";
 import dotenv from "dotenv";
 dotenv.config();
 
+import UserDatabase, {IDBWarper} from './userDatabase.ts';
 
-let test_DBwarp : UserDB = UserDatabase.getDB();
-test_DBwarp.initDB(false);
+
+let test_DBwarp : IDBWarper = UserDatabase.getDB();
     
 let createSessionStmt = test_DBwarp.makePstmt(
     "INSERT INTO sessions VALUES (?, ?, ?)"
@@ -34,7 +33,7 @@ let deleteExpiredSessionStmt= test_DBwarp.makePstmt(
 
 // return the access token if succeed
 // throws exception if failed
-const createAccessToken = (userid, username) => {
+function createAccessToken(userid, username) {
     let accessToken: string | null = null;
     try {
         let secret = process.env.ACCESS_TOKEN_SECRET as string;
@@ -60,7 +59,7 @@ const createAccessToken = (userid, username) => {
 // create refresh token for the given user and add to the database
 // return the refresh token if succeed
 // throws exception if failed
-const createRefreshToken = (userid, username) => {
+function createRefreshToken (userid, username) {
     let refershToken: string | null = null;
     try {
         let secret = process.env.REFERSH_TOKEN_SECRET as string;
@@ -86,19 +85,18 @@ const createRefreshToken = (userid, username) => {
 
 // refresh accession token with a refresh token
 // return the new access token if success, null if failed
-const refreshAccessToken = (refreshToken) => {
+function refreshAccessToken(refreshToken: string): string | null {
     let accessToken: string | null = null;
-    
     try{
-        let rows = checkSessionStmt.getAll(refreshToken);
-        if(rows.length == 0) return accessToken;
+        let row = checkSessionStmt.get(refreshToken);
+        if(row.length == undefined) return null;
 
         let secret = process.env.REFERSH_TOKEN_SECRET as string;
         jwt.verify(
             refreshToken,
             secret
         );
-        accessToken = createAccessToken(rows[0].userID, rows[0].username);
+        accessToken = createAccessToken(row.userID, row.username);
     }catch(err){
         if (err.name==='TokenExpiredError'){
             // token expired. Can delete record here or delete in batch later
@@ -111,7 +109,7 @@ const refreshAccessToken = (refreshToken) => {
 
 // session verification middleware
 // return username if vaild, throw exception if failed
-const verifyAccessToken = (accessToken) => {
+function verifyAccessToken(accessToken: string) {
     let data : jwt.JwtPayload = {};
     try{
         let secret = process.env.ACCESS_TOKEN_SECRET as string;
@@ -126,7 +124,7 @@ const verifyAccessToken = (accessToken) => {
 }
 
 // check and remove expired token from database
-const removeExpiredToken = ()=>{
+function removeExpiredToken(){
     deleteExpiredSessionStmt.run();
 }
 

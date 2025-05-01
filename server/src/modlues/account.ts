@@ -1,30 +1,30 @@
-import UserDatabase, {UserDB, StatementWarper} from './userDatabase.ts';
+import UserDatabase, {IDBWarper, IStatementWarper} from './userDatabase.ts';
 
 import auth from './auth';
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 dotenv.config();
 
+const SALT_ROUNDS = 10;
 
-let test_DBwarp : UserDB = UserDatabase.getDB();
-test_DBwarp.initDB(false);
+let test_DBwarp : IDBWarper = UserDatabase.getDB();
 
-let newUserStmt : StatementWarper= test_DBwarp.makePstmt(
+let newUserStmt : IStatementWarper = test_DBwarp.makePstmt(
     "INSERT INTO accounts VALUES (?, ?, ?, ?, ?)"
 );
-let loginStmt = test_DBwarp.makePstmt(
-    "SELECT userID AS userid, * FROM accounts \
-    WHERE username = ? AND password = ?"
+let loginStmt : IStatementWarper = test_DBwarp.makePstmt(
+    "SELECT userID AS userid, username, password FROM accounts \
+    WHERE username = ?"
 );
 
 
-
-const closeAccountStmt = ()=>{
+async function closeAccountStmt(){
     newUserStmt.close();
     loginStmt.close();
 }
 
 
-const userReg = async (req, res)=>{
+async function userReg(req, res){
     const { username, pwd, email } = req.body;
     if (
         typeof(username) !== 'string' ||
@@ -34,7 +34,7 @@ const userReg = async (req, res)=>{
         return res.status(400).json({ 'message': 'Bad request' });
     }
     // TODO: hash the password
-    let pwdHash = pwd;
+    let pwdHash = bcrypt.hashSync(pwd, SALT_ROUNDS);
     
     try {
         newUserStmt.run(
@@ -77,7 +77,7 @@ const userReg = async (req, res)=>{
 
 
 
-const userLogin = async (req, res)=>{
+async function userLogin(req, res){
     const { username, pwd } = req.body;
     if (
         typeof(username) !== 'string' ||
@@ -85,23 +85,21 @@ const userLogin = async (req, res)=>{
     ){
         return res.status(400).json({ 'message': 'Bad request' });
     }
-    // TODO: hash the password
-    let pwdHash = pwd;
 
     try {
-        let rows = loginStmt.getAll(
-            username, pwdHash
+        let row = loginStmt.get(
+            username
         );
-        if (rows.length === 0){
-            console.log(rows);
+        if (row === undefined || !bcrypt.compareSync(pwd, row.password)){
+            console.log(row);
             res.status(401).json({ 'message': `Username/Password does not match` });
-        }else{
+        }else {
             // TODO: create and return JWT sessions
             let accessToken: string | null;
             let refreshToken: string | null;
             try {
-                accessToken = auth.createAccessToken(rows[0].userid, rows[0].username);
-                refreshToken = auth.createRefreshToken(rows[0].userid, rows[0].username);
+                accessToken = auth.createAccessToken(row.userid, row.username);
+                refreshToken = auth.createRefreshToken(row.userid, row.username);
                 if (!accessToken || !refreshToken) throw Error("cannot create token");
             } catch (err) {
                 console.error(`DB error: ${err.message}`);
@@ -112,7 +110,7 @@ const userLogin = async (req, res)=>{
             // res.cookie("jwt", refreshToken, {maxAge: auth.refreshTokenExpSec*1000})
             res.status(200).json({
                 'message': `success`, 
-                'username': rows[0].username, 
+                'username': row.username, 
                 'accessToken': accessToken, 
                 'refreshToken': refreshToken
             });
@@ -125,12 +123,12 @@ const userLogin = async (req, res)=>{
     }
 
     // debug 
-    let debugStmt = test_DBwarp.makePstmt(
+    let debugStmt: IStatementWarper | null  = test_DBwarp.makePstmt(
         "SELECT datetime(expireTime, 'auto'), datetime(unixepoch(), 'auto') FROM sessions"
     );
     try {
         let rows = debugStmt.getAll();
-        rows.forEach(row => {
+        rows?.forEach(row => {
             let resultStr = '';
             for(let it in  row){
                 resultStr +=`${it}: ${row[it]}, `;
@@ -141,13 +139,7 @@ const userLogin = async (req, res)=>{
         console.log(err);
     }
     debugStmt.close();
-
-    /*
-    loginStmt.getAll(
-        loginCallback,
-        username, pwdHash
-    );
-    */
+    debugStmt = null;
     return;
 
 };
@@ -155,21 +147,21 @@ const userLogin = async (req, res)=>{
 
 
 // requires session
-const userReset = async (req, res)=>{
+async function userReset(req, res){
     
 }
 
 // requires session
-const userRestore = async (req, res)=>{
+async function userRestore(req, res){
     
 }
 
 // requires session
-const userActivate = async (req, res)=>{
+async function userActivate(req, res){
 
 }
 
-const handleAccountsReq = async (req, res)=>{
+async function handleAccountsReq (req, res){
     console.log(req.body);
     const {method} = req?.body;
     switch (method){
@@ -193,5 +185,5 @@ const handleAccountsReq = async (req, res)=>{
 
 //newUserStmt.finalize();
 
-export default { closeAccountStmt, handleAccountsReq};
+export default {closeAccountStmt, handleAccountsReq};
 

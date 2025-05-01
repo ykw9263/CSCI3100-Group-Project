@@ -1,4 +1,4 @@
-import {DBWarper, StatementWarper} from '../../database/databaseWarper.ts';
+import {BetterSqlite3Warper} from '../../database/betterSqlite3Warper.ts';
 
 const DB_CREATE_TABLES = [
     {
@@ -44,14 +44,14 @@ const DB_CREATE_TABLES = [
 ];
 
 namespace UserDatabase{
-    export class UserDB extends DBWarper{
+    export class UserDB extends BetterSqlite3Warper.DBWarper{
         
         constructor(dbPath: string){
             super(dbPath);
         }
     
         private initTable(query: string, tableName: string) {
-            let queryStmt: StatementWarper;
+            let queryStmt: BetterSqlite3Warper.StatementWarper;
             try {
                 queryStmt = this.makePstmt(query);
                 queryStmt.run();
@@ -109,16 +109,17 @@ namespace UserDatabase{
 
 }
 
-let userdb : UserDB | null = new UserDatabase.UserDB('database/data.db');
+let userdb : UserDatabase.UserDB | null = new UserDatabase.UserDB('database/data.db');
+
 function getDB(){
-    if (userdb === null){
+    if (userdb === null || !userdb.isOpen()){
         userdb = new UserDatabase.UserDB('database/data.db');
+        // userdb.initDB(false);
     }
     return userdb;
 }
 
-export type UserDB = UserDatabase.UserDB;
-export {StatementWarper} from '../../database/databaseWarper.ts';
+export {IRunResult, IDBWarper, IStatementWarper} from '../../database/sqlWarper.ts';
 export default {getDB};
 
 

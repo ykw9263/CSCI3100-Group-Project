@@ -4,7 +4,7 @@
   "description": "server for EConquerer",
   "main": "index.js",
   "scripts": {
-    "run": "npx tsx ./src/server.ts"
+    "run-server": "npx tsx ./src/server.ts"
   },
   "author": "ykw",
   "license": "ISC",
@@ -12,15 +12,17 @@
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.9.1",
     "body-parser": "^1.20.3",
+    "crc": "^4.3.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.9",
+    "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "tsx": "^4.19.3"
   }
 }
