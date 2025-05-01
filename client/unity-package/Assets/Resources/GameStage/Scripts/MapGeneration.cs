@@ -18,7 +18,7 @@ public class MapGeneration : MonoBehaviour
     // pixle size of the generated map
     public int mapSize = 100;
     // grid count
-    public int gridSize = 10;
+    public int gridSize = 3;
     public int seed = 10;
 
     IPoint[] points;
@@ -161,6 +161,7 @@ public class MapGeneration : MonoBehaviour
             shapeRender.SetMaterials(shapeMaterials);
 
             gameState.AddTerritory(new Territory(territoryID++, territoryHP, center, territoryShape));
+            
         }
 
     }

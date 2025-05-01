@@ -19,5 +19,7 @@ public class TerritoryShape : MonoBehaviour
 
     void initTerritory(Territory territory) {
         this.territory = territory;
-    }
+        
+    } 
+    
 }

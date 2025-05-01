@@ -42,6 +42,8 @@ public class GameState
     public void AddTerritory(Territory territory) 
     {
         territories.Add(territory);
+        Debug.Log("hello");
+        Debug.Log(territory.coordinates);
     }
 
     public void AddEntity(Entity entity)
