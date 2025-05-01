@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerritoryShape : MonoBehaviour
+public class TerritoryGameObj : MonoBehaviour
 {
     private Territory territory;
     // Start is called before the first frame update
@@ -12,12 +12,12 @@ public class TerritoryShape : MonoBehaviour
     }
 
     // Update is called once per frame
-    void OnClick()
+    void OnMouseDown()
     {
-        
+        Debug.Log("Clicked! " + territory.territoryID);
     }
 
-    void initTerritory(Territory territory) {
+    public void SetTerritory(Territory territory) {
         this.territory = territory;
     }
 }

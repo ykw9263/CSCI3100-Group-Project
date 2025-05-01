@@ -4,6 +4,9 @@ using DelaunatorSharp;
 using DelaunatorSharp.Unity.Extensions;
 using UnityEngine.U2D;
 using UnityEngine;
+using UnityEditor;
+using System.Linq;
+using UnityEngine.Experimental.AI;
 
 
 public class MapGeneration : MonoBehaviour
@@ -12,21 +15,20 @@ public class MapGeneration : MonoBehaviour
     struct MapPolygonMesh
     {
         public List<int> trangles;
-        public List<Vector3> vertices;
-
+        public List<IPoint> vertices;
+        public int id;
     }
     // pixle size of the generated map
     public int mapSize = 100;
-    // grid count
+    // grid count, controls how many tiles are generated
     public int gridSize = 10;
+    // a seed of 0 will be random
     public int seed = 10;
 
     IPoint[] points;
     Vector2[,] pointPositions;
     List<MapPolygonMesh> polygons;
-    SpriteShape shapeInnerEdge;
-    Material TerrBorderMaterial;
-    Material TerrFillMaterial;
+    GameObject TerrPrefab;
 
     public float mergeCoeff = .6f;
     public static float minDist = 1;
@@ -34,10 +36,7 @@ public class MapGeneration : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        shapeInnerEdge = Resources.Load<SpriteShape>("GameStage/ShapeShapes/TerritoryShapeProfile");
-        TerrBorderMaterial = Resources.Load<Material>("GameStage/Materials/TerrBorderMaterial");
-        TerrFillMaterial = Resources.Load<Material>("GameStage/Materials/TerrFillMaterial");
-
+        TerrPrefab = Resources.Load<GameObject>("GameStage/Sprites/TerritoryPrefab");
 
         generateMap();
     }
@@ -68,14 +67,10 @@ public class MapGeneration : MonoBehaviour
 
         List<IPoint> mergedVertices = new List<IPoint>();
         List<IPoint> mergedVerticesTo = new List<IPoint>();
-
         Delaunator delaunator = new Delaunator(points);
         IEnumerable<IEdge> voronoiEdges = delaunator.GetVoronoiEdgesBasedOnCircumCenter();
-        List<Material> shapeMaterials = new List<Material>
-            {
-                TerrFillMaterial,
-                TerrBorderMaterial
-            };
+
+
         // loop through every edge to check for too short edges
         foreach (var voroniEdge in voronoiEdges)
         {
@@ -98,12 +93,15 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
+        
+        Dictionary<IPoint, List<int>> adjDict = new();
+        int polygonID = 0;
 
         IEnumerable<IVoronoiCell> voronoiCells = delaunator.GetVoronoiCellsBasedOnCircumcenters();
         foreach (var voroni in voronoiCells)
         {
             MapPolygonMesh tempPolygon = new MapPolygonMesh();
-            tempPolygon.vertices = new List<Vector3>();
+            tempPolygon.vertices = new List<IPoint>();
             bool abortPolygon = false;
             foreach (var vert in voroni.Points)
             {
@@ -121,46 +119,68 @@ public class MapGeneration : MonoBehaviour
                     curVert = mergedVerticesTo[mergedVertices.IndexOf(vert)];
                 }
                 if (
-                    tempPolygon.vertices.FindIndex((vect) => {
-                        return vect == curVert.ToVector3();
+                    tempPolygon.vertices.FindIndex((vert) => {
+                        return curVert.Equals(vert);
                     }
                 ) != -1)
                 {
                     // vertice already included
                     continue;
                 }
-
-                tempPolygon.vertices.Add(curVert.ToVector3());
+                tempPolygon.vertices.Add(curVert);
             }
             if (abortPolygon || tempPolygon.vertices.Count < 3)
             {
                 continue;
             }
+            tempPolygon.id = polygonID++;
             polygons.Add(tempPolygon);
 
+            // polygons that shares a vertice is considered adjacent
+            foreach (IPoint vert in tempPolygon.vertices) {
+                if (!adjDict.ContainsKey(vert)) {
+                    adjDict[vert] = new();
+                };
+                adjDict[vert].Add(tempPolygon.id);
+            }
 
         };
+
+
         GameState gameState = GameState.GetGameState();
-        int territoryID = 0, territoryHP = DEFAULT_HP;
+        int territoryHP = DEFAULT_HP;
         foreach (var poly in polygons)
         {
-            GameObject territoryShape = ClosedShapeBuilder.AddShapeAsChild(
-                poly.vertices.ToArray(),
-                this,
-                shapeInnerEdge
-            );
+
+            GameObject terrShape1 = Instantiate<GameObject>(TerrPrefab);
+            SpriteShapeController terrSC = terrShape1.GetComponent<SpriteShapeController>();
+
+            List<int> adjList = new();
             Vector2 center = new(0,0);
-            poly.vertices.ForEach((vert) => {
-                center.x += vert.x;
-                center.y += vert.y;
-            });
+            for (int i = 0; i < poly.vertices.Count; i++)
+            {
+                terrSC.spline.InsertPointAt(i, poly.vertices[i].ToVector3());
+
+                // build adjacency list
+                foreach (var neibourID in adjDict[poly.vertices[i]])
+                {
+                    if (!adjList.Contains(neibourID)) {
+                        adjList.Add(neibourID);
+                    }
+                }
+
+                // calcualte center of polygon
+                center.x += (float)poly.vertices[i].X;
+                center.y += (float)poly.vertices[i].Y;
+            }
+
             center.x /= poly.vertices.Count;
             center.y /= poly.vertices.Count;
 
-            SpriteShapeRenderer shapeRender = territoryShape.GetComponent<SpriteShapeRenderer>();
-            shapeRender.SetMaterials(shapeMaterials);
+            terrShape1.transform.parent = this.transform;
+            gameState.AddTerritory(new Territory(poly.id, territoryHP, center, terrShape1, adjList));
 
-            gameState.AddTerritory(new Territory(territoryID++, territoryHP, center, territoryShape));
+
         }
 
     }
@@ -180,18 +200,20 @@ public class MapGeneration : MonoBehaviour
 
             MapPolygonMesh tempPolygon = new MapPolygonMesh();
             tempPolygon.trangles = new List<int>();
-            tempPolygon.vertices = new List<Vector3>();
+            tempPolygon.vertices = new List<IPoint>();
             MakePolygonFromTriangle(delaunator, t * 3, includedTriangles, tempPolygon);
             polygons.Add(tempPolygon);
-
 
         };
         foreach (var poly in polygons)
         {
-            ClosedShapeBuilder.AddShapeAsChild(
-                poly.vertices.ToArray(),
-                this
-           );
+            GameObject terrShape1 = Instantiate<GameObject>(TerrPrefab);
+            SpriteShapeController terrSC = terrShape1.GetComponent<SpriteShapeController>();
+
+            for (int i = 0; i < poly.vertices.Count; i++)
+            {
+                terrSC.spline.InsertPointAt(i, poly.vertices[i].ToVector3());
+            }
         }
 
     }
@@ -222,9 +244,7 @@ public class MapGeneration : MonoBehaviour
             if (mergeResult != 0)
             {
                 int ptIndex = delaunator.Triangles[te];
-                Vector3 tempVertex = new Vector3(
-                    (float)points[ptIndex].X, (float)points[ptIndex].Y, 0
-                );
+                IPoint tempVertex = points[ptIndex];
                 if (!tempPolygon.vertices.Contains(tempVertex))
                     tempPolygon.vertices.Add(tempVertex);
             }
