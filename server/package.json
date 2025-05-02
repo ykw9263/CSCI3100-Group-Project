@@ -4,7 +4,8 @@
   "description": "server for EConquerer",
   "main": "index.js",
   "scripts": {
-    "run-server": "npx tsx ./src/server.ts"
+    "run-server": "npx tsx ./src/server.ts",
+    "test": "npx tsc --sourceMap && node --enable-source-maps --experimental-test-coverage --test js-build/src/tests/testMain.js"
   },
   "author": "ykw",
   "license": "ISC",
@@ -16,7 +17,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

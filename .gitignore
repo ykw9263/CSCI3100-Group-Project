@@ -2,6 +2,7 @@
 .vsconfig
 .env
 /server/database/data.db
+/server/js-build/*
 /server/node_modules/*
 /client/unity-package/Temp
 /client/unity-package/Library/*
