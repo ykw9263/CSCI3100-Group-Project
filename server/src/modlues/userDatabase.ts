@@ -1,4 +1,4 @@
-import {BetterSqlite3Warper} from '../../database/betterSqlite3Warper.ts';
+import {BetterSqlite3Warper} from '../../database/betterSqlite3Warper';
 
 const DB_CREATE_TABLES = [
     {
@@ -7,7 +7,8 @@ const DB_CREATE_TABLES = [
             "CREATE TABLE license (\
             licenseID INT PRIMARY KEY, \
             issueDate DATETIME, \
-            availability INT NOT NULL\
+            availability INT NOT NULL, \
+            checksum INT NOT NULL \
             )"
     },
     {
@@ -56,28 +57,15 @@ namespace UserDatabase{
                 queryStmt = this.makePstmt(query);
                 queryStmt.run();
                 queryStmt.close();
-            } catch (err) {
+            } catch (err: any) {
                 if (err.message.match(/^table .+ already exists/)){
                     return;
                 }
                 console.log("db error: " + err.message);
             }
-        
-            console.log(`table ${tableName} created`);
+            console.debug(`table ${tableName} created`);
             
-            try {
-                let debug_table_columns = this.makePstmt(`PRAGMA table_info(${tableName})`);
-                let rows = debug_table_columns.getAll();
-                debug_table_columns.close();
-    
-                let tempStr = '';
-                for (let it in rows){
-                    tempStr += it + ", ";
-                }
-                console.log(`columns: ${tempStr}`)
-            } catch (error) {
-                
-            }
+
         }
     
         public dropTable(tableName: string) {
@@ -85,7 +73,7 @@ namespace UserDatabase{
                 let dropStmt = this.makePstmt("DROP TABLE " + tableName);
                 dropStmt.run();
                 dropStmt.close();
-            } catch (err) {
+            } catch (err: any) {
                 if (err.message.match(/^no such table: /)){
                     return;
                 }
@@ -109,55 +97,17 @@ namespace UserDatabase{
 
 }
 
-let userdb : UserDatabase.UserDB | null = new UserDatabase.UserDB('database/data.db');
+let userdb : UserDatabase.UserDB | null = null;
 
 function getDB(){
     if (userdb === null || !userdb.isOpen()){
         userdb = new UserDatabase.UserDB('database/data.db');
-        // userdb.initDB(false);
+        userdb.initDB(false);
     }
     return userdb;
 }
 
-export {IRunResult, IDBWarper, IStatementWarper} from '../../database/sqlWarper.ts';
+export {IRunResult, IDBWarper, IStatementWarper} from '../../database/sqlWarper';
 export default {getDB};
 
 
-// for testing
-
-function testDB () {
-    let userdb = getDB();
-    userdb.initDB(true);
-    try {
-        const insertStmt = userdb.makePstmt("INSERT INTO accounts VALUES (?, ?, ?, ?, ?)");
-        let values = [
-            ["a", "b", "c"],
-            ["ab", "bc", "cd"],
-            ["abc", "bcd", "cde"],
-            ["abcd", "bcde", "cdef"]
-        ];
-
-        for (let vit in values) {
-            try {
-                insertStmt.run(null, values[vit][0], values[vit][1], values[vit][2], null);
-            } catch (err) {
-                console.log(err.message)
-            }
-
-        }
-    }catch(err){
-
-    }
-
-    // let it throw error if it do, so we know sth is off
-    let testStmt = userdb.makePstmt("SELECT * FROM accounts");
-    let rows = testStmt.getAll();
-        for (let it in rows) {
-            console.log(rows[it]);
-    }
-    testStmt.close();
-    //serverDB.closeDB();
-
-}
-
-//testDB(serverDB);

@@ -71,8 +71,13 @@ export namespace BetterSqlite3Warper {
             return stmt;
         }
 
+        public makeTransaction<T>(fun: (...args: any[]) => T): any {
+            return this.db.transaction(fun);
+        }
+
         private removeStmt(stmt: StatementWarper): void {
             // this.pstmtList[stmt.id] = null;
         }
+
     }
 }
