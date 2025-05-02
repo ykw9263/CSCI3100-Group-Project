@@ -19,6 +19,11 @@ let loginStmt : IStatementWarper = test_DBwarp.makePstmt(
     WHERE username = ?"
 );
 
+let updatePasswordStmt : IStatementWarper = test_DBwarp.makePstmt(
+    "UPDATE accounts \
+    SET password = ? \
+    WHERE username = ?"
+);
 
 let checkActivationStmt : IStatementWarper = test_DBwarp.makePstmt(
     "SELECT licenseID FROM accounts \
@@ -166,7 +171,41 @@ function debug_PrintSession(){
 
 // requires session
 async function userResetPW(req: any, res: any){
+    const { username, accessToken, pwd, newpwd} = req.body;
+    if (
+        typeof(username) !== 'string' ||
+        typeof(accessToken) !== 'string' ||
+        typeof(pwd) !== 'string' ||
+        typeof(newpwd) !== 'string'
+    ){
+        return res.status(400).json({ 'message': 'Bad request' });
+    }
 
+    if (UserAuth.verifyAccessToken(accessToken) !== username){
+        return res.status(403).json({ 'message': 'Unauthorized' });
+    }
+
+    try {
+        let row = loginStmt.get(
+            username
+        );
+        if (row?.password === undefined || !bcrypt.compareSync(pwd, row.password)){
+            console.log(row);
+            res.status(401).json({ 'message': `Username/Password does not match` });
+        }else {
+            let result = updatePasswordStmt.run(newpwd, username);
+            if (!result?.changes){
+                throw Error("Failed to set password");
+            }
+            // TODO: invalide all token issued before (maybe check token's iat?)
+            UserAuth.invalidateUserToken(row.userid);
+        }
+    
+    } catch (err: any) {
+        console.error(`DB error: ${err.message}`);
+        res.status(500).json({ 'message': `Server error` });
+        
+    }
 }
 
 
