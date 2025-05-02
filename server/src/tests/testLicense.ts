@@ -17,9 +17,6 @@ function testLicense(){
         let licenseKey = 'e3699e33133e407b47a49254129d35ee';
         assert.ok(License.activateLicenseKey(licenseKey) == -1);
     })
-
-
-
 }
 
 

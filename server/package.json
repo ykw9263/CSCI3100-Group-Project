@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "run-server": "npx tsx ./src/server.ts",
-    "test": "npx tsc --sourceMap && node --enable-source-maps --experimental-test-coverage --test js-build/src/tests/testMain.js"
+    "test-build": "npx tsc --sourceMap && node --enable-source-maps --experimental-test-coverage --test js-build/src/tests/testMain.js",
+    "test-tsx": "npx tsx --enable-source-maps --experimental-test-coverage --test src/tests/testMain.ts"
   },
   "author": "ykw",
   "license": "ISC",
