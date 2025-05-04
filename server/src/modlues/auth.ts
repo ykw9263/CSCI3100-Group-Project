@@ -5,26 +5,52 @@ dotenv.config();
 
 import UserDatabase from './userDatabase';
 
-namespace UserAuth{
-    let test_DBwarp = UserDatabase.getDB();
+class NMame {
+    constructor() {
+        
+    }
+}
+
+namespace AuthModule{
+    let ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
+    let ACCESS_TOKEN_EXP = process.env.ACCESS_TOKEN_EXP as MsStringValue;
+    let REFERSH_TOKEN_SECRET = process.env.REFERSH_TOKEN_SECRET as string;
+    let REFERSH_TOKEN_EXP = process.env.REFERSH_TOKEN_EXP as MsStringValue;
+    if(
+        typeof(ACCESS_TOKEN_SECRET) != 'string' || 
+        ACCESS_TOKEN_SECRET.length != 32 ||
+        Number.isNaN(parseInt(ACCESS_TOKEN_SECRET, 16))
+    ) 
+        throw Error("No valid ACCESS_TOKEN_SECRET");
+    if(typeof(ACCESS_TOKEN_EXP) != 'string') throw Error("No valid ACCESS_TOKEN_EXP");
+    if(
+        typeof(REFERSH_TOKEN_SECRET) != 'string' || 
+        REFERSH_TOKEN_SECRET.length != 32 ||
+        Number.isNaN(parseInt(REFERSH_TOKEN_SECRET, 16))
+    ) 
+        throw Error("No valid REFERSH_TOKEN_SECRET");
+    if(typeof(REFERSH_TOKEN_EXP) != 'string') throw Error("No valid REFERSH_TOKEN_EXP");
+
+
+    let DBwarp = UserDatabase.getDB();
     
-    let createSessionStmt = test_DBwarp.makePstmt(
+    let createSessionStmt = DBwarp.makePstmt(
         "INSERT INTO sessions VALUES (?, ?, ?)"
     );
-    let checkSessionStmt = test_DBwarp.makePstmt(
+    let checkSessionStmt = DBwarp.makePstmt(
         "SELECT sessionID, userID, username \
         FROM sessions NATURAL JOIN accounts \
         WHERE sessionID = ?"
     );
-    let deleteSessionStmt= test_DBwarp.makePstmt(
+    let deleteSessionStmt= DBwarp.makePstmt(
         "DELETE FROM sessions \
         WHERE sessionID = ?"
     );
-    let deleteExpiredSessionStmt= test_DBwarp.makePstmt(
+    let deleteExpiredSessionStmt= DBwarp.makePstmt(
         "DELETE FROM sessions \
         WHERE expireTime < unixepoch()"
     );
-    let deleteUserSessionStmt= test_DBwarp.makePstmt(
+    let deleteUserSessionStmt= DBwarp.makePstmt(
         "DELETE FROM sessions \
         WHERE userID = ?"
     );
@@ -39,17 +65,14 @@ namespace UserAuth{
     export function createAccessToken(userid: any, username: any) {
         let accessToken: string | null = null;
         try {
-            let secret = process.env.ACCESS_TOKEN_SECRET as string;
-            let expStringValue = process.env.ACCESS_TOKEN_EXP as MsStringValue;
-
             let iat = (Date.now()/1000)|0;
             accessToken = jwt.sign(
                 {
                     'username': username,
                     'iat': iat,
                 },
-                secret,
-                {expiresIn: expStringValue}
+                ACCESS_TOKEN_SECRET,
+                {expiresIn: ACCESS_TOKEN_EXP}
             );
 
         } catch(err) {
@@ -69,17 +92,15 @@ namespace UserAuth{
     export function createRefreshToken (userid: any, username: any) {
         let refershToken: string | null = null;
         try {
-            let secret = process.env.REFERSH_TOKEN_SECRET as string;
-            let expStringValue = process.env.REFERSH_TOKEN_EXP as MsStringValue;
             let iat = (Date.now()/1000)|0;
-            let exp = iat + ms(expStringValue)/1000;
+            let exp = iat + ms(REFERSH_TOKEN_EXP)/1000;
             refershToken = jwt.sign(
                 {
                     'username': username,
                     'iat': iat,
                 },
-                secret,
-                { expiresIn: expStringValue}
+                REFERSH_TOKEN_SECRET,
+                { expiresIn: REFERSH_TOKEN_EXP}
             );
             createSessionStmt.run(
                 refershToken, userid, exp
@@ -96,18 +117,19 @@ namespace UserAuth{
      * @param refreshToken
      * @return the new access token if success, null if failed
     */
-    export function refreshAccessToken(refreshToken: string): string | null {
-        let accessToken: string | null = null;
+    export function refreshAccessToken(refreshToken: string, username: string): string | null {
         try{
             let row = checkSessionStmt.get(refreshToken);
             if(row?.userID == undefined) return null;
 
-            let secret = process.env.REFERSH_TOKEN_SECRET as string;
-            jwt.verify(
+            let jwtPayload = jwt.verify(
                 refreshToken,
-                secret
-            );
-            accessToken = createAccessToken(row.userID, row.username);
+                REFERSH_TOKEN_SECRET
+            ) as jwt.JwtPayload;
+            if (username !== jwtPayload.username) return null;
+
+            let accessToken = createAccessToken(row.userID, row.username);
+            return accessToken;
         }catch(err: any){
             if (err.name==='TokenExpiredError'){
                 // token expired. Can delete record here or delete in batch later
@@ -115,7 +137,7 @@ namespace UserAuth{
             }
         }
         
-        return accessToken;
+        return null;
     }
     /**
      * Verify Access token
@@ -125,10 +147,9 @@ namespace UserAuth{
     export function verifyAccessToken(accessToken: string) {
         let data : jwt.JwtPayload = {};
         try{
-            let secret = process.env.ACCESS_TOKEN_SECRET as string;
             data = jwt.verify(
                 accessToken,
-                secret
+                ACCESS_TOKEN_SECRET
             ) as jwt.JwtPayload;    // this should not return string anyway so let it throw error if so
         }catch(err){
 
@@ -156,4 +177,4 @@ namespace UserAuth{
 
 }
 
-export default UserAuth;
+export default AuthModule;

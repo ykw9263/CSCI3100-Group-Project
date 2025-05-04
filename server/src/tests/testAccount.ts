@@ -1,6 +1,7 @@
-import accountModule from '../modlues/account';
-import License from '../modlues/license';
-import UserAuth from '../modlues/auth';
+import accountHandler from '../routes/accountHandler';
+import authHandler from '../routes/authHandler';
+import LicenseModule from '../modlues/license';
+import AuthModule from '../modlues/auth';
 
 import Test, {test} from 'node:test';
 import assert from 'node:assert';
@@ -44,7 +45,7 @@ function testAccount(){
 
         let res = new TestAccount.ResStub();
 
-        await accountModule.handleAccountsReq(req, res);
+        await accountHandler.handleAccountsPost(req, res);
 
         assert.ok(res.result.httpStatus == 400);
     })
@@ -56,47 +57,51 @@ function testAccount(){
 
         let res = new TestAccount.ResStub();
 
-        await accountModule.handleAccountsReq(req, res);
+        await accountHandler.handleAccountsPost(req, res);
 
         assert.ok(res.result.httpStatus == 400);
     })
 
 
     test("activate new user", async ()=>{
+        let username = 'aaa';
+        let pwd = 'bbb';
+        let email = 'ccc';
+
         let req = new TestAccount.ReqStub();
         req.body = {
             method: "register", 
-            username:'aaa', pwd:'bbb', email:'ccc'
+            username:username, pwd:pwd, email:email
         };
         let res = new TestAccount.ResStub();
-        await accountModule.handleAccountsReq(req, res);
+        await accountHandler.handleAccountsPost(req, res);
         assert.ok(res.result.httpStatus == 200);
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
         req.body = {
             method: "login", 
-            username:'aaa', pwd:'bbb'
+            username:username, pwd:pwd
         };
-        await accountModule.handleAccountsReq(req, res);
+        await authHandler.handleAuthPost(req, res);
 
         assert.ok(res.result.httpStatus == 200);
         let accessToken = res.result.json?.accessToken;
         let refreshToken = res.result.json?.refreshToken;
 
-        assert.ok(UserAuth.verifyAccessToken(accessToken));
-        assert.ok(UserAuth.refreshAccessToken(refreshToken));
+        assert.ok(AuthModule.verifyAccessToken(accessToken));
+        assert.ok(AuthModule.refreshAccessToken(refreshToken, username));
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
 
-        let licenseKey = License.generateLicenseKey();
+        let licenseKey = LicenseModule.generateLicenseKey();
         req.body = {
             method: "activate", 
-            username:'aaa', accessToken: accessToken, licenseKey: licenseKey
+            username:username, accessToken: accessToken, licenseKey: licenseKey
         };
 
-        await accountModule.handleAccountsReq(req, res);
+        await accountHandler.handleAccountsPost(req, res);
         assert.ok(res.result.httpStatus == 200);
     })
 

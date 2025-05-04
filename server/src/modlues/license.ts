@@ -5,17 +5,17 @@ dotenv.config();
 
 import UserDatabase, {IDBWarper, IStatementWarper} from './userDatabase';
 
-let test_DBwarp : IDBWarper = UserDatabase.getDB();
+let DBwarp : IDBWarper = UserDatabase.getDB();
 
-let lastLicenseIDStmt: IStatementWarper = test_DBwarp.makePstmt(
+let lastLicenseIDStmt: IStatementWarper = DBwarp.makePstmt(
     "SELECT MAX(licenseID) as lastID FROM license"
 );
 
-let createLicenseStmt: IStatementWarper = test_DBwarp.makePstmt(
+let createLicenseStmt: IStatementWarper = DBwarp.makePstmt(
     "INSERT INTO license VALUES (?, ?, ?, ?)"
 );
 
-let updateLicenseStmt: IStatementWarper = test_DBwarp.makePstmt(
+let updateLicenseStmt: IStatementWarper = DBwarp.makePstmt(
     "UPDATE license \
     SET availability = availability - 1 \
     WHERE licenseID = ? AND checksum = ? AND availability >= 1"
@@ -28,6 +28,7 @@ let licenseAESKey: Buffer;
 
 // default to zero when no key is specified in .env
 if(process.env.LICENSE_KEYGEN_SECRET === undefined || process.env.LICENSE_KEYGEN_SECRET.length != 32){
+    console.warn("No license keygen secret found! Use zero instead.");
     licenseAESKey = Buffer.alloc(16, 0); 
 }else{
     licenseAESKey = Buffer.from(process.env.LICENSE_KEYGEN_SECRET, 'hex'); 
@@ -67,7 +68,7 @@ function validateLicensePayload(payload: string): number{
     return parseInt(payload.substring(0,8), 16);
 }
 
-let newLicenseTransaction = test_DBwarp.makeTransaction<string>(()=>{
+let newLicenseTransaction = DBwarp.makeTransaction<string>(()=>{
     let encrypted = '';
     let row = lastLicenseIDStmt.get();
     let id;
@@ -92,18 +93,6 @@ function generateLicenseKey(): string{
     let encrypted = '';
     try {
         encrypted = newLicenseTransaction.exclusive();
-
-        // let row = lastLicenseIDStmt.get()
-        // let id;
-        // if (typeof(row?.licenseID) !== "number") id = 1;
-        // else id = row.licenseID;
-        // if (id>0xFFFFFFFF) throw Error("License id exceeded limit");
-
-        // let payload = getLicensePayload(id);
-        // let cipher = crypto.createCipheriv(algo, licenseAESKey, genIV());
-        // encrypted = cipher.update(payload, 'hex', 'hex');
-        // encrypted += cipher.final('hex');
-        // createLicenseStmt.run(id, (Date.now()/1000)|0, 1, parseInt(payload.substring(24), 16));
     } catch (error: any) {
         throw Error("Error creating new license: " + error.message);
     }

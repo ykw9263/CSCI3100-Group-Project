@@ -3,14 +3,14 @@ export interface IRunResult {
 }
 
 export interface IDBWarper{
-    isOpen(): boolean
+    get isOpen(): boolean
     close(): void
     makePstmt(query: string): IStatementWarper
     makeTransaction<T>(fun: (...args: any[]) => any): any
 }
 
 export interface IStatementWarper{
-    isOpen(): boolean
+    get isOpen(): boolean
     close(): void
     run(...params: unknown[]): IRunResult | undefined
     get(...params: unknown[]): any

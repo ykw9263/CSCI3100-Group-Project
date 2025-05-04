@@ -61,7 +61,7 @@ namespace UserDatabase{
                 if (err.message.match(/^table .+ already exists/)){
                     return;
                 }
-                console.log("db error: " + err.message);
+                console.debug("db error: " + err.message);
             }
             console.debug(`table ${tableName} created`);
             
@@ -100,7 +100,7 @@ namespace UserDatabase{
 let userdb : UserDatabase.UserDB | null = null;
 
 function getDB(){
-    if (userdb === null || !userdb.isOpen()){
+    if (userdb === null || !userdb.isOpen){
         userdb = new UserDatabase.UserDB('database/data.db');
         userdb.initDB(false);
     }

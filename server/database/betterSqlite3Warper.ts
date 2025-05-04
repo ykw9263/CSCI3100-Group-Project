@@ -17,7 +17,7 @@ export namespace BetterSqlite3Warper {
             this.open = true;
         }
 
-        public isOpen(): boolean{
+        public get isOpen(): boolean{
             return this.open;
         }
 
@@ -50,7 +50,7 @@ export namespace BetterSqlite3Warper {
             this.db = new BetterSqlite3(path);
         }
         
-        public isOpen(): boolean{ 
+        public get isOpen(): boolean{ 
             return this.db.open; 
         }
 
