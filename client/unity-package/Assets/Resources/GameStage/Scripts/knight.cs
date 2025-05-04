@@ -1,60 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 
-public class knight : MonoBehaviour
+public class Knight : Army
 {
-    // Start is called before the first frame update
-    public struct stats {
-        public int hp ;
-        public int attack ;
-        public int speed ;
-        
-    }   
-    public Entity Owner;
-    public stats info;
-    public int count;
-    private bool is_traveling = false;
-    //private bool selected = false;
-    void Start()
+     void Start()
     {
         count = 5;
         info.hp = 5;
         info.attack = 1;
-        info.speed = 2;
+        info.speed = 10;
+        SetDestination(GameState.GetGameState().territories[0]) ;
+        is_traveling = true ;
     }
-
-    void travel(){
-        Debug.Log("traveling");
-        //target = territory.transform.position;
-        Vector2 target = GameState.GetGameState().territories[0].coordinates;
-        Debug.Log(target);
-        //transform.position = transform.position + Vector3.left * info.speed ;
-
-        transform.position = Vector2.MoveTowards(transform.position, target , info.speed*Time.deltaTime);
-    }
-    
-    void attack() {
-        Debug.Log("attacking");
-        //enemy.info.hp -= info.attack;
-    }
-    
+     
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {   
         if(is_traveling){
-            travel();
+            travel();  
         }
-    }
-    void OnMouseDown(){
+        if (counter % 30 == 0)
+        {
+            if (attackTarget.Count != 0)
+            {
+                Attack(attackTarget[0]);
+            }
+        }
+    }*/
+
+    /*void OnMouseDown(){
         //selected = true ; 
         Debug.Log("selected");
+        setDestination(GameState.GetGameState().territories[0]);
         is_traveling = true;
-        Update();
-    }
-    void options(){
-        Debug.Log("options");
-        
-    }
+    }*/
+   
 }
