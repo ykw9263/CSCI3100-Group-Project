@@ -16,11 +16,6 @@ public class CameraMove : MonoBehaviour
     Camera cameraComp;
 
 
-    [SerializeField] InputAction movement;
-    InputSystem_Actions input = null;
-    private Vector2 pointed;
-    private Vector2 Navigate;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -32,47 +27,6 @@ public class CameraMove : MonoBehaviour
         // HandleMouseOver(pointed);
     }
 
-    private void OnEnable()
-    {
-        input = new InputSystem_Actions();
-        //input.UI.Enable();
-        input.UI.Point.performed += SetPointed;
-        input.UI.Point.canceled += SetPointed;
-        input.UI.Click.performed += SetPointed;
-        input.UI.Click.canceled += SetPointed;
-    }
-
-    private void OnDisable()
-    {
-        input.UI.Disable();
-    }
-
-    private void HandleClick() { 
-    }
-
-    private void SetPointed(InputAction.CallbackContext context)
-    {
-        this.pointed = context.ReadValue<Vector2>();
-        //Debug.Log(pointed);
-        //HandleMouseOver(this.pointed);
-    }
-
-    public void HandleMouseOver(Vector2 pointed) {
-        Vector3 ray3d = cameraComp.ScreenToWorldPoint(new Vector3(pointed.x, pointed.y, 0));
-        Vector2 ray2d = new(ray3d.x, ray3d.y);
-
-        RaycastHit2D[] hitsInfo;
-        hitsInfo = Physics2D.RaycastAll(ray2d, Vector2.down, 0);
-        foreach (var hit in hitsInfo)
-        {
-            if (hit.collider.gameObject.CompareTag("CameraBorder"))
-            {
-                CameraBorder cameraBorder= hit.collider.gameObject.GetComponent<CameraBorder>();
-                cameraBorder.HandleMouseOver();
-            }
-        }
-
-    }
 
     public void MoveCamera(Vector3 movement) {
         Vector3 pos = movement + this.transform.position;

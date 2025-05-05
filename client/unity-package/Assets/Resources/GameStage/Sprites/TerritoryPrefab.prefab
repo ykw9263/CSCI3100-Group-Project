@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1761619387748793295}
   - component: {fileID: 6912656242443634064}
   - component: {fileID: 8706971120299725537}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TerritoryPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,10 +163,10 @@ PolygonCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0

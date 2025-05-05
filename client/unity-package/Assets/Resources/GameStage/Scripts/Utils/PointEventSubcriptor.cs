@@ -21,15 +21,15 @@ public class PointEventSubcriptor : MonoBehaviour
     {
         if (isPointed)
         {
-            if (lastPointedID != inputs.pointed.Item1) {
+            if (lastPointedID != inputs.pointed.Item1)
+            {
+                isPointed = false;
             }
-                //isPointed = false;
         }
     }
 
     public void HandlePointedEvent(int pointedID) {
         lastPointedID = pointedID;
         isPointed = true;
-        Debug.Log("hi");
     }
 }
