@@ -18,15 +18,21 @@
     "crc": "^4.3.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.2",
     "sqlite3": "^5.1.7",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "validator": "^13.15.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.1",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/nodemailer": "^6.4.17",
+    "@types/validator": "^13.15.0",
     "tsx": "^4.19.3"
   }
 }
