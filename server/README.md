@@ -22,6 +22,8 @@ ACCESS_TOKEN_EXP=<time value>
 REFERSH_TOKEN_SECRET=<128bit hex-value>
 REFERSH_TOKEN_EXP=<time value>
 LICENSE_KEYGEN_SECRET=<128bit hex-value>
+GMAIL_APP_USER=<gmail address>
+GMAIL_APP_PASS=<gmail password>
 ```
 Time value should fit formats supported by [ms](https://github.com/vercel/ms/blob/main/readme.md#examples).
 Note that replacing secret will invalidate previous records that involves the secret. Make sure to migrate corresponding records.

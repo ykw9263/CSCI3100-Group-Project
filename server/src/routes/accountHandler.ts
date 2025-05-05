@@ -59,15 +59,19 @@ let checkUserEmailStmt : IStatementWarper = DBwarp.makePstmt(
 async function userVerifyEmail(req: any, res: any){
     const { username, email } = req.body;
     if (
-        typeof(email) !== 'string' || !IsEmail(email)
+        typeof(username) !== 'string' || 
+        typeof(email) !== 'string' 
     ){
         return res.status(400).json({ 'message': 'Bad request' });
+    }
+    if(!USERNAME_FORMAT.test(username) || !IsEmail(email)){
+        return res.status(400).json({ 'message': 'Incorrect Username/Email format' });
     }
     try {
         
         let iat = (Date.now()/1000)|0;
         let exp = iat + ms(REG_CODE_EXPIRE)/1000;
-        let token = crypto.randomInt(1e6, 1e7);
+        let token = crypto.randomInt(1e5, 1e6);
 
         if (!newVerifyCodeStmt.run(token, username, AuthModule.REG_TOKEN_ACTION, exp)?.changes) throw Error("db error");
         MailModule.sendEmail(
@@ -78,6 +82,7 @@ async function userVerifyEmail(req: any, res: any){
             Enter verification code ${token.toString().padStart(6, '0')} to finish registration
             `
         );
+        return res.status(200).json({ 'message': `Email Sent` });
         
     } catch (error) {
         
@@ -184,13 +189,14 @@ async function userRequestRestore(req: any, res: any){
         return res.status(400).json({ 'message': 'Bad request' });
     }
     try {
-        let row = checkUserEmailStmt.get();
+        let row = checkUserEmailStmt.get(username, email);
         if (!row) return res.status(403).json({ 'message': 'Username/Email does not match' });
         let iat = (Date.now()/1000)|0;
         let exp = iat + ms(RESTORE_CODE_EXPIRE)/1000;
-        let token = crypto.randomInt(1e6, 1e7);
+        let token = crypto.randomInt(1e5, 1e6);
 
         if (!newVerifyCodeStmt.run(token, username, AuthModule.RESTORE_TOKEN_ACTION, exp)?.changes) throw Error("db error");
+
         MailModule.sendEmail(
             email, 
             "Restore Account on The Evil Conqueror", 
@@ -199,7 +205,7 @@ async function userRequestRestore(req: any, res: any){
             Enter verification code ${token.toString().padStart(6, '0')} to continue recovery
             `
         );
-        
+        return res.status(200).json({ 'message': `Email Sent` });
     } catch (error) {
         
     }
@@ -309,8 +315,11 @@ async function handleAccountsPost(req: any, res: any){
         case 'reset':
             userResetPW(req, res);
             break;
-        case 'restore':
+        case 'requestRestore':
             userRequestRestore(req, res);
+            break;
+        case 'finishRestore':
+            userFinishRestore(req, res);
             break;
         case 'activate':
             userActivate(req, res);

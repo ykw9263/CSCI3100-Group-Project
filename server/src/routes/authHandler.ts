@@ -140,6 +140,7 @@ async function handleAuthPost(req: any, res: any){
             break;
         case 'verifycode':
             userVerifyCode(req, res);
+            break;
         default: 
             return res.status(400).json({ 'message': 'Bad request' });
     }

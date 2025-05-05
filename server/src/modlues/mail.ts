@@ -6,7 +6,7 @@ dotenv.config();
 
 async function sendEmail(recipient: string, subject:string, content: string) {
     if (!IsEmail(recipient)) return;
-
+    
     let transporter = nodemailer.createTransport({
         service: " gmail",
         auth: {
@@ -27,7 +27,6 @@ async function sendEmail(recipient: string, subject:string, content: string) {
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
           console.error(err);
-          
         } else {
           //console.debug(info);
         }
