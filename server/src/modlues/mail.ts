@@ -29,7 +29,7 @@ async function sendEmail(recipient: string, subject:string, content: string) {
           console.error(err);
           
         } else {
-          console.log(info);
+          //console.debug(info);
         }
       });
     

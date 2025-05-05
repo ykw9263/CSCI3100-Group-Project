@@ -42,6 +42,17 @@ const DB_CREATE_TABLES = [
             FOREIGN KEY(userID) REFERENCES accounts(userID)\
             )"
     },
+    {
+        tableName: "verifycode",
+        query: 
+            "CREATE TABLE verifycode (\
+            token INT NOT NULL, \
+            username TEXT NOT NULL, \
+            actiontype TEXT NOT NULL, \
+            expireTime DATETIME \
+            )"
+    },
+
 ];
 
 namespace UserDatabase{

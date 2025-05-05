@@ -6,7 +6,7 @@ npm install
 ```
 Start the server on port number `<port>`. Default on port 80.
 ``` 
-npm run run-server [-- [-p <port>]]
+npm run run-server [--- [-p <port>]]
 ```
 Compile TypeScript into JavaScript (Built js files will be stored in `js-build/`)
 ``` 

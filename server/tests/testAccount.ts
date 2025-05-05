@@ -64,18 +64,23 @@ function testAccount(){
 
 
     test("activate new user", async ()=>{
-        let username = 'aaa';
-        let pwd = 'bbb';
+        let username = 'username123';
+        let pwd = 'bbbAseHello123';
         let email = 'ccc';
+        let regToken = AuthModule.createAccessToken(0, username, AuthModule.REG_TOKEN_ACTION);
 
         let req = new TestAccount.ReqStub();
         req.body = {
             method: "register", 
-            username:username, pwd:pwd, email:email
+            username:username, pwd:pwd, email:email,
+            accessToken: regToken
         };
         let res = new TestAccount.ResStub();
-        await accountHandler.handleAccountsPost(req, res);
-        assert.ok(res.result.httpStatus == 200);
+
+        await test("create new user", async ()=>{
+            await accountHandler.handleAccountsPost(req, res);
+            assert.ok(res.result.httpStatus == 200);
+        }).catch(()=>{throw Error()});;
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
@@ -83,14 +88,27 @@ function testAccount(){
             method: "login", 
             username:username, pwd:pwd
         };
-        await authHandler.handleAuthPost(req, res);
 
-        assert.ok(res.result.httpStatus == 200);
-        let accessToken = res.result.json?.accessToken;
-        let refreshToken = res.result.json?.refreshToken;
+        let accessToken = '', refreshToken = '';
+        await test("Login user", async ()=>{
+            await authHandler.handleAuthPost(req, res);
+            accessToken = res.result.json?.accessToken;
+            refreshToken = res.result.json?.refreshToken;
+            await test("Response", ()=>{
+                assert.ok(res.result.httpStatus == 200);
+            });
+            await test("accessToken", ()=>{
+                assert.ok(AuthModule.verifyAccessToken(accessToken));
+            });
+            await test("refreshToken", ()=>{
+                assert.ok(AuthModule.refreshAccessToken(refreshToken, username));
+            });
+        }).catch(()=>{throw Error()});
 
-        assert.ok(AuthModule.verifyAccessToken(accessToken));
-        assert.ok(AuthModule.refreshAccessToken(refreshToken, username));
+        // let accessToken = res.result.json?.accessToken;
+        // let refreshToken = res.result.json?.refreshToken;
+        
+        
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
@@ -100,9 +118,10 @@ function testAccount(){
             method: "activate", 
             username:username, accessToken: accessToken, licenseKey: licenseKey
         };
-
-        await accountHandler.handleAccountsPost(req, res);
-        assert.ok(res.result.httpStatus == 200);
+        await test("Activate User", async ()=>{
+            await accountHandler.handleAccountsPost(req, res);
+            assert.ok(res.result.httpStatus == 200);
+        }).catch(()=>{throw Error()});
     })
 
 }

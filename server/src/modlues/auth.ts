@@ -5,13 +5,12 @@ dotenv.config();
 
 import UserDatabase from './userDatabase';
 
-class NMame {
-    constructor() {
-        
-    }
-}
 
 namespace AuthModule{
+    export const AUTH_TOKEN_ACTION = 'auth';
+    export const REG_TOKEN_ACTION = 'reg';
+    export const RESTORE_TOKEN_ACTION = 'restore';
+
     let ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
     let ACCESS_TOKEN_EXP = process.env.ACCESS_TOKEN_EXP as MsStringValue;
     let REFERSH_TOKEN_SECRET = process.env.REFERSH_TOKEN_SECRET as string;
@@ -52,7 +51,10 @@ namespace AuthModule{
     );
     let deleteUserSessionStmt= DBwarp.makePstmt(
         "DELETE FROM sessions \
-        WHERE userID = ?"
+        WHERE userID IN ( \
+            SELECT userID FROM accounts \
+            WHERE username = ? \
+        )"
     );
     
     /**
@@ -62,13 +64,14 @@ namespace AuthModule{
      * @returns access token if succeed
      * @throws error if failed
      */
-    export function createAccessToken(userid: any, username: any) {
+    export function createAccessToken(userid: number, username: string, actionType: string) {
         let accessToken: string | null = null;
         try {
             let iat = (Date.now()/1000)|0;
             accessToken = jwt.sign(
                 {
                     'username': username,
+                    'actionType': actionType,
                     'iat': iat,
                 },
                 ACCESS_TOKEN_SECRET,
@@ -89,7 +92,7 @@ namespace AuthModule{
      * @returns the refresh token if succeed
      * @throws error if failed
      */
-    export function createRefreshToken (userid: any, username: any) {
+    export function createRefreshToken (userid: number, username: string) {
         let refershToken: string | null = null;
         try {
             let iat = (Date.now()/1000)|0;
@@ -128,7 +131,7 @@ namespace AuthModule{
             ) as jwt.JwtPayload;
             if (username !== jwtPayload.username) return null;
 
-            let accessToken = createAccessToken(row.userID, row.username);
+            let accessToken = createAccessToken(row.userID, row.username, AUTH_TOKEN_ACTION);
             return accessToken;
         }catch(err: any){
             if (err.name==='TokenExpiredError'){
@@ -139,10 +142,11 @@ namespace AuthModule{
         
         return null;
     }
+
     /**
      * Verify Access token
      * @param accessToken 
-     * @returns the associated username, null if failed
+     * @returns the associated token payload, null if failed
      */
     export function verifyAccessToken(accessToken: string) {
         let data : jwt.JwtPayload = {};
@@ -154,7 +158,7 @@ namespace AuthModule{
         }catch(err){
 
         }
-        if (data?.username) return data.username;
+        if (data?.username) return data;
         return null;
     }
 
@@ -168,9 +172,13 @@ namespace AuthModule{
         } 
     }
 
-    export function invalidateUserToken(userID: number){
+    /**
+     * Invalidate refresh token of the user
+     * @param username
+     */
+    export function invalidateUserToken(username: string){
         try {
-            deleteUserSessionStmt.run(userID);
+            deleteUserSessionStmt.run(username);
         } catch (error) {
         } 
     }

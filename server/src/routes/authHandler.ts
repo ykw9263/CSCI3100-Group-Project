@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
+import ToInt from 'validator/lib/toInt';
 
 import UserDatabase, {IDBWarper, IStatementWarper} from '../modlues/userDatabase';
 import AuthModule from '../modlues/auth';
 
 const USERNAME_FORMAT = /^([\w.()]){4,20}$/;
-const PASSWORD_FORMAT = /^(?=[\w]*[A-Z]).{8,16}$/;
+const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
 
 let DBwarp : IDBWarper = UserDatabase.getDB();
 
@@ -12,6 +13,45 @@ let loginStmt : IStatementWarper = DBwarp.makePstmt(
     "SELECT userID AS userid, username, password FROM accounts \
     WHERE username = ?"
 );
+
+
+let checkVerifyCodeStmt : IStatementWarper = DBwarp.makePstmt(
+    "SELECT username, actiontype FROM verifycode \
+    WHERE token = ? \
+    AND username = ? \
+    AND expireTime > unixepoch() "
+);
+
+let deleteVerifyCodeStmt : IStatementWarper = DBwarp.makePstmt(
+    "DELETE FROM verifycode \
+    WHERE token = ? "
+);
+
+async function userVerifyCode(req: any, res: any){
+    const { username, vericode} = req.body;
+    if (
+        typeof(username) !== 'string' ||
+        typeof(vericode) !== 'string' ||
+        Number.isNaN(ToInt(vericode))
+    ){
+        return res.status(400).json({ 'message': 'Bad request' });
+    }
+    if (vericode.length!=6){
+        return res.status(400).json({ 'message': 'Invalid verification code' });
+    }
+    try {
+        let actionType = checkVerifyCodeStmt.get(vericode, username)?.actiontype;
+        if (!actionType) return res.status(400).json({ 'message': 'Invalid verification code' });
+        let token = AuthModule.createAccessToken(0, username, actionType);
+        if (!token){ throw Error("Error creating token for verification code")};
+
+        deleteVerifyCodeStmt.run(vericode);
+        return res.status(200).json({ 'message': `success` , accessToken: token});
+    } catch (error) {
+        
+    }
+    return res.status(500).json({ 'message': `Server error` });
+}
 
 async function userLogin(req: any, res: any){
     const { username, pwd } = req.body;
@@ -33,14 +73,13 @@ async function userLogin(req: any, res: any){
             username
         );
         if (row?.password === undefined || !bcrypt.compareSync(pwd, row.password)){
-            console.log(row);
             return res.status(401).json({ 'message': `Username/Password does not match` });
         }else {
             // TODO: create and return JWT sessions
             let accessToken: string | null;
             let refreshToken: string | null;
             try {
-                accessToken = AuthModule.createAccessToken(row.userid, row.username);
+                accessToken = AuthModule.createAccessToken(row.userid, row.username, AuthModule.AUTH_TOKEN_ACTION);
                 refreshToken = AuthModule.createRefreshToken(row.userid, row.username);
                 if (!accessToken || !refreshToken) throw Error("cannot create token");
             } catch (err: any) {
@@ -62,7 +101,7 @@ async function userLogin(req: any, res: any){
     }
 
     // debug 
-    debug_PrintSession();
+    // debug_PrintSession();
     return res.status(500).json({ 'message': `Server error` });
 
 };
@@ -90,7 +129,7 @@ async function userRefreshSession(req: any, res: any){
 }
 
 async function handleAuthPost(req: any, res: any){
-    console.log(req.body);
+    // console.log(req.body);
     const {method} = req?.body;
     switch (method){
         case 'login': 
@@ -99,6 +138,8 @@ async function handleAuthPost(req: any, res: any){
         case 'refresh':
             userRefreshSession(req, res);
             break;
+        case 'verifycode':
+            userVerifyCode(req, res);
         default: 
             return res.status(400).json({ 'message': 'Bad request' });
     }
