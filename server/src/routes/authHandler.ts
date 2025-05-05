@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import UserDatabase, {IDBWarper, IStatementWarper} from '../modlues/userDatabase';
 import AuthModule from '../modlues/auth';
 
+const USERNAME_FORMAT = /^([\w.()]){4,20}$/;
+const PASSWORD_FORMAT = /^(?=[\w]*[A-Z]).{8,16}$/;
 
 let DBwarp : IDBWarper = UserDatabase.getDB();
 
@@ -18,6 +20,12 @@ async function userLogin(req: any, res: any){
         typeof(pwd) !== 'string'
     ){
         return res.status(400).json({ 'message': 'Bad request' });
+    }
+    if (
+        pwd.length > 16 || username.length > 20 || 
+        !PASSWORD_FORMAT.test(pwd) || !USERNAME_FORMAT.test(username)
+    ){
+        return res.status(400).json({ 'message': 'Incorrect username/password format' });
     }
 
     try {

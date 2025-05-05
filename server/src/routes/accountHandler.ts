@@ -4,6 +4,8 @@ import UserDatabase, {IDBWarper, IStatementWarper} from '../modlues/userDatabase
 import AuthModule from '../modlues/auth';
 import LicenseModule from '../modlues/license';
 
+const USERNAME_FORMAT = /^([\w.()]){4,20}$/;
+const PASSWORD_FORMAT = /^(?=[\w]*[A-Z]).{8,16}$/;
 
 const SALT_ROUNDS = 10;
 
@@ -50,6 +52,12 @@ async function userReg(req: any, res: any){
     ){
         return res.status(400).json({ 'message': 'Bad request' });
     }
+    if (
+        pwd.length > 16 || username.length > 20 || 
+        !PASSWORD_FORMAT.test(pwd) || !USERNAME_FORMAT.test(username)
+    ){
+        return res.status(400).json({ 'message': 'Incorrect username/password format' });
+    }
     // TODO: hash the password
     let pwdHash = bcrypt.hashSync(pwd, SALT_ROUNDS);
     
@@ -85,6 +93,12 @@ async function userResetPW(req: any, res: any){
         return res.status(400).json({ 'message': 'Bad request' });
     }
 
+    if (
+        pwd.length > 16 || username.length > 20 || newpwd.length > 16 || 
+        !PASSWORD_FORMAT.test(pwd) || !USERNAME_FORMAT.test(username) || !PASSWORD_FORMAT.test(newpwd)
+    ){
+        return res.status(400).json({ 'message': 'Incorrect username/password format' });
+    }
     if (AuthModule.verifyAccessToken(accessToken) !== username){
         return res.status(403).json({ 'message': 'Unauthorized' });
     }
