@@ -139,10 +139,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33ef08752bd5ee4e855befcd3947b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   count: 5
+  is_traveling: 0
   cur_pos: {x: 0, y: 0}
   des_pos: {x: 0, y: 0}
-  attackTargetIDs: []
+  attackTarget: []
   isDead: 0
 --- !u!60 &-2118501409151339194
 PolygonCollider2D:
@@ -941,7 +943,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 1
 --- !u!114 &1141056295249694078
 MonoBehaviour:
   m_ObjectHideFlags: 0

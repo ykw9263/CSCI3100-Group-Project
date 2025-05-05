@@ -8,10 +8,10 @@ public class Territory
     public int controlledBy;
     public List<int> forces;
     public List<int> neibours;
-    public Vector2 coordinates;
+    public Vector3 coordinates;
     private GameObject territoryGameObject;
 
-    public Territory(int territoryID, int hp, Vector2 coordinates, GameObject territoryGameObject, List<int> neibours) {
+    public Territory(int territoryID, int hp, Vector3 coordinates, GameObject territoryGameObject, List<int> neibours) {
         this.territoryID = territoryID;
         this.hp = territoryID;
         this.controlledBy = -1;
