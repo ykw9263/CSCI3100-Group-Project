@@ -1,7 +1,7 @@
-import accountHandler from '../routes/accountHandler';
-import authHandler from '../routes/authHandler';
-import LicenseModule from '../modlues/license';
-import AuthModule from '../modlues/auth';
+import accountHandler from '../src/routes/accountHandler';
+import authHandler from '../src/routes/authHandler';
+import LicenseModule from '../src/modlues/license';
+import AuthModule from '../src/modlues/auth';
 
 import Test, {test} from 'node:test';
 import assert from 'node:assert';

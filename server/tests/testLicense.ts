@@ -1,4 +1,4 @@
-import LicenseModule from '../modlues/license';
+import LicenseModule from '../src/modlues/license';
 import {test} from 'node:test';
 import assert from 'node:assert';
 

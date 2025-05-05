@@ -1,4 +1,4 @@
-import UserDatabase, {IDBWarper} from '../modlues/userDatabase';
+import UserDatabase, {IDBWarper} from '../src/modlues/userDatabase';
 
 const TABLE_NAMES = ["license", "accounts", "sessions", "userdata"];
 

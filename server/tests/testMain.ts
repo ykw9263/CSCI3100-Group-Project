@@ -1,4 +1,4 @@
-import UserDatabase, {IDBWarper, IStatementWarper} from '../modlues/userDatabase';
+import UserDatabase, {IDBWarper, IStatementWarper} from '../src/modlues/userDatabase';
 
 import TestLicense from './testLicense';
 import TestAccount from './testAccount';
