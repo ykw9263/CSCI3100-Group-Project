@@ -1,7 +1,11 @@
 .vscode
 .vs
 .vsconfig
-server/.env
-node_modules/
-client/unity-package/Temp
-client/unity-package/Logs
+.env
+/server/database/data.db
+/server/js-build/*
+/server/node_modules/*
+/client/unity-package/Temp
+/client/unity-package/Library/*
+/client/unity-package/Logs/*
+/client/unity-package/UserSettings/*
