@@ -5,6 +5,7 @@
 /server/database/data.db
 /server/js-build/*
 /server/node_modules/*
+/client/unity-package/obj
 /client/unity-package/Temp
 /client/unity-package/Library/*
 /client/unity-package/Logs/*
