@@ -156,7 +156,7 @@ public class MapGeneration : MonoBehaviour
             SpriteShapeController terrSC = terrShape1.GetComponent<SpriteShapeController>();
 
             List<int> adjList = new();
-            Vector2 center = new(0,0);
+            Vector3 center = new(0,0,0);
             for (int i = 0; i < poly.vertices.Count; i++)
             {
                 terrSC.spline.InsertPointAt(i, poly.vertices[i].ToVector3());
@@ -178,11 +178,11 @@ public class MapGeneration : MonoBehaviour
             center.y /= poly.vertices.Count;
 
             terrShape1.transform.parent = this.transform;
-            gameState.AddTerritory(new Territory(poly.id, territoryHP, center, terrShape1, adjList));
-
-
+            gameState.AddTerritory(new Territory(poly.id, territoryHP, center, terrShape1, adjList));   
         }
-
+        gameState.AddEntity(new Player()) ; 
+        gameState.AddEntity(new Enemy()) ; 
+        gameState.InitGame() ; 
     }
 
     void GenerateDelaunate()

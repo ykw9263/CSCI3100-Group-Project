@@ -15,9 +15,12 @@ public class TerritoryGameObj : MonoBehaviour
     void OnMouseDown()
     {
         Debug.Log("Clicked! " + territory.territoryID);
+        
     }
 
     public void SetTerritory(Territory territory) {
         this.territory = territory;
-    }
+        
+    } 
+    
 }
