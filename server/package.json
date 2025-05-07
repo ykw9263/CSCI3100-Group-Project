@@ -4,7 +4,8 @@
   "description": "server for EConquerer",
   "main": "index.js",
   "scripts": {
-    "run-server": "npx tsx ./src/server.ts",
+    "server": "npx tsx ./src/server.ts",
+    "gen-license": "npx tsx ./src/genLicense.ts",
     "build-js": "npx tsc --sourceMap",
     "test-build": "npx tsc --sourceMap && node --enable-source-maps --experimental-test-coverage --test js-build/tests/testMain.js",
     "test-tsx": "npx tsx --enable-source-maps --experimental-test-coverage --test tests/testMain.ts"

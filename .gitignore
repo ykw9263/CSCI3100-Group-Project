@@ -1,6 +1,7 @@
 .vs
 .vsconfig
 .env
+/server/licenses.txt
 /server/database/data.db
 /server/js-build/*
 /server/node_modules/*
