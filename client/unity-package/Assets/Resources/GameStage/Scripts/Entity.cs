@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Entity : MonoBehaviour
+public abstract class Entity
 {
     public int entityID;
     //public Army[] armies;
-    public List<int> territories_in_Controls = new () ;
+    public List<Territory> territories_in_Controls = new () ;
     public List<Army> army = new () ;
-    public Territory home ;  
-    
-    public Entity() {
-        
+    public Territory home ;
+
+    public int money = 0;
+    public Color color;
+
+    public Entity(int entityID, Color color) {
+        this.entityID = entityID;
+        this.color = color;
     }
     
     public void SendArmy(Territory terr, Army troop){
@@ -32,5 +36,13 @@ public abstract class Entity : MonoBehaviour
         //troop.isDead = false ;
         //troop.cur_pos = home.coordinates ; 
     }
-    
+
+    public void TakeControl(Territory terr) {
+        territories_in_Controls.Add(terr);
+    }
+    public void LoseControl(Territory terr)
+    {
+        territories_in_Controls.Remove(terr);
+    }
+
 }

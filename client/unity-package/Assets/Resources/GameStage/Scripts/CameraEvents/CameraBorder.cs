@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class CameraBorder : MonoBehaviour
 {
     [SerializeField] CameraMove _camera;
-    [SerializeField] PointEventSubcriptor subscriptor;
+    PointEventSubcriptor subscriptor;
     public int direction = 0;
     public float speed = 1; 
     private bool isHovered;
@@ -18,13 +18,14 @@ public class CameraBorder : MonoBehaviour
         subscriptor = GetComponent<PointEventSubcriptor>();
     }
     void Update() {
-        if (subscriptor.isPointed)
+        if (subscriptor != null && subscriptor.isPointed )
         {
             HandleMouseOver();
+            //Debug.Log("subscriptor: " + this.subscriptor);
         }
     }
 
-    public void HandleMouseOver()
+    private void HandleMouseOver()
     {
         if (!_camera || direction == 0)
         {
@@ -47,7 +48,7 @@ public class CameraBorder : MonoBehaviour
             default:
                 break;
         }
-        Debug.Log("direction: "+ this.direction);
+        //Debug.Log("direction: "+ this.direction);
     }
 
     public void Hello() {

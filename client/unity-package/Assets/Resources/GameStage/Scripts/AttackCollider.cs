@@ -19,7 +19,7 @@ public class AttackCollider : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Enter Collison") ;
-        Army enemy = collision.gameObject.GetComponentInParent<Army>() ;
+        Army enemy = collision.gameObject.GetComponent<Army>() ;
         Army myself = this.GetComponentInParent<Army>() ;
         if (enemy == null || myself == null )
         {
@@ -32,7 +32,8 @@ public class AttackCollider : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         //Debug.Log("Exit Collison");
-        Army enemy = collision.gameObject.GetComponentInParent<Army>();
+        //Army enemy = collision.gameObject.GetComponentInParent<Army>()
+        Army enemy = collision.gameObject.GetComponent<Army>();
         Army myself = this.GetComponentInParent<Army>();
         if (enemy == null || myself == null )
         {
