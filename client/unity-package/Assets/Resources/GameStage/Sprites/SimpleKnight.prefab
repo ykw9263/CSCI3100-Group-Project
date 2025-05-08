@@ -143,13 +143,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d33ef08752bd5ee4e855befcd3947b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderObject: {fileID: 4920965244318345934}
+  renderSprite: {fileID: 4920965244318345934}
   curPathObject: {fileID: 753587841786200922}
-  InfoObject: {fileID: 158747387056199212}
-  newPathObject: {fileID: 0}
+  popupObject: {fileID: 158747387056199212}
+  planPathObject: {fileID: 2505971751041687696}
   count: 5
   cur_pos: {x: 0, y: 0, z: 0}
   des_pos: {x: 0, y: 0, z: 0}
+  planned_des_pos: {x: 0, y: 0, z: 0}
   is_traveling: 0
   finished_traveling: 1
   attackTarget: []
@@ -1274,7 +1275,7 @@ SpriteShapeRenderer:
   m_SortingLayerID: -864846431
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Color: {r: 0.48776254, g: 0.79920125, b: 0.9150943, a: 1}
+  m_Color: {r: 1, g: 0.2, b: 0.40392157, a: 1}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 2800000, guid: 61eb338209225934283638d47fa1b447, type: 3}
   m_Sprites:

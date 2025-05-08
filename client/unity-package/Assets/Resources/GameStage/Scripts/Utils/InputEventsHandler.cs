@@ -25,9 +25,10 @@ public class InputEventsHandler : MonoBehaviour
 
     enum EventStates
     {
-        free, // can click [UI, army -> dragArmy]; hover [UI]
-        selectArmy, // can click [UI, army -> dragArmy]; hover [UI]
+        free, // can click [UI, army -> selectArmy]; hover [UI]
+        selectArmy, // can click [UI, army -> dragArmy]; hover [UI]     // maybe not needed
         dragArmy, // can release; hover [UI, territory -> sendArmy(), cancel-> free]
+
     }
 
 
@@ -35,7 +36,10 @@ public class InputEventsHandler : MonoBehaviour
     private Dictionary<EventStates, LayerMask> clickLayermasks = new ();
     private Dictionary<EventStates, LayerMask> pointLayermasks = new();
 
+    const int UI_LAYERMASK = 1 << 5; // the LayerMask.GetMask() seems buggy on ui layer so we manually make one
+
     private Army selectedArmy = null;
+    private Territory hoveredTerr = null;
 
     private EventStates cur_state = EventStates.free;
     
@@ -45,13 +49,15 @@ public class InputEventsHandler : MonoBehaviour
     {
         layermask = LayerMask.GetMask("UserLayerA", "UserLayerB");
 
-        clickLayermasks.Add(EventStates.free, LayerMask.GetMask("UI", "ArmyObj"));
-        pointLayermasks.Add(EventStates.free, LayerMask.GetMask("UI"));
+        clickLayermasks.Add(EventStates.free, LayerMask.GetMask("ArmyObj")| UI_LAYERMASK);
+        pointLayermasks.Add(EventStates.free, LayerMask.GetMask() | UI_LAYERMASK);
 
-        clickLayermasks.Add(EventStates.dragArmy, LayerMask.GetMask("UI"));
-        pointLayermasks.Add(EventStates.dragArmy, LayerMask.GetMask("UI", "Map"));
-        
-            
+        clickLayermasks.Add(EventStates.selectArmy, LayerMask.GetMask("ArmyObj") | UI_LAYERMASK);
+        pointLayermasks.Add(EventStates.selectArmy, LayerMask.GetMask() | UI_LAYERMASK);
+
+        clickLayermasks.Add(EventStates.dragArmy, LayerMask.GetMask("Map") | UI_LAYERMASK);
+        pointLayermasks.Add(EventStates.dragArmy, LayerMask.GetMask("Map") | UI_LAYERMASK);
+
     }
 
     // Update is called once per frame
@@ -104,24 +110,41 @@ public class InputEventsHandler : MonoBehaviour
         input.UI.Disable();
     }
 
-
+    private void UIPointed()
+    {
+        RaycastHit2D[] uiHits = PointerRaycastAll(UI_LAYERMASK);
+        foreach (RaycastHit2D uiHit in uiHits)
+        {
+            GameObject hitObj = uiHit.collider.gameObject;
+            PointEventSubcriptor pointSubscriber = uiHit.collider.gameObject.GetComponent<PointEventSubcriptor>();
+            if (pointSubscriber) pointSubscriber.HandlePointedEvent(pointed.Item1);
+        }
+    }
 
     private void HandlePoint(InputAction.CallbackContext context)
     {
         pointed = (++eventCounter, context.ReadValue<Vector2>());
-        RaycastHit2D[] hits = PointerRaycastAll();
-        foreach (RaycastHit2D hit in hits) {
-            GameObject hitObj = hit.collider.gameObject;
-            switch (hitObj.tag)
-            {
-                case "CameraBorder":
-                    PointEventSubcriptor cameraBorder = hit.collider.gameObject.GetComponent<PointEventSubcriptor>();
-                    cameraBorder.HandlePointedEvent(pointed.Item1);
-                    
-                    break;
-                default:
-                    break;
-            }
+        switch (cur_state)
+        {
+            case EventStates.free:
+                {
+                    UIPointed();
+                }
+                break;
+
+            case EventStates.selectArmy:
+                UIPointed();
+                break;
+            case EventStates.dragArmy:
+                {
+                    UIPointed();
+                    RaycastHit2D hit = PointerRaycast(pointLayermasks[EventStates.dragArmy]);
+                    Vector2 pointer = this.pointed.Item2;
+                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(pointer);
+                    bool valid = hit ? hit.collider.gameObject.CompareTag("Territory"): false;
+                    selectedArmy.PlanDestination(worldPoint, valid);
+                }
+                break;
         }
     }
 
@@ -129,48 +152,78 @@ public class InputEventsHandler : MonoBehaviour
         float clicked = context.ReadValue<float>();   // 1: down, 0 up
 
         switch (cur_state) {
-            case EventStates.free: 
-                if (clicked == 1) {
-                    RaycastHit2D hit = PointerRaycast(clickLayermasks[EventStates.free]);
-                    if (!hit) {
-                        setSelectedArmy(null);
-                        break;
-                    }
-                    GameObject hitObj = hit.collider.gameObject;
-                    switch (hitObj.tag)
+            case EventStates.free:
+                {
+                    if (clicked == 1)
                     {
-                        case "ArmyObj":
-                            Army tgtArmy = hitObj.GetComponent<Army>();
-                            setSelectedArmy(tgtArmy);
-                            cur_state = EventStates.selectArmy;
-                            break;
-                        default:
+                        RaycastHit2D hit = PointerRaycast(clickLayermasks[EventStates.free]);
+                        if (!hit)
+                        {
                             setSelectedArmy(null);
                             break;
+                        }
+                        GameObject hitObj = hit.collider.gameObject;
+                        switch (hitObj.tag)
+                        {
+                            case "ArmyObj":
+                                Army tgtArmy = hitObj.GetComponent<Army>();
+                                setSelectedArmy(tgtArmy);
+                                cur_state = EventStates.dragArmy;
+                                break;
+                            default:
+                                setSelectedArmy(null);
+                                break;
+                        }
+                    }
+
+                }
+                break;
+            case EventStates.selectArmy:
+                {
+                    if (clicked == 1)
+                    {
+                        RaycastHit2D hit = PointerRaycast(clickLayermasks[EventStates.selectArmy]);
+                        if (!hit)
+                        {
+                            setSelectedArmy(null);
+                            cur_state = EventStates.free;
+                            break;
+                        }
+                        Debug.Log("selectArmy hit");
+                        GameObject hitObj = hit.collider.gameObject;
+                        switch (hitObj.tag)
+                        {
+                            case "ArmyObj":
+                                Army tgtArmy = hitObj.GetComponent<Army>();
+                                if(tgtArmy == selectedArmy)
+                                    cur_state = EventStates.dragArmy;
+                                else
+                                    setSelectedArmy(tgtArmy);
+                                break;
+                            default:
+                                setSelectedArmy(null);
+                                cur_state = EventStates.free;
+                                break;
+                        }
                     }
                 }
                 break;
-
             case EventStates.dragArmy:
+                
                 if (clicked == 0)
                 {
                     RaycastHit2D hit = PointerRaycast(clickLayermasks[EventStates.dragArmy]);
                     if (!hit)
                     {
+                        if (selectedArmy) selectedArmy.CommitPlanDestination(false);
                         setSelectedArmy(null);
+                        cur_state = EventStates.free;
                         break;
                     }
                     GameObject hitObj = hit.collider.gameObject;
-                    switch (hitObj.tag)
-                    {
-                        case "TerritoryTile":
-                            selectedArmy?.SetDestination(hitObj.GetComponent<Territory>());
-                            Debug.Log("hello");
-                            break;
-                        default:
-                            break;
-                    }
+                    if (selectedArmy) selectedArmy.CommitPlanDestination(hitObj.CompareTag("Territory"));
                 }
+                // should be holding mouse, so no mouse down should enter here.
                 cur_state = EventStates.free;
                 break;
 
@@ -180,9 +233,9 @@ public class InputEventsHandler : MonoBehaviour
                     break;
                 }
 
-        
+            
         }
-
+        // Debug.Log("event state: " + cur_state);
         // RaycastHit2D hit = PointerRaycast();
         // GameObject hitObj = hit.collider.gameObject;
 
@@ -217,8 +270,8 @@ public class InputEventsHandler : MonoBehaviour
     }
 
     private void setSelectedArmy(Army army) {
-        selectedArmy?.HandleSelect(false);
+        if(selectedArmy) selectedArmy.HandleSelect(false);
         selectedArmy = army;
-        selectedArmy?.HandleSelect(true);
+        if (selectedArmy) selectedArmy.HandleSelect(true);
     }
 }

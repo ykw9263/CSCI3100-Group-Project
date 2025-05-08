@@ -18,14 +18,14 @@ public class CameraBorder : MonoBehaviour
         subscriptor = GetComponent<PointEventSubcriptor>();
     }
     void Update() {
-        if (subscriptor.isPointed)
+        if (subscriptor != null && subscriptor.isPointed )
         {
             HandleMouseOver();
             //Debug.Log("subscriptor: " + this.subscriptor);
         }
     }
 
-    public void HandleMouseOver()
+    private void HandleMouseOver()
     {
         if (!_camera || direction == 0)
         {

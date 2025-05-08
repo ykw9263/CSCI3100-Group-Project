@@ -90,7 +90,7 @@ public class GameState : MonoBehaviour
     {
         territories.Add(territory);
         
-        Debug.Log($" {territory.territoryID} : {territory.coordinates} ");
+        //Debug.Log($" {territory.territoryID} : {territory.coordinates} ");
     }
 
     public void AddEntity(Entity entity)

@@ -25,6 +25,10 @@ public class PointEventSubcriptor : MonoBehaviour
             {
                 isPointed = false;
             }
+            else
+            {
+                
+            }
         }
     }
 

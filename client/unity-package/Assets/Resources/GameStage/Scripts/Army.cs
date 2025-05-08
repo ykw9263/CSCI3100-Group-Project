@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 
 public struct stats {
@@ -11,17 +12,19 @@ public struct stats {
 }   
 public abstract class Army : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer renderObject;
+    [SerializeField] SpriteRenderer renderSprite;
     [SerializeField] GameObject curPathObject;
-    [SerializeField] GameObject InfoObject;
-    [SerializeField] GameObject newPathObject;
+    [SerializeField] GameObject popupObject;
+    [SerializeField] GameObject planPathObject;
+
+    const float PATH_RENDER_THREADSHOLD = 1;
 
     private int counter; 
     public Entity owner;
-    [SerializeField] public stats info;
+    public stats info;
 
     public int count;
-    public Vector3 cur_pos, des_pos;
+    public Vector3 cur_pos, des_pos, planned_des_pos;
     public bool is_traveling = false;
     public bool finished_traveling = true;
 
@@ -68,7 +71,12 @@ public abstract class Army : MonoBehaviour
         //transform.position = transform.position + Vector3.left * info.speed ;
         transform.position = Vector3.MoveTowards(transform.position, des_pos , info.speed*Time.deltaTime);
         cur_pos = transform.position ;
-        if (Vector3.Distance(cur_pos, des_pos) <= 0.01){
+
+        Vector3 disp = des_pos - cur_pos ;
+        UpdatePathLine(curPathObject, disp);
+        UpdatePathLine(planPathObject, planned_des_pos - cur_pos);
+
+        if (disp.magnitude <= 0.01){
             //Debug.Log("finish traveling") ;
             finished_traveling = true;
             is_traveling = false ; 
@@ -79,13 +87,35 @@ public abstract class Army : MonoBehaviour
         is_traveling = true ;
         finished_traveling = false;
     }
-    public void SetDestination(Vector2 coordinates)
+    public void SetDestination(Vector2 des_pos)
     {
-        des_pos = new Vector3(coordinates.x, coordinates.y, 0);
+        this.des_pos = (Vector3)des_pos;
         is_traveling = true;
         finished_traveling = false;
     }
 
+    public void PlanDestination(Vector2 des_pos, bool valid)
+    {
+        this.planned_des_pos = (Vector3)des_pos;
+        Vector3 displacement = this.planned_des_pos - cur_pos;
+
+        planPathObject.GetComponent<SpriteShapeRenderer>().color =
+                    valid ?
+                    new Color(0x7C / 256f, 0xCC / 256f, 0xE9 / 256f) :
+                    new Color(0xFF / 256f, 0x33 / 256f, 0x67 / 256f);
+
+        planPathObject.SetActive(true);
+        UpdatePathLine(planPathObject, planned_des_pos - cur_pos);
+    }
+
+    public void CommitPlanDestination(bool commit) {
+        Debug.Log("commit plan destination" + commit);
+        planPathObject.SetActive(false);
+        if (commit)
+        {
+            SetDestination(planned_des_pos);
+        }
+    }
 
     public void AddAttackTarget(Army army){
         if (army.owner.entityID == this.owner.entityID)
@@ -122,26 +152,38 @@ public abstract class Army : MonoBehaviour
     public void HandleSelect(bool select)
     {
         if (select) {
-            InfoObject?.SetActive(true);
-            curPathObject?.SetActive(true);
+            if (popupObject) popupObject.SetActive(true);
+            if (curPathObject && (des_pos - cur_pos).magnitude > PATH_RENDER_THREADSHOLD) curPathObject.SetActive(true);
         }
         else
         {
-            InfoObject?.SetActive(false);
-            curPathObject?.SetActive(false);
+            if(popupObject) popupObject.SetActive(false);
+            if (curPathObject) curPathObject.SetActive(false);
         }
     }
-/*
-    protected void OnMouseDown(){
-        //selected = true ; 
-        //Debug.Log("selected");
-        SetDestination(GameState.GetGameState().territories[0]);
-        is_traveling = true;
+    /*
+        protected void OnMouseDown(){
+            //selected = true ; 
+            //Debug.Log("selected");
+            SetDestination(GameState.GetGameState().territories[0]);
+            is_traveling = true;
+        }
+    */
+    public void UpdatePathLine(GameObject pathObject, Vector3 disp) {
+        if (pathObject)
+        {
+            if (disp.magnitude > PATH_RENDER_THREADSHOLD)
+            {
+                pathObject.GetComponent<SpriteShapeController>().spline.SetPosition(1, disp / transform.localScale.y);
+            }
+            else
+            {
+                pathObject.SetActive(false);
+            }
+        }
     }
-*/
-
     public void SetColor(Color color) {
-        if (renderObject) renderObject.color = color;
+        if (renderSprite) renderSprite.color = color;
     }
 }
     

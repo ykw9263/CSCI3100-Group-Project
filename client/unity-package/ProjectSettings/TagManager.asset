@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraBorder
   - ArmyObj
+  - Territory
   layers:
   - Default
   - TransparentFX

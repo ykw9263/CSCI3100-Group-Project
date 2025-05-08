@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ArmySpawner : MonoBehaviour
 {
     // Start is called before the first frame update
 
     [SerializeField] public GameObject knight_prefab ;
+    public int debug_dest = 2;
 
     void Start()
     {
@@ -32,7 +34,7 @@ public class ArmySpawner : MonoBehaviour
         knight.transform.position = soldier.cur_pos ;
         soldier.SetColor(ownerEnt.color);
 
-        soldier.SetDestination(GameState.GetGameState().territories[2]) ;
+        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]) ;
         //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;
     }
 }

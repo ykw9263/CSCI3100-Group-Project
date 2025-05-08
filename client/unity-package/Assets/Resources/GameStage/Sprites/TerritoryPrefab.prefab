@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2777223482944906532}
   m_Layer: 11
   m_Name: TerritoryPrefab
-  m_TagString: Untagged
+  m_TagString: Territory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ SpriteShapeRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1415276035
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_MaskInteraction: 0
