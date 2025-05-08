@@ -6,7 +6,7 @@ public class ArmySpawner : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject knight_prefab ;
-
+    [SerializeField] Skill sp ;
     void Start()
     {
         //knight_prefab = Resources.Load<GameObject>("GameStage/Miniature Army 2D V.1/Prefab/Knight");
@@ -18,8 +18,14 @@ public class ArmySpawner : MonoBehaviour
         
     }
     public void spawn(int owner){
+
         GameObject knight = Instantiate(this.knight_prefab) ;
-        Army soldier = knight.GetComponent<Knight>() ;
+        
+        Army soldier = knight.GetComponent<Army>() ;
+        if (owner == 0) {
+            Debug.Log("spawnStats"); 
+            soldier.setStats( sp.hp, sp.atk, sp.speed ) ; 
+        }
         soldier.count = 2; 
         soldier.owner = GameState.GetGameState().entities[owner] ;
         soldier.owner.AddArmy(soldier) ;

@@ -19,7 +19,7 @@ public class Player : Entity
         //Debug.Log(this);*/
     }
     private void Start()
-    {
+    { 
         Debug.Log(GameState.GetGameState().player) ;
     }
 

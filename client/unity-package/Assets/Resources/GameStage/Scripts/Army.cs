@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 
@@ -13,7 +14,7 @@ public abstract class Army : MonoBehaviour
 {
     private int counter; 
     public Entity owner;
-    public stats info;
+    protected stats info;
     public int count;
     public bool is_traveling = false;
     public Vector3 cur_pos , des_pos ;
@@ -27,12 +28,18 @@ public abstract class Army : MonoBehaviour
         //target = territory.transform.position;    
         //Debug.Log(des_pos);
         //transform.position = transform.position + Vector3.left * info.speed ;
-        transform.position = Vector3.MoveTowards(transform.position, des_pos , info.speed*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, des_pos , (info.speed+9)*Time.deltaTime);
         cur_pos = transform.position ;
         if (Vector3.Distance(cur_pos, des_pos) <= 0.01 ){
             //Debug.Log("finish traveling") ;
             is_traveling = false ; 
         }
+    }
+    public void setStats(int hp, int atk , int speed) {
+        Debug.Log("SetStats");
+        info.hp = hp;
+        info.attack = atk;
+        info.speed = speed ;
     }
     public void SetDestination(Territory terr){
         des_pos = terr.coordinates ; 
