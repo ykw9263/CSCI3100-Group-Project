@@ -20,17 +20,17 @@ public abstract class Army : MonoBehaviour
     const float PATH_RENDER_THREADSHOLD = 1;
 
     private int counter; 
-    public Entity owner;
+    public int ownerID;
     public stats info;
 
     public int count;
     public Vector3 cur_pos, des_pos, planned_des_pos;
+    public int des_territoryID = -1;
     public bool is_traveling = false;
     public bool finished_traveling = true;
 
     public List<Army> attackTarget;
     public bool isDead = false ;
-    //protected bool selected = false;
 
 
 
@@ -60,7 +60,7 @@ public abstract class Army : MonoBehaviour
 
     protected void OnDestroy()
     {
-        owner?.army.Remove(this);
+        GameState.GetGameState().entities.GetValueOrDefault(ownerID)?.army.Remove(this);
     }
 
     public void travel(){
@@ -118,7 +118,7 @@ public abstract class Army : MonoBehaviour
     }
 
     public void AddAttackTarget(Army army){
-        if (army.owner.entityID == this.owner.entityID)
+        if (army.ownerID == this.ownerID)
         {
             return ;
         }
@@ -139,7 +139,7 @@ public abstract class Army : MonoBehaviour
         
     }
     public void TakeDamage(int damage){
-        Debug.Log($"{this.owner.entityID} : Taking Damage") ;
+        Debug.Log($"{this.ownerID} : Taking Damage") ;
         info.hp -= damage ; 
         if(info.hp <= 0 && this)
         {

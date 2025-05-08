@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject gameMapPrefab;
     public Player player;
-    public List<Entity> entities;
-    public List<Territory> territories;
+    public Dictionary<int, Entity> entities;
+    public Dictionary<int, Territory> territories;
 
     private static GameState gamestate;
     MapGeneration gameMap;
@@ -20,8 +21,8 @@ public class GameState : MonoBehaviour
     void Start()
     {
         gamestate = this;
-        this.entities = new List<Entity>() ;
-        this.territories = new List<Territory>() ;
+        this.entities = new Dictionary<int, Entity>() ;
+        this.territories = new Dictionary<int, Territory>() ;
         InitGame(2);
     }
 
@@ -46,15 +47,15 @@ public class GameState : MonoBehaviour
 
         float h = 210 / 360f, s = 0.7f, v = 0.9f;
 
-        entities.Add(player = new Player(0, Color.HSVToRGB(h, s, v)));
+        entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v)));
         for (int i = 0; i < enemy_count; i++) {
             // h = UnityEngine.Random.Range(1f, 160f) / 360f;
             // entities.Add(new Enemy(i+1, Color.HSVToRGB(h, s, v)));
-            entities.Add(new Enemy(i + 1, Color.HSVToRGB(enemyHues[i], s, v)));
+            entities.Add(i+1, new Enemy(i + 1, Color.HSVToRGB(enemyHues[i], s, v)));
             
         }
 
-        List<Territory> shuffledterr = new List<Territory>(territories) ;
+        List<Territory> shuffledterr = new List<Territory>(territories.Values) ;
         for (int i = 0; i < shuffledterr.Count; i++)
         {
             int r = UnityEngine.Random.Range(i, shuffledterr.Count);
@@ -63,7 +64,7 @@ public class GameState : MonoBehaviour
             shuffledterr[r] = tmp;
         }
         int counter = 0;
-        foreach (Entity entity in this.entities) {
+        foreach (Entity entity in this.entities.Values) {
             shuffledterr[counter].FallTo(entity);
             entity.home = shuffledterr[counter];
             counter++;
@@ -71,13 +72,13 @@ public class GameState : MonoBehaviour
     }
     public GameState ResetGameState()
     {
-        this.entities = new List<Entity>();
+        this.entities = new Dictionary<int, Entity>();
         this.player = new Player(0, Color.HSVToRGB(210 / 360f, 0.7f, 0.9f));
-        this.territories = new List<Territory>();
+        this.territories = new Dictionary<int, Territory>();
         return this;
     }
     public GameState ImportGameState(
-        Player player, List<Entity> entities, List<Territory> territories
+        Player player, Dictionary<int, Entity> entities, Dictionary<int, Territory> territories
         )
     {
         this.player = player;
@@ -88,14 +89,14 @@ public class GameState : MonoBehaviour
 
     public void AddTerritory(Territory territory) 
     {
-        territories.Add(territory);
+        territories.Add(territory.territoryID, territory);
         
         //Debug.Log($" {territory.territoryID} : {territory.coordinates} ");
     }
 
     public void AddEntity(Entity entity)
     {
-        entities.Add(entity);
+        entities.Add(entity.entityID, entity);
         //Debug.Log($" Add entity{entity.EntityID} : {territory.coordinates} ");
     }
 }

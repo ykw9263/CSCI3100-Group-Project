@@ -20,13 +20,13 @@ public class ArmySpawner : MonoBehaviour
     {
         
     }
-    public void spawn(int owner){
+    public void spawn(int ownerID){
         GameObject knight = Instantiate(this.knight_prefab);
         knight.transform.parent = this.transform;
 
         Army soldier = knight.GetComponent<Knight>() ;
         soldier.count = 1; 
-        Entity ownerEnt = GameState.GetGameState().entities[owner] ;
+        Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID) ;
         ownerEnt.AddArmy(soldier) ;
         Debug.Log(ownerEnt.entityID) ;
 

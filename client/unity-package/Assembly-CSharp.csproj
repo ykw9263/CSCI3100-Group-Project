@@ -60,14 +60,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.61f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Resources\GameStage\Scripts\knight.cs" />
     <Compile Include="Assets\Resources\LoginPage\Scripts\Login.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\InputEventsHandler.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\ArmySpawner.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\MapGeneration.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\UI\DragPopup.cs" />
     <Compile Include="Assets\InputSystem_Actions.cs" />
-    <Compile Include="Assets\Resources\GameStage\Scripts\TerritoryGameObj.cs" />
     <Compile Include="Assets\Resources\LoginPage\Scripts\InputClear.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\CameraEvents\CameraBorder.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\ClickEventSubscriptor.cs" />
@@ -77,6 +75,7 @@
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\ClosedShapeBuilder.cs" />
     <Compile Include="Assets\Resources\LoginPage\Scripts\DisplayUsername.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\AttackCollider.cs" />
+    <Compile Include="Assets\Resources\GameStage\Scripts\Knight.cs" />
     <Compile Include="Assets\Resources\MainMenu\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Territory.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\GameState.cs" />

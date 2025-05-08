@@ -9,31 +9,20 @@ public class Territory : MonoBehaviour
     public int territoryID;
     public int max_hp { get; private set; }
     public int hp;
-    public Entity owner;
+    public int ownerID;
     public List<int> forces;
     public List<int> neibours;
     public Vector3 coordinates;
-    // private GameObject territoryGameObject;
+
     Color color = Color.white;
 
-/*    public Territory(int territoryID, int max_hp, Vector3 coordinates, GameObject territoryGameObject, List<int> neibours) {
-        this.territoryID = territoryID;
-        this.max_hp = max_hp;
-        this.hp = max_hp;
-        this.owner = null;
-        this.coordinates = coordinates;
-        this.forces = new List<int>();
-        this.neibours = neibours;
-        this.territoryGameObject = territoryGameObject;
-        this.territoryGameObject.GetComponent<TerritoryGameObj>()?.SetTerritory(this);
-    }*/
 
     public void InitTerritory(int territoryID, int max_hp, Vector3 coordinates, List<int> neibours)
     {
         this.territoryID = territoryID;
         this.max_hp = max_hp;
         this.hp = max_hp;
-        this.owner = null;
+        this.ownerID = -1;
         this.coordinates = coordinates;
         this.forces = new List<int>();
         this.neibours = neibours;
@@ -60,7 +49,9 @@ public class Territory : MonoBehaviour
         if (hp >= max_hp)
         {
             hp = max_hp;
-            color = owner.color;
+            Entity owner = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
+
+            color = (owner!=null)? owner.color: Color.white;
         }
         float h, s, v;
         Color.RGBToHSV(color, out h, out s, out v);
@@ -69,9 +60,9 @@ public class Territory : MonoBehaviour
     }
 
     public void FallTo(Entity ent) {
-        owner?.LoseControl(this);
+        GameState.GetGameState().entities.GetValueOrDefault(ownerID)?.LoseControl(this);
         ent.TakeControl(this);
-        owner = ent;
+        ownerID = ent.entityID;
         color = ent.color;
         hp = max_hp;
         GetComponent<SpriteShapeRenderer>().color = color;
