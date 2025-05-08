@@ -11,7 +11,7 @@ using UnityEngine.Rendering;
 
 public class CameraMove : MonoBehaviour
 {
-    public Vector2 border;
+    public Vector2 border = new(300, 300);
     public float padding = 10;
     Camera cameraComp;
 
@@ -33,11 +33,13 @@ public class CameraMove : MonoBehaviour
         float physcial_width = (Screen.width *1000/Screen.height) / 10;
         float padded_width = physcial_width - this.padding;
         float padded_height = 100 - this.padding;
+        padded_width *=  this.cameraComp.orthographicSize / 100;
+        padded_height *=  this.cameraComp.orthographicSize / 100;
 
         pos.x = pos.x > padded_width ? pos.x : padded_width;
         pos.x = (pos.x < border.x - padded_width) ? pos.x : border.x - padded_width;
 
-        pos.y = (pos.y > 100 - this.padding) ? pos.y : padded_height;
+        pos.y = (pos.y > padded_height) ? pos.y : padded_height;
         pos.y = (pos.y < border.y - padded_height) ? pos.y : border.y - padded_height;
 
 

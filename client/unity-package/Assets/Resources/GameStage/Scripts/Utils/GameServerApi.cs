@@ -46,7 +46,24 @@ public class GameServerApi : MonoBehaviour
         Register("User123", "Password123", "email@mail.com", "accessToken", RegisterCallback);
         Login("User123", "Password123", LoginCallback);
     }
+    void ExampleUseInExternalClass() {
+        // In Unity Scene put GameServerApi script in a gameobj (we call it GameObj_A)
 
+        // In other script, add class field:
+        // [SerializeField] GameServerApi gameServerApi;
+        // drag and drop the GameObj_A into the script field in Unity
+
+        // calling function
+        // 
+        // // this will be called after the request has been processed.
+        // void SomeCallback(GameServerApi.ServerResponse resObj, bool result)
+        // {
+        //    // Do something
+        // }
+        // // send the request
+        // gameServerApi.Login("User123", "Password123", SomeCallback);
+
+    }
 
     private void Start()
     {

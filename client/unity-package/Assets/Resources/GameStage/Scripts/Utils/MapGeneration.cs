@@ -9,8 +9,10 @@ using System.Linq;
 using UnityEngine.Experimental.AI;
 
 
+
 public class MapGeneration : MonoBehaviour
 {
+    
     const int DEFAULT_HP = 100;
     struct MapPolygonMesh
     {
@@ -28,7 +30,7 @@ public class MapGeneration : MonoBehaviour
     IPoint[] points;
     Vector2[,] pointPositions;
     List<MapPolygonMesh> polygons;
-    GameObject TerrPrefab;
+    [SerializeField] GameObject TerrPrefab;
 
     public float mergeCoeff = .6f;
     public static float minDist = 1;
@@ -36,9 +38,9 @@ public class MapGeneration : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        TerrPrefab = Resources.Load<GameObject>("GameStage/Sprites/TerritoryPrefab");
+        // TerrPrefab = Resources.Load<GameObject>("GameStage/Sprites/TerritoryPrefab");
 
-        generateMap();
+        // generateMap();
     }
 
     // Update is called once per frame
@@ -47,7 +49,7 @@ public class MapGeneration : MonoBehaviour
 
     }
 
-    void generateMap()
+    public void generateMap()
     {
         if (seed != 0)
             Random.InitState(seed);
@@ -178,11 +180,11 @@ public class MapGeneration : MonoBehaviour
             center.y /= poly.vertices.Count;
 
             terrShape1.transform.parent = this.transform;
-            gameState.AddTerritory(new Territory(poly.id, territoryHP, center, terrShape1, adjList));   
+            Territory territory = terrShape1.GetComponent<Territory>();
+            territory.InitTerritory(poly.id, territoryHP, center, adjList);
+            gameState.AddTerritory(territory);
+            // gameState.AddTerritory(new Territory(poly.id, territoryHP, center, terrShape1, adjList));   
         }
-        gameState.AddEntity(new Player()) ; 
-        gameState.AddEntity(new Enemy()) ; 
-        gameState.InitGame() ; 
     }
 
     void GenerateDelaunate()

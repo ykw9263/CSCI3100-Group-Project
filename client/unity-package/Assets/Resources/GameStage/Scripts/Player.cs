@@ -4,19 +4,10 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    public Player()
+    public Player(int entityID, Color color) : base(entityID, color)
     {
-        entityID = 0 ;
-        //public Army[] armies;
-        //territories_in_Controls = new List<int>() ;
-        territories_in_Controls.Add(entityID) ;
-        
         GameState gameState = GameState.GetGameState() ;
-        gameState.player = this ;
-        //Debug.Log(gameState.player) ; 
-        //Debug.Log(gamestate.territories.Count);
-        //home = gamestate.territories[entityID];
-        //Debug.Log(this);*/
+        // gameState.player = this ;
     }
     private void Start()
     {

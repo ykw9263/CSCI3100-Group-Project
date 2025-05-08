@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2338758615684909117}
   - component: {fileID: 931503266854600399}
   - component: {fileID: 1761619387748793295}
-  - component: {fileID: 6912656242443634064}
   - component: {fileID: 8706971120299725537}
-  m_Layer: 10
+  - component: {fileID: -2777223482944906532}
+  m_Layer: 11
   m_Name: TerritoryPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,8 +74,8 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1415276035
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_MaskInteraction: 0
@@ -126,18 +126,6 @@ MonoBehaviour:
   m_Creator: {fileID: 0}
   m_Modifiers: []
   m_ColliderSegment: []
---- !u!114 &6912656242443634064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5897820775173037741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86b14d2543e207e4c98793fb9ea71e94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!60 &8706971120299725537
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -188,3 +176,20 @@ PolygonCollider2D:
       - {x: 49.10116, y: 50.7869}
       - {x: 51.020405, y: 56.693737}
   m_UseDelaunayMesh: 0
+--- !u!114 &-2777223482944906532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5897820775173037741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee7568634032484ebbf87d7c601d3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  territoryID: 0
+  hp: 0
+  forces: 
+  neibours: 
+  coordinates: {x: 0, y: 0, z: 0}

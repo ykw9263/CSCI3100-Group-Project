@@ -5,7 +5,8 @@ using UnityEngine;
 public class ArmySpawner : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject knight_prefab ;
+
+    [SerializeField] public GameObject knight_prefab ;
 
     void Start()
     {
@@ -18,18 +19,18 @@ public class ArmySpawner : MonoBehaviour
         
     }
     public void spawn(int owner){
-        GameObject knight = Instantiate(this.knight_prefab) ;
-        Army soldier = knight.GetComponent<Knight>() ;
-        soldier.count = 2; 
-        soldier.owner = GameState.GetGameState().entities[owner] ;
-        soldier.owner.AddArmy(soldier) ;
-        Debug.Log(soldier.owner.entityID) ;
-        soldier.cur_pos = soldier.owner.home.coordinates ;
-        
-        //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
-        knight.transform.parent = this.transform ;
+        GameObject knight = Instantiate(this.knight_prefab);
+        knight.transform.parent = this.transform;
 
+        Army soldier = knight.GetComponent<Knight>() ;
+        soldier.count = 1; 
+        Entity ownerEnt = GameState.GetGameState().entities[owner] ;
+        ownerEnt.AddArmy(soldier) ;
+        Debug.Log(ownerEnt.entityID) ;
+
+        soldier.cur_pos = ownerEnt.home.coordinates ;
         knight.transform.position = soldier.cur_pos ;
+        soldier.SetColor(ownerEnt.color);
 
         soldier.SetDestination(GameState.GetGameState().territories[2]) ;
         //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;

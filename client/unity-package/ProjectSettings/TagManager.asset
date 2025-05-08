@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CameraBorder
+  - ArmyObj
   layers:
   - Default
   - TransparentFX
@@ -12,10 +14,10 @@ TagManager:
   - Water
   - UI
   - 
+  - UICancel
   - 
-  - 
-  - 
-  - Army
+  - ArmyObj
+  - ArmyAttack
   - Map
   - 
   - 
@@ -38,6 +40,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Map
+    uniqueID: 2879691261
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Army
+    uniqueID: 3430120865
     locked: 0
