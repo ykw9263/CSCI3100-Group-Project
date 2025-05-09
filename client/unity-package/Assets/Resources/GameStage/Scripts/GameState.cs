@@ -7,6 +7,8 @@ using System.Linq;
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject gameMapPrefab;
+    [SerializeField] GameObject skillPrefab;
+        [SerializeField] GameObject PopUpParent;
     public Player player;
     public Dictionary<int, Entity> entities;
     public Dictionary<int, Territory> territories;
@@ -34,6 +36,7 @@ public class GameState : MonoBehaviour
     public void InitGame(int enemy_count) {
         Destroy(gameMap?.gameObject);
         GameObject gameMapObj = Instantiate<GameObject>(gameMapPrefab);
+        
         gameMapObj.transform.parent = transform;
 
         gameMap = gameMapObj.GetComponent<MapGeneration>();
@@ -47,7 +50,11 @@ public class GameState : MonoBehaviour
 
         float h = 210 / 360f, s = 0.7f, v = 0.9f;
 
-        entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v)));
+        entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v))) ;
+        GameObject skillObj = Instantiate<GameObject>(skillPrefab) ;
+        player.skill = skillObj.GetComponent<Skill>() ;
+        skillObj.transform.parent = PopUpParent.transform ;
+        skillObj.transform.localPosition = new Vector3(-50, -115, 0);
         for (int i = 0; i < enemy_count; i++) {
             // h = UnityEngine.Random.Range(1f, 160f) / 360f;
             // entities.Add(new Enemy(i+1, Color.HSVToRGB(h, s, v)));

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -20,25 +19,56 @@ public class ArmySpawner : MonoBehaviour
     {
         
     }
-    public void spawn(int owner){
-        GameObject knight = Instantiate(this.knight_prefab) ;
-        knight.transform.parent = this.transform;
-        Army soldier = knight.GetComponent<Army>() ;
-        if (owner == 0)
-        {
-            Debug.Log("spawnStats");
-            soldier.setStats(sp.hp, sp.atk, sp.speed);
-        }
-        soldier.count = 1;
+    public void spawn(int ownerID){
+
         Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
-        ownerEnt.AddArmy(soldier);
-        Debug.Log(soldier.owner.entityID) ;        
+        GameObject knight = Instantiate(this.knight_prefab);
+        knight.transform.parent = this.transform;
+        Army soldier = knight.GetComponent<Army>();
+        if (ownerEnt is Player) {
+            if ( ((Player)ownerEnt).skill.gold <= 0 )
+            {
+                Debug.Log("No Gold");
+                return;
+            }
+            ((Player)ownerEnt).skill.MinusGold();
+            if (ownerID == 0)
+            {
+                Debug.Log("spawnStats");
+                soldier.setStats(((Player)ownerEnt).skill);
+            }
+        }
+        
+        
+        
+        
+        soldier.count = 1;
+        
+        ownerEnt.AddArmy(soldier);     
         //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
         soldier.cur_pos = ownerEnt.home.coordinates ;
         knight.transform.position = soldier.cur_pos ;
         soldier.SetColor(ownerEnt.color);
 
-        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]) ;
+        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
+        //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;
+    }
+    public void spawnEnemy(int ownerID)
+    {
+        Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
+        GameObject knight = Instantiate(this.knight_prefab);
+        knight.transform.parent = this.transform;
+        Army soldier = knight.GetComponent<Army>();
+
+        soldier.count = 1;
+
+        ownerEnt.AddArmy(soldier);
+        //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
+        soldier.cur_pos = ownerEnt.home.coordinates;
+        knight.transform.position = soldier.cur_pos;
+        soldier.SetColor(ownerEnt.color);
+
+        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
         //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;
     }
 }

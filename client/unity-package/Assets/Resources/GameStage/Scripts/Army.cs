@@ -20,12 +20,14 @@ public abstract class Army : MonoBehaviour
 
     const float PATH_RENDER_THREADSHOLD = 1;
 
-    private int counter; 
+    private int counter;
+
     public int ownerID;
     public stats info;
 
     public int count;
     public Vector3 cur_pos, des_pos, planned_des_pos;
+    public int cur_territoryId ;
     public int des_territoryID = -1;
     public bool is_traveling = false;
     public bool finished_traveling = true;
@@ -83,22 +85,22 @@ public abstract class Army : MonoBehaviour
             is_traveling = false ; 
         }
     }
-    public void setStats(int hp, int atk , int speed) {
+    public void setStats(Skill skill) {
         Debug.Log("SetStats");
-        info.hp = hp;
-        info.attack = atk;
-        info.speed = speed ;
+        info.hp = skill.hp;
+        info.attack = skill.atk;
+        info.speed = skill.speed ;
     }
     public void SetDestination(Territory terr){
         des_pos = terr.coordinates ; 
-        is_traveling = true ;
-        finished_traveling = false;
+        //is_traveling = true ;
+        //finished_traveling = false;
     }
     public void SetDestination(Vector2 des_pos)
     {
         this.des_pos = (Vector3)des_pos;
-        is_traveling = true;
-        finished_traveling = false;
+        //is_traveling = true;
+        //finished_traveling = false;
     }
 
     public void PlanDestination(Vector2 des_pos, bool valid)

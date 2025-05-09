@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
@@ -21,10 +22,13 @@ public class Skill : MonoBehaviour
     public int maxAtk;
     public int maxSpeed;
     public int counter ;
+
+    public int gold ;
     [SerializeField] TextMeshProUGUI textHp ;
     [SerializeField] TextMeshProUGUI textAtk ;
     [SerializeField] TextMeshProUGUI textSpeed ;
     [SerializeField] TextMeshProUGUI textSkillPoint;
+    [SerializeField] TextMeshProUGUI textGold;
     [SerializeField] GameObject army; 
 
     // Start is called before the first frame update
@@ -32,6 +36,15 @@ public class Skill : MonoBehaviour
     {
         skillpoints++ ;
             Debug.Log(skillpoints) ;
+    }
+    public void MinusGold()
+    {
+        if (gold <= 0) {
+            return;
+        }
+        gold--;
+        textGold.SetText($"Gold: {gold}");
+        Debug.Log("Minus Gold");
     }
     public void AddHp() 
     {
@@ -166,10 +179,14 @@ public class Skill : MonoBehaviour
         {
             skillpoints++ ; 
             textSkillPoint.SetText($"SP: {skillpoints}");
+            gold++;
+            textGold.SetText($"Gold: {gold}");
             visualTime = timer ;
-
+            
             // Remove the recorded 2 seconds.
             timer = timer - waitTime ;
         }
     }
+
+    
 }
