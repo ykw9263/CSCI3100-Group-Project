@@ -65,7 +65,8 @@ public class GameState : MonoBehaviour
         }
         int counter = 0;
         foreach (Entity entity in this.entities.Values) {
-            shuffledterr[counter].FallTo(entity);
+            shuffledterr[counter].FallTo(entity.entityID);
+            shuffledterr[counter].Repair(99999);
             entity.home = shuffledterr[counter];
             counter++;
         }
@@ -91,12 +92,19 @@ public class GameState : MonoBehaviour
     {
         territories.Add(territory.territoryID, territory);
         
-        //Debug.Log($" {territory.territoryID} : {territory.coordinates} ");
     }
 
     public void AddEntity(Entity entity)
     {
         entities.Add(entity.entityID, entity);
-        //Debug.Log($" Add entity{entity.EntityID} : {territory.coordinates} ");
+    }
+
+    public Territory GetTerrByID(int terrID)
+    {
+        return territories.GetValueOrDefault(terrID, null);
+    }
+    public Entity GetEntityByID(int entityID)
+    {
+        return entities.GetValueOrDefault(entityID, null);
     }
 }
