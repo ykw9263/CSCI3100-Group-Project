@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Resources\GameStage\Scripts\Skill.cs" />
     <Compile Include="Assets\Resources\LoginPage\Scripts\Login.cs" />
+    <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\InputEventsHandler.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\ArmySpawner.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\MapGeneration.cs" />
@@ -82,7 +83,10 @@
     <Compile Include="Assets\Resources\GameStage\Scripts\GameState.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Entity.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\Buttons.cs" />
+    <Compile Include="Assets\Scripts\RegisterPanel.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\GameServerApi.cs" />
   </ItemGroup>
   <ItemGroup>

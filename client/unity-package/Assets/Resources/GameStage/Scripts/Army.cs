@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
-using UnityEngine;
+using TMPro;using UnityEngine;
 using UnityEngine.U2D;
+using System.Diagnostics;
 
 
 public struct stats {
@@ -27,8 +28,7 @@ public abstract class Army : MonoBehaviour
 
     public int count;
     public Vector3 cur_pos, des_pos, planned_des_pos;
-    public int cur_territoryId ;
-    public int des_territoryID = -1;
+    public int des_terrID = -1;
     public bool is_traveling = false;
     public bool finished_traveling = true;
 
@@ -53,7 +53,18 @@ public abstract class Army : MonoBehaviour
                 is_traveling = false;
                 Attack(attackTarget[0]);
             }
-            else if (!is_traveling && !finished_traveling)
+            else if (finished_traveling) {
+                GameState gs = GameState.GetGameState();
+                Territory terr = gs.GetTerrByID(des_terrID);
+                if (terr != null)
+                {
+                    if (terr.ownerID == ownerID)
+                        terr.Repair(info.attack);
+                    else
+                        terr.TakeDamage(gs.GetEntityByID(ownerID), info.attack);
+                }
+            }
+            else if (!is_traveling)
             {
                 is_traveling = true;
             }
@@ -67,7 +78,6 @@ public abstract class Army : MonoBehaviour
     }
 
     public void travel(){
-        
         //Debug.Log("traveling");
         //target = territory.transform.position;    
         //Debug.Log(des_pos);
@@ -85,19 +95,21 @@ public abstract class Army : MonoBehaviour
             is_traveling = false ; 
         }
     }
-    public void setStats(Skill skill) {
+    public void setStats(Skill skill)
+    {
         Debug.Log("SetStats");
         info.hp = skill.hp;
         info.attack = skill.atk;
-        info.speed = skill.speed ;
-    }
-    public void SetDestination(Territory terr){
+        info.speed = skill.speed;
+    }    public void SetDestination(Territory terr){
+        des_terrID = terr.territoryID;
         des_pos = terr.coordinates ; 
         //is_traveling = true ;
         //finished_traveling = false;
     }
-    public void SetDestination(Vector2 des_pos)
+    public void SetDestination(Territory terr, Vector2 des_pos)
     {
+        des_terrID = terr.territoryID;
         this.des_pos = (Vector3)des_pos;
         //is_traveling = true;
         //finished_traveling = false;
@@ -117,12 +129,12 @@ public abstract class Army : MonoBehaviour
         UpdatePathLine(planPathObject, planned_des_pos - cur_pos);
     }
 
-    public void CommitPlanDestination(bool commit) {
+    public void CommitPlanDestination(Territory terr, bool commit) {
         Debug.Log("commit plan destination" + commit);
         planPathObject.SetActive(false);
-        if (commit)
+        if (commit && terr!= null)
         {
-            SetDestination(planned_des_pos);
+            SetDestination(terr, planned_des_pos);
         }
     }
 

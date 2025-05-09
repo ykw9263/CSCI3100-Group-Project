@@ -34,7 +34,7 @@ public class InputEventsHandler : MonoBehaviour
     const int UI_LAYERMASK = 1 << 5; // the LayerMask.GetMask() seems buggy on ui layer so we manually make one
 
     private Army selectedArmy = null;
-    private Territory hoveredTerr = null;
+    // private Territory hoveredTerr = null;
 
     private EventStates cur_state = EventStates.free;
     
@@ -210,13 +210,13 @@ public class InputEventsHandler : MonoBehaviour
                     RaycastHit2D hit = PointerRaycast(clickLayermasks[EventStates.dragArmy]);
                     if (!hit)
                     {
-                        if (selectedArmy) selectedArmy.CommitPlanDestination(false);
+                        if (selectedArmy) selectedArmy.CommitPlanDestination(null, false);
                         setSelectedArmy(null);
                         cur_state = EventStates.free;
                         break;
                     }
                     GameObject hitObj = hit.collider.gameObject;
-                    if (selectedArmy) selectedArmy.CommitPlanDestination(hitObj.CompareTag("Territory"));
+                    if (selectedArmy) selectedArmy.CommitPlanDestination(hitObj.GetComponent<Territory>(), hitObj.CompareTag("Territory"));
                 }
                 // should be holding mouse, so no mouse down should enter here.
                 cur_state = EventStates.free;
