@@ -27,6 +27,7 @@ public class ArmySpawner : MonoBehaviour
         Army soldier = knight.GetComponent<Knight>() ;
         soldier.count = 1; 
         Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID) ;
+        soldier.ownerID = ownerID ;
         ownerEnt.AddArmy(soldier) ;
         Debug.Log(ownerEnt.entityID) ;
 

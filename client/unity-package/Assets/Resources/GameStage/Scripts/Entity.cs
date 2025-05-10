@@ -31,7 +31,6 @@ public abstract class Entity
     public void AddArmy(Army troop){
         Debug.Log(troop);
         this.army.Add(troop) ;
-        Debug.Log(this.army[0]);
         //troop.owner = this ;
         //troop.isDead = false ;
         //troop.cur_pos = home.coordinates ; 
