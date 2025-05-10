@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject WelcomePanel, ForgetPasswordPanel, MainMenu, Settings, SoundPanel, VideoPanel, UserProfilePanel;
+    public GameObject WelcomePanel, ForgetPasswordPanel, ActivationPanel, MainMenu, Settings, SoundPanel, VideoPanel, UserProfilePanel;
     public RegisterPanel RegisterPanel;
     public TMP_InputField LoginName, LoginPassword, ResetEmail;
     public TextMeshProUGUI 
@@ -34,9 +34,18 @@ public class GameManager : MonoBehaviour
     {
         if (_loginFlag)
         {
-            ID.text = "Welcome, \n" + UserData.username;
             WelcomePanel.gameObject.SetActive(false);
-            MainMenu.gameObject.SetActive(true);
+            ActivationPanel.gameObject.SetActive(false);
+            MainMenu.gameObject.SetActive(false);
+
+            if (UserData.Activated)
+            {
+                ID.text = "Welcome, \n" + UserData.username;
+                MainMenu.gameObject.SetActive(true);
+            }
+            else {
+                ActivationPanel.SetActive(true);
+            }
         }
     }
 
@@ -124,6 +133,9 @@ public class GameManager : MonoBehaviour
                         UserData.username = resobj.username;
                         UserData.SetAccessToken(resobj.accessToken);
                         UserData.SetRefreshToken(resobj.refreshToken);
+                        if (resobj.activated.Equals("true")) {
+                            UserData.Activate();
+                        }
                         _loginFlag = true;
                         SwitchMainMenu();
                     }

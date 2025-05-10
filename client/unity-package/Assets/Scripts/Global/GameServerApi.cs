@@ -30,6 +30,7 @@ public static class GameServerApi
         public string? username;
         public string? accessToken;
         public string? refreshToken;
+        public string? activated;
 #nullable disable
 
     }
@@ -94,6 +95,7 @@ public static class GameServerApi
             ServerResponse resobj = null;
             bool isSuccess = res.result == UnityWebRequest.Result.Success;
             string jsontext = res.downloadHandler.text;
+            Debug.Log("Server responsed: "+jsontext);
             if (jsontext.Length>0) {
                 resobj = JsonUtility.FromJson<ServerResponse>(jsontext);
                 resobj.statusCode = res.responseCode;
@@ -216,7 +218,7 @@ public static class GameServerApi
         ServerRequestPayload reqObj = new ServerRequestPayload();
         reqObj.method = "activate";
         reqObj.username = username;
-        reqObj.pwd = newpwd;
+        reqObj.licenseKey = newpwd;
         reqObj.accessToken = accessToken;
 
         yield return PostMessage("/account", reqObj, ActivateCallback);

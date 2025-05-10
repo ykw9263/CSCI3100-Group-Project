@@ -303,7 +303,7 @@ async function userActivate(req: any, res: any){
 }
 
 async function handleAccountsPost(req: any, res: any){
-    // console.log(req.body);
+     console.log(req.body);
     const {method} = req?.body;
     switch (method){
         case 'verifyEmail':

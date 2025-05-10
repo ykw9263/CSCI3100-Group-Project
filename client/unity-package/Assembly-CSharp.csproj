@@ -74,6 +74,7 @@
     <Compile Include="Assets\Resources\GameStage\Scripts\Army.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\CameraEvents\CameraMove.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Account\RecoveryPanel.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\Account\ActivationPanel.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\ClosedShapeBuilder.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\AttackCollider.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Knight.cs" />

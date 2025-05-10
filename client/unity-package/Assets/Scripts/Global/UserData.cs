@@ -12,7 +12,11 @@ public static class UserData
     }
     private static UserCred userCred = new();
     public static Dictionary<string, string> gameStats = new();
+    public static bool Activated { get; private set; }
 
+    public static void Activate() {
+        Activated = true;
+    }
 
     public static void SetAccessToken(string accessToken) {
         userCred.accessToken = accessToken;
