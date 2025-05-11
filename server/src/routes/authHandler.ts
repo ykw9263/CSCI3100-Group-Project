@@ -107,6 +107,27 @@ async function userLogin(req: any, res: any){
 
 };
 
+async function userLogout(req: any, res: any){
+    const { username, refreshToken } = req.body;
+    if (
+        typeof(username) !== 'string' ||
+        typeof(refreshToken) !== 'string'
+    ){
+        return res.status(400).json({ 'message': 'Bad request' });
+    }
+    let accessToken = AuthModule.refreshAccessToken(refreshToken, username);
+    if (!accessToken){
+        return res.status(422).json({ 'message': 'Invalid refresh token' });
+    }
+    AuthModule.invalidateUserToken(username);
+    return res.status(200).json({ 
+        'message': 'success' ,
+        'username': username
+
+    });
+
+}
+
 async function userRefreshSession(req: any, res: any){
     const { username, refreshToken } = req.body;
     if (
@@ -133,6 +154,9 @@ async function handleAuthPost(req: any, res: any){
     console.log(req.body);
     const {method} = req?.body;
     switch (method){
+        case 'logout': 
+            userLogout(req, res);
+            break;
         case 'login': 
             userLogin(req, res);
             break;

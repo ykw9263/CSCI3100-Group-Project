@@ -266,94 +266,17 @@ public static class GameServerApi
         yield return PostMessage("/auth", reqObj, LoginCallback);
     }
 
-    /*
-
-    // TODO: Define behaivour according to server response
-    // callback can be defined in other scripts. Make sure to track access and refresh tokens
-
-    public void VerifyEmailCallback(ServerResponse resobj, bool result)
+    /**
+     *  Logout with username and refresh token
+     *  Response contains a new access token and a refresh token
+     */
+    static public IEnumerator Logout(string username, string refreshToken, System.Action<ServerResponse, bool> LogoutCallback)
     {
-        Debug.Log("EmailCallback: " + resobj.message);
+        ServerRequestPayload reqObj = new ServerRequestPayload();
+        reqObj.method = "logout";
+        reqObj.username = username;
+        reqObj.refreshToken = refreshToken;
+
+        yield return PostMessage("/auth", reqObj, LogoutCallback);
     }
-
-    public void RegisterCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-    }
-
-
-    public void ResetPWCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-    }
-
-    public void RequestRestoreCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-    }
-
-    public void FinishRestoreCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-    }
-
-
-
-    public void ActivateCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-        if (result)
-        {
-            // TODO: 
-        }
-        else
-        {
-            // TODO: 
-        }
-    }
-
-    public void VerifyCodeCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-        if (result)
-        {
-            active_accessToken = resobj.accessToken;
-            // TODO: next UI
-        }
-        else
-        {
-            // TODO: Wrong Code
-        }
-    }
-
-
-    public void RefreshSessionCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-
-        if (result) { active_accessToken = resobj.accessToken; }
-        else
-        {
-            active_accessToken = null;
-            if (resobj.statusCode == 422)
-            {
-                active_refreshToken = null;
-            }
-        }
-
-    }
-    public void LoginCallback(ServerResponse resobj, bool result)
-    {
-        Debug.Log("EmailCallback: " + resobj.message);
-        if (result) { 
-            active_accessToken = resobj.accessToken; 
-            active_refreshToken= resobj.refreshToken;
-        }
-        else
-        {
-            // TODO: 
-        }
-    }
-
-    */
 }

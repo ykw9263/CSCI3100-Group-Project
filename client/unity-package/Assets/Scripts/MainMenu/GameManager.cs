@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         InvalidUserOrPWMessage, ServerErrorMsg, 
         ResetLinkMessage, ResetFailMessage, 
         ID, SettingsUsername;
-    private bool _loginFlag;
+    private bool _loginFlag = false;
 
     public string gameStageSceneName = "gameStageScene2";
 
@@ -28,6 +28,30 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+    public void SwitchWelcomePanel()
+    {
+        WelcomePanel.SetActive(false);
+        ForgetPasswordPanel.SetActive(false);
+        ActivationPanel.SetActive(false);
+        MainMenu.SetActive(false);
+        if (UserData.GetRefreshToken()?.Length > 0)
+        {
+            if (UserData.Activated)
+            {
+                ID.text = "Welcome, \n" + UserData.username;
+                MainMenu.gameObject.SetActive(true);
+            }
+            else
+            {
+                ActivationPanel.SetActive(true);
+            }
+        }
+        else {
+            WelcomePanel.SetActive(true);
+        }
     }
 
     public void SwitchMainMenu()
