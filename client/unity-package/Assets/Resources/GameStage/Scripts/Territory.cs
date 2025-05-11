@@ -28,6 +28,7 @@ public class Territory : MonoBehaviour
         this.forces = new List<int>();
         this.neibours = neibours;
         UpdateHPColor();
+        
 /*        this.territoryGameObject;
         this.territoryGameObject.GetComponent<TerritoryGameObj>()?.SetTerritory(this);*/
     }

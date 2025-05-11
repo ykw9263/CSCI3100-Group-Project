@@ -10,7 +10,7 @@ const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
 let DBwarp : IDBWarper = UserDatabase.getDB();
 
 let loginStmt : IStatementWarper = DBwarp.makePstmt(
-    "SELECT userID AS userid, username, password FROM accounts \
+    "SELECT userID AS userid, username, password, licenseID FROM accounts \
     WHERE username = ?"
 );
 
@@ -92,7 +92,8 @@ async function userLogin(req: any, res: any){
                 'message': `success`, 
                 'username': row.username, 
                 'accessToken': accessToken, 
-                'refreshToken': refreshToken
+                'refreshToken': refreshToken,
+                'activated': (row.licenseID != null)?"true":"false"
             });
         }
     
@@ -129,7 +130,7 @@ async function userRefreshSession(req: any, res: any){
 }
 
 async function handleAuthPost(req: any, res: any){
-    // console.log(req.body);
+    console.log(req.body);
     const {method} = req?.body;
     switch (method){
         case 'login': 

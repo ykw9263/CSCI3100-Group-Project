@@ -8,6 +8,8 @@ import util from 'node:util';
 import accountRoute from './routes/account';
 import authRoute from './routes/auth';
 
+import LicenseModule from './modlues/license';
+
 const options = {
     port:{
         type: 'string',
@@ -30,6 +32,11 @@ app.use(bodyParser.json());
 
 app.get("/", (req, res, next) => {
     res.json({status: "success", data:[], message: "hi"});
+});
+
+app.get("/get_license", (req, res, next) => {
+    let licenseKey = LicenseModule.generateLicenseKey();
+    res.json({status: "success", data:[], message: licenseKey});
 });
 
 app.get("/version", (req, res, next) => {

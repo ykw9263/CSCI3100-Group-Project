@@ -27,7 +27,7 @@ public class Buttons : MonoBehaviour
         switch (button.name)
         {
             case "Login Button":
-                _gameManager.SwitchMainMenu();
+                _gameManager.Login();
                 break;
             case "Forget Password Button":
                 _gameManager.SwitchForgetPassword();
