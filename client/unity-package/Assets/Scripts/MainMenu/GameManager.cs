@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject WelcomePanel, ForgetPasswordPanel, ActivationPanel, MainMenu, Settings, SoundPanel, VideoPanel, UserProfilePanel;
+    public GameObject WelcomePanel, ForgetPasswordPanel, ActivationPanel, MainMenu, Settings, Achievements, SoundPanel, VideoPanel, UserProfilePanel;
     public RegisterPanel RegisterPanel;
     public TMP_InputField LoginName, LoginPassword, ResetEmail;
     public TextMeshProUGUI 
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
         ID, SettingsUsername;
     private bool _loginFlag = false;
 
-    public string gameStageSceneName = "gameStageScene2";
+    private string gameStageSceneName = "GameStageScene2";
 
     // Start is called before the first frame update
     void Start()
@@ -110,6 +110,19 @@ public class GameManager : MonoBehaviour
     public void SettingsSwitchMM()
     {
         Settings.gameObject.SetActive(false);
+        MainMenu.gameObject.SetActive(true);
+    }
+
+    public void SwitchAchievements()
+    {
+        //SettingsUsername.text = LoginName.text;
+        MainMenu.gameObject.SetActive(false);
+        Achievements.gameObject.SetActive(true);
+    }
+
+    public void AchievementsSwitchMM()
+    {
+        Achievements.gameObject.SetActive(false);
         MainMenu.gameObject.SetActive(true);
     }
 

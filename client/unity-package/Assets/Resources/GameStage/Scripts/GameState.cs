@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
-using Unity.Mathematics;
+
 //using System.Diagnostics;
 
 public class GameState : MonoBehaviour
@@ -50,7 +50,7 @@ public class GameState : MonoBehaviour
         {
             this.elapsedTime += Time.deltaTime;
             this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
-            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
+            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss");
             time.SetText(timePlayingStr) ;
         }
     }
@@ -123,7 +123,6 @@ public class GameState : MonoBehaviour
         panel.EndGame(timeText);    
         //time.SetText("You Win!") ; 
         Debug.Log("You Win !") ;
-        
     }
 
     public void EnemyMove() {
@@ -162,13 +161,13 @@ public class GameState : MonoBehaviour
     {
         entities.Add(entity.entityID, entity);
     }
+
     public void RemoveEntities(Entity entity) {
         entities.Remove(entity.entityID) ;
         if (this.entities.Count == 1) {
             Debug.Log(this.entities.Count);
             EndGame(); 
-        }
-        
+        }    
     }
 
     public Territory GetTerrByID(int terrID)

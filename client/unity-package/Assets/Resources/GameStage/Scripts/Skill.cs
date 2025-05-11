@@ -186,13 +186,14 @@ public class Skill : MonoBehaviour
             gold++;
             textGold.SetText($"Gold: {gold}");
             visualTime = timer ;
+            timer = timer - waitTime;
             if (counter >= 2) {
                 GameState.GetGameState().EnemyMove();
                 counter = 0 ;
             }
             
             // Remove the recorded 2 seconds.
-            timer = timer - waitTime ;
+            
         }
     }
 
