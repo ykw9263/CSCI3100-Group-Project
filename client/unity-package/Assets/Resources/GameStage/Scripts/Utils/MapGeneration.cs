@@ -30,7 +30,7 @@ public class MapGeneration : MonoBehaviour
     [SerializeField] GameObject TerrPrefab;
 
     public float mergeCoeff = .6f;
-    public static float minDist = 1;
+    public static float minDist = 3;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

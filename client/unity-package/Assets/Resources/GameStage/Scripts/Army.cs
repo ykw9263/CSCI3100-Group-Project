@@ -37,24 +37,34 @@ public abstract class Army : MonoBehaviour
     public bool isDead = false ;
 
 
+    private float waitTime = 0.5f;
+    private float timer = 0.0f;
+
+
 
     // Update is called once per frame
     protected void Update()
     {
+        timer += Time.deltaTime;
+
+        
         counter += 1;
         if (is_traveling)
         {
             travel();
         }
 
-        if (counter % 30 == 0)
+        // if (GameState.GetGameState().gameSpeed == 0) return;
+        float tempWaitTime = waitTime / GameState.GetGameState().gameSpeed;
+        if (timer > tempWaitTime)
         {
             if (attackTarget.Count != 0)
             {
                 is_traveling = false;
                 Attack(attackTarget[0]);
             }
-            else if (finished_traveling) {
+            else if (finished_traveling)
+            {
                 GameState gs = GameState.GetGameState();
                 Territory terr = gs.GetTerrByID(des_terrID);
                 if (terr != null)
@@ -70,7 +80,9 @@ public abstract class Army : MonoBehaviour
             {
                 is_traveling = true;
             }
+            timer = 0;
         }
+
 
     }
 
@@ -84,7 +96,7 @@ public abstract class Army : MonoBehaviour
         //target = territory.transform.position;    
         //Debug.Log(des_pos);
         //transform.position = transform.position + Vector3.left * info.speed ;
-        transform.position = Vector3.MoveTowards(transform.position, des_pos , (info.speed+9)*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, des_pos , (info.speed+9)*Time.deltaTime * GameState.GetGameState().gameSpeed);
         cur_pos = transform.position ;
 
         Vector3 disp = des_pos - cur_pos ;

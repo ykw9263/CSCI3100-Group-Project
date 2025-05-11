@@ -61,9 +61,9 @@ public class ArmySpawner : MonoBehaviour
         knight.transform.parent = this.transform;
         Army soldier = knight.GetComponent<Army>();
         soldier.ownerID = ownerID ;
-        soldier.info.attack = 8 ;
-        soldier.info.hp = 3;
-        soldier.info.speed =2; 
+        soldier.info.attack = 2 ;
+        soldier.info.hp = 8;
+        soldier.info.speed = 2; 
         soldier.count = 1;
         
         ownerEnt.AddArmy(soldier);

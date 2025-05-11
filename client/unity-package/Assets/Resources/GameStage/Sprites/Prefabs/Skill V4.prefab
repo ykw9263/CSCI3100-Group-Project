@@ -41,7 +41,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -263, y: -182}
+  m_AnchoredPosition: {x: -263, y: -160}
   m_SizeDelta: {x: 63.125, y: 83.139}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &7711537045955402220
@@ -56,7 +56,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83cc8662769caed48914a48610044313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textHp: {fileID: 1540364363457436110}
+  textAtk: {fileID: 5061460078415432125}
+  textSpeed: {fileID: 3108048263006370508}
+  textSkillPoint: {fileID: 6074008582070654271}
+  textGold: {fileID: 733078844024653330}
+  army: {fileID: 0}
   skillpoints: 23
+  gold: 0
   hp: 3
   atk: 1
   speed: 2
@@ -68,13 +75,6 @@ MonoBehaviour:
   maxSpeed: 99
   counter: 0
   start: 1
-  gold: 0
-  textHp: {fileID: 1540364363457436110}
-  textAtk: {fileID: 5061460078415432125}
-  textSpeed: {fileID: 3108048263006370508}
-  textSkillPoint: {fileID: 6074008582070654271}
-  textGold: {fileID: 733078844024653330}
-  army: {fileID: 0}
 --- !u!1 &1064047849666843950
 GameObject:
   m_ObjectHideFlags: 0

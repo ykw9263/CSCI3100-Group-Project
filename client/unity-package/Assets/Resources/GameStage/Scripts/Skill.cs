@@ -5,10 +5,21 @@ using UnityEngine;
 
 public class Skill : MonoBehaviour
 {
+
+    [SerializeField] TextMeshProUGUI textHp;
+    [SerializeField] TextMeshProUGUI textAtk;
+    [SerializeField] TextMeshProUGUI textSpeed;
+    [SerializeField] TextMeshProUGUI textSkillPoint;
+    [SerializeField] TextMeshProUGUI textGold;
+    [SerializeField] GameObject army;
+
     private float waitTime = 2.0f;
     private float timer = 0.0f;
     private float visualTime = 0.0f;
-    public int skillpoints ;
+
+    public int skillpoints = 3;
+    public int gold = 5;
+
     public int hp ;
     public int atk ;
     public int speed ;
@@ -22,14 +33,6 @@ public class Skill : MonoBehaviour
     public bool start=true ;
 
     //public ArmySpawner enemy ;
-
-    public int gold ;
-    [SerializeField] TextMeshProUGUI textHp ;
-    [SerializeField] TextMeshProUGUI textAtk ;
-    [SerializeField] TextMeshProUGUI textSpeed ;
-    [SerializeField] TextMeshProUGUI textSkillPoint;
-    [SerializeField] TextMeshProUGUI textGold;
-    [SerializeField] GameObject army; 
 
     // Start is called before the first frame update
     public void AddSp() 
@@ -155,7 +158,7 @@ public class Skill : MonoBehaviour
         counter = 0; 
         minAtk = 1 ;
         minSpeed = 2 ;
-        minHp = 3 ; 
+        minHp = 8 ; 
         maxAtk = 99 ;
         maxSpeed = 99 ;
         maxHp = 99 ;
@@ -172,10 +175,10 @@ public class Skill : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-
+        float tempWaitTime = waitTime / GameState.GetGameState().gameSpeed;
         // Check if we have reached beyond 2 seconds.
         // Subtracting two is more accurate over time than resetting to zero.
-        if (timer > waitTime && this.start == true)
+        if (timer > tempWaitTime && this.start == true)
         {
             counter++ ;
             skillpoints++ ; 
@@ -183,14 +186,13 @@ public class Skill : MonoBehaviour
             gold++;
             textGold.SetText($"Gold: {gold}");
             visualTime = timer ;
-            timer = timer - waitTime;
             if (counter >= 2) {
                 GameState.GetGameState().EnemyMove();
                 counter = 0 ;
             }
-            
-            // Remove the recorded 2 seconds.
-            
+
+            timer = 0;
+
         }
     }
 

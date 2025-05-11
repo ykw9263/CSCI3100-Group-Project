@@ -18,9 +18,7 @@ public class GameState : MonoBehaviour
     public Player player;
     public Dictionary<int, Entity> entities;
     public Dictionary<int, Territory> territories;
-    private float waitTime = 2.0f;
-    private float timer = 0.0f;
-    private float visualTime = 0.0f;
+    
     //[SerializeField] Text time;
     private float elapsedTime;
     private TimeSpan timePlaying  ; 
@@ -38,6 +36,13 @@ public class GameState : MonoBehaviour
     const int MAX_ENEMY_COUNT = 8;
     public int enemyCount = 2;
     public int seed = 0;
+
+    public float gameSpeed = 1;
+
+    public void ChageGameSpeed(float value)
+    {
+        gameSpeed = value / 2 ;
+    }
 
     void Start()
     {
@@ -123,7 +128,7 @@ public class GameState : MonoBehaviour
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
         string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
         
-        UserData.SetGameStat(timePlaying.TotalMilliseconds, player.skill.maxHp, player.skill.maxSpeed, player.skill.maxAtk);
+        UserData.SetGameStat(timePlaying.TotalMilliseconds, player.skill.hp, player.skill.speed, player.skill.atk);
         UserData.IncrementPlayCount();
         panel.EndGame(timeText, winMessage);    
         //time.SetText("You Win!") ; 

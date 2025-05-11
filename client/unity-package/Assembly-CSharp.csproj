@@ -77,6 +77,7 @@
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\ClickEventSubscriptor.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\PointEventSubcriptor.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Army.cs" />
+    <Compile Include="Assets\Resources\GameStage\Scripts\UI\GameSpeedSlider.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\CameraEvents\CameraMove.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Account\RecoveryPanel.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Account\ActivationPanel.cs" />
