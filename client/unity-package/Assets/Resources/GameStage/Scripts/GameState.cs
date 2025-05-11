@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using static UserData;
+//using System.Diagnostics;
 
 public class GameState : MonoBehaviour
 {
@@ -21,9 +23,10 @@ public class GameState : MonoBehaviour
     //[SerializeField] Text time;
     private float elapsedTime;
     private TimeSpan timePlaying  ; 
-    private DateTime startTime;
-    private DateTime endTime ;
-    private bool timerGoing ; 
+    //private DateTime startTime;
+    //private DateTime endTime ;
+    private bool timerGoing ;
+    public EndGamePanel panel ;
 
     private static GameState gamestate;
     MapGeneration gameMap;
@@ -109,9 +112,21 @@ public class GameState : MonoBehaviour
 
     public void EndGame() {
         this.timerGoing = false;
+        player.skill.start = false ;
+        UserData.playcount ++ ;
+        this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
+        Debug.Log(this.timePlaying);
+        string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff") ;
+        Debug.Log(timeText);
+        UserData.fastestEndTime = timeText;
+        UserData.maxHp = player.skill.hp ;
+        UserData.maxSpeed = player.skill.speed;
+        UserData.maxAtk = player.skill.atk;
+        panel.EndGame(timeText);
         //time.SetText("You Win!") ; 
         Debug.Log("You Win !") ;
     }
+
     public GameState ResetGameState()
     {
         this.entities = new Dictionary<int, Entity>();

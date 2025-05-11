@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+//using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -39,6 +40,7 @@ public class Territory : MonoBehaviour
         this.hp -= damage;
         if (this.hp < 0)
         {
+            //Debug.Log("Fall");
             FallTo(inflictor.entityID);
             return;
         }

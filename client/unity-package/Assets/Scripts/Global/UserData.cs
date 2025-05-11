@@ -6,9 +6,14 @@ using UnityEngine;
 public static class UserData
 {
     public static string username;
+    public static int playcount;
+    public static string fastestEndTime;
+    public static int maxHp;
+    public static int maxAtk;    
+    public static int maxSpeed;
     private struct UserCred {
-        public string refershToken;
-        public string accessToken;
+        public string refershToken ;
+        public string accessToken ;
     }
     private static UserCred userCred = new();
     public static Dictionary<string, string> gameStats = new();

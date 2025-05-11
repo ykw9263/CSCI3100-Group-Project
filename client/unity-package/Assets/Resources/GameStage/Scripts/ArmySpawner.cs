@@ -59,8 +59,10 @@ public class ArmySpawner : MonoBehaviour
         GameObject knight = Instantiate(this.knight_prefab);
         knight.transform.parent = this.transform;
         Army soldier = knight.GetComponent<Army>();
-        soldier.ownerID = ownerID;
-
+        soldier.ownerID = ownerID ;
+        soldier.info.attack = 8 ;
+        soldier.info.hp = 3;
+        soldier.info.speed =2; 
         soldier.count = 1;
         foreach (Territory terr in ownerEnt.territories_in_Controls) 
         {

@@ -22,6 +22,7 @@ public class Skill : MonoBehaviour
     public int maxAtk;
     public int maxSpeed;
     public int counter ;
+    public bool start=true ;
 
     public int gold ;
     [SerializeField] TextMeshProUGUI textHp ;
@@ -175,7 +176,7 @@ public class Skill : MonoBehaviour
 
         // Check if we have reached beyond 2 seconds.
         // Subtracting two is more accurate over time than resetting to zero.
-        if (timer > waitTime)
+        if (timer > waitTime && this.start == true)
         {
             skillpoints++ ; 
             textSkillPoint.SetText($"SP: {skillpoints}");

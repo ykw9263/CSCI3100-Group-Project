@@ -4,6 +4,7 @@ using UnityEditor.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
+//using System.Diagnostics;
 
 
 
@@ -62,7 +63,7 @@ public abstract class Army : MonoBehaviour
                     if (terr.ownerID == ownerID)
                         terr.Repair(info.attack);
                     else
-                        Debug.Log($"{gs.GetEntityByID(ownerID)} attacking terr");
+                        //Debug.Log($"{gs.GetEntityByID(ownerID)} attacking terr");
                         terr.TakeDamage(gs.GetEntityByID(ownerID), info.attack);
                 }
             }
@@ -174,7 +175,8 @@ public abstract class Army : MonoBehaviour
         } 
     }
 
-    public void OwnerFall() { 
+    public void OwnerFall() {
+        Debug.Log("OwnerFall");
         Destroy(this.gameObject) ;
     }
 

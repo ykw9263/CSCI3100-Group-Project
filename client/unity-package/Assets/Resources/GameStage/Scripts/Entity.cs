@@ -48,12 +48,14 @@ public abstract class Entity
         territories_in_Controls.Remove(terr);
         if (terr == home) 
         {    
-            Debug.Log($"Enemy {this.entityID} falls");
-            foreach (Territory territory in this.territories_in_Controls) {
-                territory.FallTo(-1);
-            }
+            //Debug.Log($"Enemy {this.entityID} falls");
+            
             foreach (Army troops in this.army) {
                 troops.OwnerFall();
+            }
+            foreach (Territory territory in this.territories_in_Controls)
+            {
+                territory.FallTo(-1);
             }
             GameState.GetGameState().RemoveEntities(this); 
         }  
