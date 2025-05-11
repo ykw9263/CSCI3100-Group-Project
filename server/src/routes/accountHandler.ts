@@ -27,11 +27,21 @@ let loginStmt : IStatementWarper = DBwarp.makePstmt(
     "SELECT userID AS userid, username, password FROM accounts \
     WHERE username = ?"
 );
-
+let checkUserIDStmt : IStatementWarper = DBwarp.makePstmt(
+    "SELECT userID AS userid FROM accounts \
+    WHERE username = ?"
+);
 let updatePasswordStmt : IStatementWarper = DBwarp.makePstmt(
     "UPDATE accounts \
     SET password = ? \
     WHERE username = ?"
+);
+
+
+
+let updateUserDataStmt : IStatementWarper = DBwarp.makePstmt(
+    `INSERT OR REPLACE INTO userdata (userID, gamedata) VALUES(\
+    (SELECT userID FROM accounts WHERE username = ?), ?)`
 );
 
 let checkActivationStmt : IStatementWarper = DBwarp.makePstmt(
@@ -251,6 +261,39 @@ async function userFinishRestore(req: any, res: any){
 }
 
 
+let syncDataTransaction = DBwarp.makeTransaction<boolean>((username, userData: string)=>{
+    let userID = checkUserIDStmt.get(username)?.userid;
+    if(userID){
+        updateUserDataStmt.run(userID, userData, userData);
+        return true;
+    }else{
+        return false;
+    }
+});
+
+// requires session
+async function userSyncData(req: any, res: any){
+    const { username, accessToken, userdata } = req.body;
+    if (
+        typeof(username) !== 'string' ||
+        typeof(accessToken) !== 'string' ||
+        typeof(userdata) !== 'string'
+    ){
+        return res.status(400).json({ 'message': 'Bad request' });
+    }
+
+    if (AuthModule.verifyAccessToken(accessToken)?.username !== username){
+        return res.status(403).json({ 'message': 'Unauthorized' });
+    }
+    try {
+        // syncDataTransaction(username, userdata);
+        updateUserDataStmt.run(username, userdata);
+        return res.status(200).json({ 'message': 'Success' });
+    } catch (error) {
+    }
+    return res.status(500).json({ 'message': 'Server Error' });
+}
+
 let activationTransaction = DBwarp.makeTransaction<boolean>((username, licenseKey: string)=>{
     let licenseID = LicenseModule.activateLicenseKey(licenseKey);
     if(licenseID != -1){
@@ -321,6 +364,9 @@ async function handleAccountsPost(req: any, res: any){
         case 'finishRestore':
             userFinishRestore(req, res);
             break;
+        case 'syncData':
+            userSyncData(req, res);
+            break;
         case 'activate':
             userActivate(req, res);
             break;
@@ -331,3 +377,12 @@ async function handleAccountsPost(req: any, res: any){
 
 export default {handleAccountsPost};
 
+function debugDeleteUserData(){
+    let debugStmt = DBwarp.makePstmt(
+        "DELETE FROM userdata"
+    );
+    console.debug(debugStmt.run())
+
+}
+
+debugDeleteUserData();

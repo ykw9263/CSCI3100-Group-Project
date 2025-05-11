@@ -37,7 +37,7 @@ const DB_CREATE_TABLES = [
         tableName: "userdata",
         query: 
             "CREATE TABLE userdata (\
-            userID INT NOT NULL, \
+            userID INT PRIMARY KEY NOT NULL, \
             gamedata ANY, \
             FOREIGN KEY(userID) REFERENCES accounts(userID)\
             )"

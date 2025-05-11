@@ -1,25 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static GameServerApi;
 
 public static class UserData
 {
     public static string username;
-    public struct GameStat {
+    
+    public class GameStat : ICloneable
+    {
         public int playcount;
-        public string fastestEndTime;
+        public double fastestEndTime = Double.PositiveInfinity;
         public int maxHp;
         public int maxAtk;
         public int maxSpeed;
-    } 
+
+
+         
+        public object Clone()
+        {
+            GameStat newgs = new GameStat();
+            newgs.playcount = playcount;
+            newgs.fastestEndTime = fastestEndTime;
+            newgs.maxHp = maxHp;
+            newgs.maxAtk = maxAtk;
+            newgs.maxSpeed = maxSpeed;
+            return newgs;
+        }
+    }
     
     private struct UserCred {
         public string refershToken ;
         public string accessToken ;
     }
     private static UserCred userCred = new();
-    public static  GameStat gameStat= new();
+    private static GameStat gameStat= new();
     //public static Dictionary<string, string> gameStats = new();
     public static bool Activated { get; private set; }
 
@@ -41,6 +58,46 @@ public static class UserData
     public static string GetRefreshToken()
     {
         return userCred.refershToken ;
+
     }
 
+    public static void IncrementPlayCount( )
+    {
+        gameStat.playcount++;
+    }
+    public static void SetGameStat(
+        double fastestEndTime,
+        int maxHp,
+        int maxAtk,
+        int maxSpeed,
+        int? playcount = null
+    )
+    {
+        gameStat.fastestEndTime = (fastestEndTime < gameStat.fastestEndTime) ? fastestEndTime : gameStat.fastestEndTime;
+        gameStat.maxHp = (maxHp > gameStat.maxHp) ? maxHp : gameStat.maxHp;
+        gameStat.maxAtk = (maxAtk > gameStat.maxAtk)? maxAtk : gameStat.maxAtk;
+        gameStat.maxSpeed = (maxSpeed > gameStat.maxSpeed)? maxSpeed : gameStat.maxSpeed;
+
+        if (playcount != null )
+        {
+            gameStat.playcount = playcount.Value;
+        }
+    }
+
+    public static void SetGameStat(string jsonfied) {
+        if (jsonfied == null) return;
+        try {
+            JsonUtility.FromJson<GameStat>(jsonfied);
+            gameStat = JsonUtility.FromJson<GameStat>(jsonfied);
+        }
+        catch (Exception ex)
+        {
+
+        }
+        
+    }
+
+    public static GameStat GetGameStat() {
+        return (GameStat)gameStat.Clone();
+    }
 }

@@ -10,7 +10,8 @@ const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
 let DBwarp : IDBWarper = UserDatabase.getDB();
 
 let loginStmt : IStatementWarper = DBwarp.makePstmt(
-    "SELECT userID AS userid, username, password, licenseID FROM accounts \
+    "SELECT accounts.userID AS userid, username, password, licenseID, gamedata FROM accounts \
+    LEFT JOIN userdata ON accounts.userid = userdata.userID \
     WHERE username = ?"
 );
 
@@ -93,7 +94,8 @@ async function userLogin(req: any, res: any){
                 'username': row.username, 
                 'accessToken': accessToken, 
                 'refreshToken': refreshToken,
-                'activated': (row.licenseID != null)?"true":"false"
+                'activated': (row.licenseID != null)?"true":"false",
+                'userdata': row.gamedata
             });
         }
     

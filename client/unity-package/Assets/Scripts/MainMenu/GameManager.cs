@@ -165,6 +165,7 @@ public class GameManager : MonoBehaviour
                         UserData.username = resobj.username;
                         UserData.SetAccessToken(resobj.accessToken);
                         UserData.SetRefreshToken(resobj.refreshToken);
+                        UserData.SetGameStat(resobj.userdata);
                         if (resobj.activated.Equals("true")) {
                             UserData.Activate();
                         }

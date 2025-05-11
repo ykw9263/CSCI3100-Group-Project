@@ -18,6 +18,7 @@ public static class GameServerApi
         public string? vericode;
         public string? accessToken;
         public string? refreshToken;
+        public string? userdata;
         public string? licenseKey;
 #nullable disable
     }
@@ -31,6 +32,7 @@ public static class GameServerApi
         public string? accessToken;
         public string? refreshToken;
         public string? activated;
+        public string? userdata;
 #nullable disable
 
     }
@@ -210,15 +212,30 @@ public static class GameServerApi
         yield return PostMessage("/account", reqObj, FinishRestoreCallback);
     }
 
+
+    /**
+     *  Sync user data with server
+     */
+    static public IEnumerator SyncData(string username, string userdata, string accessToken, System.Action<ServerResponse, bool> SyncDataCallback = null)
+    {
+        ServerRequestPayload reqObj = new ServerRequestPayload();
+        reqObj.method = "syncData";
+        reqObj.username = username;
+        reqObj.userdata = userdata;
+        reqObj.accessToken = accessToken;
+
+        yield return PostMessage("/account", reqObj, SyncDataCallback);
+    }
+
     /**
      *  Activate user with a license key
      */
-    static public IEnumerator Activate(string username, string newpwd, string accessToken, System.Action<ServerResponse, bool> ActivateCallback)
+    static public IEnumerator Activate(string username, string licenseKey, string accessToken, System.Action<ServerResponse, bool> ActivateCallback)
     {
         ServerRequestPayload reqObj = new ServerRequestPayload();
         reqObj.method = "activate";
         reqObj.username = username;
-        reqObj.licenseKey = newpwd;
+        reqObj.licenseKey = licenseKey;
         reqObj.accessToken = accessToken;
 
         yield return PostMessage("/account", reqObj, ActivateCallback);
