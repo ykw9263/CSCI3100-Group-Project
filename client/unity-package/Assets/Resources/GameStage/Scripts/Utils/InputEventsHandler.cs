@@ -14,6 +14,8 @@ public class InputEventsHandler : MonoBehaviour
     [SerializeField] InputAction movement;
     InputSystem_Actions input = null;
 
+    [SerializeField] CameraMove cameraMove;
+
     public Vector2 Navigate { get; private set; }
     public int eventCounter { get; private set; }
     public (int, Vector2) pointed { get; private set; }
@@ -162,8 +164,12 @@ public class InputEventsHandler : MonoBehaviour
                         {
                             case "ArmyObj":
                                 Army tgtArmy = hitObj.GetComponent<Army>();
-                                setSelectedArmy(tgtArmy);
-                                cur_state = EventStates.dragArmy;
+                                if (tgtArmy.ownerID == 0)
+                                {
+                                    setSelectedArmy(tgtArmy);
+                                    cur_state = EventStates.dragArmy;
+                                }
+                                else setSelectedArmy(null);
                                 break;
                             default:
                                 setSelectedArmy(null);
@@ -256,6 +262,7 @@ public class InputEventsHandler : MonoBehaviour
         if (scroll.y > 0)
             Camera.main.transform.position += (Camera.main.ScreenToWorldPoint(new Vector3(pointed.Item2.x, pointed.Item2.y, 0)) - Camera.main.transform.position) / 2;
         Camera.main.orthographicSize = camsize;
+        cameraMove.MoveCamera(Vector3.zero);
     }
 
     private void HandleNavigate(InputAction.CallbackContext context)

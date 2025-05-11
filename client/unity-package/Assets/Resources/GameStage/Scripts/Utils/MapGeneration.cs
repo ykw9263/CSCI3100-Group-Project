@@ -4,9 +4,6 @@ using DelaunatorSharp;
 using DelaunatorSharp.Unity.Extensions;
 using UnityEngine.U2D;
 using UnityEngine;
-using UnityEditor;
-using System.Linq;
-using UnityEngine.Experimental.AI;
 
 
 
@@ -51,9 +48,7 @@ public class MapGeneration : MonoBehaviour
 
     public void generateMap()
     {
-        if (seed != 0)
-            Random.InitState(seed);
-        Debug.Log(seed);
+        
         points = new IPoint[gridSize * gridSize];
         polygons = new List<MapPolygonMesh>();
         GenerateGrid();

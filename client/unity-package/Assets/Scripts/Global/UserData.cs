@@ -34,8 +34,15 @@ public static class UserData
         public string refershToken ;
         public string accessToken ;
     }
+    public class GameSetting
+    {
+        public int enemyCount = 2;
+        public int seed = 0;
+    }
     private static UserCred userCred = new();
     private static GameStat gameStat= new();
+    public static GameSetting gameSetting = new();
+
     //public static Dictionary<string, string> gameStats = new();
     public static bool Activated { get; private set; }
 
@@ -59,6 +66,7 @@ public static class UserData
         return userCred.refershToken ;
 
     }
+
 
     public static void IncrementPlayCount( )
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Buttons : MonoBehaviour
@@ -65,6 +66,13 @@ public class Buttons : MonoBehaviour
             case "User Profile Button":
                 _gameManager.SwitchUserProfile();
                 break;
+            case "ResetPW Button":
+                _gameManager.SwitchResetPW();
+                break;
+            case "GamePlay Button":
+                _gameManager.SwitchGamePlaySetting();
+                break;
+                
             default:
                 break;
         }

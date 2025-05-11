@@ -7,7 +7,9 @@ using System.Text.RegularExpressions;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject WelcomePanel, ForgetPasswordPanel, ActivationPanel, MainMenu, Settings, Achievements, SoundPanel, VideoPanel, UserProfilePanel;
+    public GameObject WelcomePanel, ForgetPasswordPanel, ActivationPanel, 
+        MainMenu, Settings, Achievements, 
+        SoundPanel, VideoPanel, UserProfilePanel, ResetPasswordPanel, GameplaySettingPanel;
     public RegisterPanel RegisterPanel;
     public TMP_InputField LoginName, LoginPassword, ResetEmail;
     public TextMeshProUGUI 
@@ -16,7 +18,7 @@ public class GameManager : MonoBehaviour
         ID, SettingsUsername;
     private bool _loginFlag = false;
 
-    private string gameStageSceneName = "GameStageScene2";
+    private string gameStageSceneName = "GameStageScene";
 
     // Start is called before the first frame update
     void Start()
@@ -131,6 +133,8 @@ public class GameManager : MonoBehaviour
         SoundPanel.gameObject.SetActive(true);
         VideoPanel.gameObject.SetActive(false);
         UserProfilePanel.gameObject.SetActive(false);
+        ResetPasswordPanel.gameObject.SetActive(false);
+        GameplaySettingPanel.gameObject.SetActive(false);
     }
 
     public void SwitchVideo()
@@ -138,6 +142,8 @@ public class GameManager : MonoBehaviour
         SoundPanel.gameObject.SetActive(false);
         VideoPanel.gameObject.SetActive(true);
         UserProfilePanel.gameObject.SetActive(false);
+        ResetPasswordPanel.gameObject.SetActive(false);
+        GameplaySettingPanel.gameObject.SetActive(false);
     }
 
     public void SwitchUserProfile()
@@ -145,7 +151,26 @@ public class GameManager : MonoBehaviour
         SoundPanel.gameObject.SetActive(false);
         VideoPanel.gameObject.SetActive(false);
         UserProfilePanel.gameObject.SetActive(true);
+        ResetPasswordPanel.gameObject.SetActive(false);
+        GameplaySettingPanel.gameObject.SetActive(false);
     }
+    public void SwitchResetPW()
+    {
+        SoundPanel.gameObject.SetActive(false);
+        VideoPanel.gameObject.SetActive(false);
+        UserProfilePanel.gameObject.SetActive(false);
+        ResetPasswordPanel.gameObject.SetActive(true);
+        GameplaySettingPanel.gameObject.SetActive(false);
+    }
+    public void SwitchGamePlaySetting()
+    {
+        SoundPanel.gameObject.SetActive(false);
+        VideoPanel.gameObject.SetActive(false);
+        UserProfilePanel.gameObject.SetActive(false);
+        ResetPasswordPanel.gameObject.SetActive(false);
+        GameplaySettingPanel.gameObject.SetActive(true);
+    }
+    
     public void Exit()
     {
         Application.Quit();

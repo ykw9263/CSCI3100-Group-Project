@@ -46,10 +46,11 @@ public class ArmySpawner : MonoBehaviour
         ownerEnt.AddArmy(soldier);     
         //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
         soldier.cur_pos = ownerEnt.home.coordinates ;
+        soldier.des_pos = soldier.cur_pos;
         knight.transform.position = soldier.cur_pos ;
         soldier.SetColor(ownerEnt.color);
 
-        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
+        //soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
         //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;
     }
     public void spawnEnemy(int ownerID)
@@ -68,6 +69,7 @@ public class ArmySpawner : MonoBehaviour
         ownerEnt.AddArmy(soldier);
         //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
         soldier.cur_pos = ownerEnt.home.coordinates;
+        soldier.des_pos = soldier.cur_pos;
         knight.transform.position = soldier.cur_pos;
         soldier.SetColor(ownerEnt.color);
 

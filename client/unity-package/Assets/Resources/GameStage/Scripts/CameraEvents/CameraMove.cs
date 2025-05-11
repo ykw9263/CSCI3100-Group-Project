@@ -37,11 +37,11 @@ public class CameraMove : MonoBehaviour
         padded_width *=  this.cameraComp.orthographicSize / 100;
         padded_height *=  this.cameraComp.orthographicSize / 100;
 
-        pos.x = pos.x > padded_width ? pos.x : padded_width;
         pos.x = (pos.x < border.x - padded_width) ? pos.x : border.x - padded_width;
+        pos.x = pos.x > padded_width ? pos.x : padded_width;
 
-        pos.y = (pos.y > padded_height) ? pos.y : padded_height;
         pos.y = (pos.y < border.y - padded_height) ? pos.y : border.y - padded_height;
+        pos.y = (pos.y > padded_height) ? pos.y : padded_height;
 
 
         this.transform.position = pos;

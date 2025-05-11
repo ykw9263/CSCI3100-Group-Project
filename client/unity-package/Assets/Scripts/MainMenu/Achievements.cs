@@ -17,11 +17,13 @@ public class Achievements : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playCount.SetText( $"Play Count : {UserData.gameStat.playCount.ToString()}" ) ;
-        finishTime.SetText($"Finish Time : {UserData.gameStat.fastestEndTime.ToString("mm':'ss")}" ) ;
-        maxHP.SetText($"Max HP : {UserData.gameStat.maxHp.ToString()}" ) ;
-        maxSpeed.SetText($"Max Speed : {UserData.gameStat.maxSpeed.ToString()}") ;
-        maxAtk.SetText($"Max ATK : {UserData.gameStat.maxAtk.ToString()}") ;
+        UserData.GameStat gameStat = UserData.GetGameStat();
+        playCount.SetText( $"Play Count : {gameStat.playcount.ToString()}" ) ;
+        string finishTimeStr = (gameStat.fastestEndTime> 1e9)? "N/A": TimeSpan.FromMilliseconds(gameStat.fastestEndTime).ToString("mm':'ss'.'ff");
+        finishTime.SetText($"Finish Time : {finishTimeStr}" ) ;
+        maxHP.SetText($"Max HP : {gameStat.maxHp.ToString()}" ) ;
+        maxSpeed.SetText($"Max Speed : {gameStat.maxSpeed.ToString()}") ;
+        maxAtk.SetText($"Max ATK : {gameStat.maxAtk.ToString()}") ;
     }
 
     // Update is called once per frame

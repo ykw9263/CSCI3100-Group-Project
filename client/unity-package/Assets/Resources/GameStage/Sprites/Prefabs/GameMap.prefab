@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6028347749133807220}
   - component: {fileID: 6223589383275382858}
-  - component: {fileID: 7371128230355371617}
   - component: {fileID: -8319119050406010989}
   m_Layer: 0
   m_Name: GameMap
@@ -49,23 +48,6 @@ MonoBehaviour:
   _data:
     _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
     _objectReferences: []
---- !u!114 &7371128230355371617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7364828196582833356}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 447bdb8a166ede24aabcddbde5a07bfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapSize: 100
-  gridSize: 10
-  seed: 10
-  TerrPrefab: {fileID: 5897820775173037741, guid: 29cb8e663a26fb4428674e0b86b84527, type: 3}
-  mergeCoeff: 0.6
 --- !u!114 &-8319119050406010989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,6 +62,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSize: 100
   gridSize: 10
-  seed: 10
+  seed: 0
   TerrPrefab: {fileID: 5897820775173037741, guid: 29cb8e663a26fb4428674e0b86b84527, type: 3}
   mergeCoeff: 0.6

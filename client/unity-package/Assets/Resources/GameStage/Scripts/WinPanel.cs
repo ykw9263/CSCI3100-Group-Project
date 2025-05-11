@@ -20,6 +20,6 @@ public class EndGamePanel : MonoBehaviour
         GameCanva.SetActive(false);
     }
     public void ExitButton() {
-        SceneManager.LoadScene("Assets/Scenes/MainMenu2.unity") ;
+        SceneManager.LoadScene(sceneName: "MainMenu");
     }
 }

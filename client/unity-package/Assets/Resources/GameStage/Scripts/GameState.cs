@@ -35,6 +35,8 @@ public class GameState : MonoBehaviour
     [SerializeField] List<float> enemyHues = new List<float>{ 0f, 0.044f , 0.088f, 0.177f, 0.35f, 0.700f, 0.777f, 0.888f};
 
     const int MAX_ENEMY_COUNT = 8;
+    public int enemyCount = 2;
+    public int seed = 0;
 
     void Start()
     {
@@ -42,7 +44,7 @@ public class GameState : MonoBehaviour
         this.entities = new Dictionary<int, Entity>() ;
         this.territories = new Dictionary<int, Territory>() ;
         
-        InitGame(2);
+        InitGame(UserData.gameSetting.enemyCount);
     }
     void Update()
     {
@@ -61,8 +63,10 @@ public class GameState : MonoBehaviour
     }
 
     public void InitGame(int enemy_count) {
+        if (seed != 0)
+            UnityEngine.Random.InitState(seed);
+        Debug.Log(seed);
 
-        
         Destroy(gameMap?.gameObject);
         GameObject gameMapObj = Instantiate<GameObject>(gameMapPrefab);
         

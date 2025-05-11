@@ -41,6 +41,13 @@ public class Settings : MonoBehaviour
         
     }
 
+
+    public void SetEnemyCount(int EnemyCount)
+    {
+        UserData.gameSetting.enemyCount = EnemyCount+1;
+        Debug.Log("enemy count" +UserData.gameSetting.enemyCount);
+    }
+
     public void SetSolution (int ResolutionIndex)
     {
         Resolution Resolution = Resolutions[ResolutionIndex];
