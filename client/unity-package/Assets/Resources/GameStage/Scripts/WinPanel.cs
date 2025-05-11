@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class EndGamePanel : MonoBehaviour
 {
-    public GameObject GameCanva;
+    public GameObject GameCanva, UICanva;
     public Text text, winText;  
     // Start is called before the first frame update
     public void EndGame(string endTime, string winMessage = "You Win!") {
@@ -19,6 +19,7 @@ public class EndGamePanel : MonoBehaviour
 
         text.text =   endTime;
         GameCanva.SetActive(false);
+        UICanva.SetActive(false);
     }
     public void ExitButton() {
         SceneManager.LoadScene(sceneName: "MainMenu");
