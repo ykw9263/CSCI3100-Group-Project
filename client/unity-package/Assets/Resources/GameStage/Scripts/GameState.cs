@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 //using System.Diagnostics;
 
@@ -116,7 +117,7 @@ public class GameState : MonoBehaviour
         this.timePlaying = new TimeSpan();
     }
 
-    public void EndGame() {
+    public void EndGame(string winMessage = "You Win") {
         this.timerGoing = false;
         player.skill.start = false ;
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
@@ -124,9 +125,9 @@ public class GameState : MonoBehaviour
         
         UserData.SetGameStat(timePlaying.TotalMilliseconds, player.skill.maxHp, player.skill.maxSpeed, player.skill.maxAtk);
         UserData.IncrementPlayCount();
-        panel.EndGame(timeText);    
+        panel.EndGame(timeText, winMessage);    
         //time.SetText("You Win!") ; 
-        Debug.Log("You Win !") ;
+        Debug.Log(winMessage) ;
     }
 
     public void EnemyMove() {
@@ -168,6 +169,11 @@ public class GameState : MonoBehaviour
 
     public void RemoveEntities(Entity entity) {
         entities.Remove(entity.entityID) ;
+        if (entity.entityID == 0)
+        {
+            EndGame("You Have Been Defeated!");
+            return;
+        }
         if (this.entities.Count == 1) {
             Debug.Log(this.entities.Count);
             EndGame(); 

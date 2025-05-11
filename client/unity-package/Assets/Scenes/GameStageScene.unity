@@ -216,6 +216,8 @@ MonoBehaviour:
   - 0.7
   - 0.777
   - 0.888
+  enemyCount: 2
+  seed: 0
 --- !u!1 &291516532
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,6 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameCanva: {fileID: 1290321973}
   text: {fileID: 2011814620}
+  winText: {fileID: 1697666613}
 --- !u!114 &416926782
 MonoBehaviour:
   m_ObjectHideFlags: 0

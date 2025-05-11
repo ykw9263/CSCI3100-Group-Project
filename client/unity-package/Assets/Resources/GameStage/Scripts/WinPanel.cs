@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 public class EndGamePanel : MonoBehaviour
 {
     public GameObject GameCanva;
-    public Text text;  
+    public Text text, winText;  
     // Start is called before the first frame update
-    public void EndGame(string endTime) {
+    public void EndGame(string endTime, string winMessage = "You Win!") {
 
+        winText.text = winMessage;
         gameObject.SetActive(true);
         Debug.Log(endTime);
         string userDataJson = JsonUtility.ToJson(UserData.GetGameStat());
