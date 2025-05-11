@@ -98,6 +98,19 @@ function testAccount(){
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
+        let accessToken2 = AuthModule.createAccessToken(0, username, AuthModule.RESTORE_TOKEN_ACTION);
+        req.body = {
+            method: "finishRestore", 
+            username:username, accessToken: accessToken2, newpwd: newpwd
+        };
+        await test("finishRestore", async ()=>{
+            await accountHandler.handleAccountsPost(req, res);
+            assert.ok(res.result.httpStatus == 200);
+        }).catch(()=>{throw Error()});;
+
+
+        req = new TestAccount.ReqStub();
+        res = new TestAccount.ResStub();
         pwd = newpwd;
 
         req.body = {
