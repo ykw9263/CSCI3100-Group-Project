@@ -23,12 +23,13 @@ public class ArmySpawner : MonoBehaviour
 
         Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
         GameObject knight = Instantiate(this.knight_prefab);
-        knight.transform.parent = this.transform;
         Army soldier = knight.GetComponent<Army>();
+        soldier.ownerID = ownerID;
         if (ownerEnt is Player) {
             if ( ((Player)ownerEnt).skill.gold <= 0 )
             {
                 Debug.Log("No Gold");
+                Destroy(knight);
                 return;
             }
             ((Player)ownerEnt).skill.MinusGold();
@@ -38,10 +39,8 @@ public class ArmySpawner : MonoBehaviour
                 soldier.setStats(((Player)ownerEnt).skill);
             }
         }
-        
-        
-        
-        
+        knight.transform.parent = this.transform;
+
         soldier.count = 1;
         
         ownerEnt.AddArmy(soldier);     
@@ -55,13 +54,19 @@ public class ArmySpawner : MonoBehaviour
     }
     public void spawnEnemy(int ownerID)
     {
+
         Entity ownerEnt = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
         GameObject knight = Instantiate(this.knight_prefab);
         knight.transform.parent = this.transform;
         Army soldier = knight.GetComponent<Army>();
+        soldier.ownerID = ownerID;
 
         soldier.count = 1;
-
+        foreach (Territory terr in ownerEnt.territories_in_Controls) 
+        {
+            Debug.Log(terr.coordinates);
+        }
+        
         ownerEnt.AddArmy(soldier);
         //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
         soldier.cur_pos = ownerEnt.home.coordinates;

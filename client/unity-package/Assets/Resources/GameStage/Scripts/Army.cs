@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
-using TMPro;using UnityEngine;
+using TMPro;
+using UnityEngine;
 using UnityEngine.U2D;
-using System.Diagnostics;
+
 
 
 public struct stats {
@@ -61,6 +62,7 @@ public abstract class Army : MonoBehaviour
                     if (terr.ownerID == ownerID)
                         terr.Repair(info.attack);
                     else
+                        Debug.Log($"{gs.GetEntityByID(ownerID)} attacking terr");
                         terr.TakeDamage(gs.GetEntityByID(ownerID), info.attack);
                 }
             }
@@ -97,22 +99,22 @@ public abstract class Army : MonoBehaviour
     }
     public void setStats(Skill skill)
     {
-        Debug.Log("SetStats");
+        //Debug.Log("SetStats");
         info.hp = skill.hp;
         info.attack = skill.atk;
         info.speed = skill.speed;
     }    public void SetDestination(Territory terr){
         des_terrID = terr.territoryID;
         des_pos = terr.coordinates ; 
-        //is_traveling = true ;
-        //finished_traveling = false;
+        is_traveling = true ;
+        finished_traveling = false;
     }
     public void SetDestination(Territory terr, Vector2 des_pos)
     {
         des_terrID = terr.territoryID;
         this.des_pos = (Vector3)des_pos;
-        //is_traveling = true;
-        //finished_traveling = false;
+        is_traveling = true;
+        finished_traveling = false;
     }
 
     public void PlanDestination(Vector2 des_pos, bool valid)
@@ -130,7 +132,7 @@ public abstract class Army : MonoBehaviour
     }
 
     public void CommitPlanDestination(Territory terr, bool commit) {
-        Debug.Log("commit plan destination" + commit);
+        //Debug.Log("commit plan destination" + commit);
         planPathObject.SetActive(false);
         if (commit && terr!= null)
         {
@@ -139,11 +141,12 @@ public abstract class Army : MonoBehaviour
     }
 
     public void AddAttackTarget(Army army){
+        Debug.Log($"{this.ownerID} : Add Target");
         if (army.ownerID == this.ownerID)
         {
             return ;
         }
-        //Debug.Log("Add Target");
+        Debug.Log("Add Target");
         attackTarget.Add(army) ;
     }
 
@@ -152,6 +155,7 @@ public abstract class Army : MonoBehaviour
         attackTarget.Remove(army) ;
     }
     public void Attack(Army army) {
+        Debug.Log($"{this.ownerID}: attacking");
         if (!army || army.isDead) {
             RemoveAttackTarget(army);
         }
@@ -168,6 +172,10 @@ public abstract class Army : MonoBehaviour
             //owner.army.Remove(this) ;
             Destroy(this.gameObject) ; 
         } 
+    }
+
+    public void OwnerFall() { 
+        Destroy(this.gameObject) ;
     }
 
     public void HandleSelect(bool select)

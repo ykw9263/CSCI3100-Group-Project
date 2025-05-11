@@ -18,9 +18,10 @@ public class AttackCollider : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.Log("Enter Collison") ;
+        Debug.Log("enter collision"); 
         Army enemy = collision.gameObject.GetComponent<Army>() ;
         Army myself = this.GetComponentInParent<Army>() ;
+        Debug.Log($"{myself.ownerID} :  Enter Collison");
         if (enemy == null || myself == null )
         {
             //Debug.Log($"enemy: {enemy},myself {myself}" ) ;

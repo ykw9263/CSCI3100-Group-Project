@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject gameMapPrefab;
     [SerializeField] GameObject skillPrefab;
-        [SerializeField] GameObject PopUpParent;
+    [SerializeField] GameObject PopUpParent;
+    [SerializeField] TextMeshProUGUI time ;
     public Player player;
     public Dictionary<int, Entity> entities;
     public Dictionary<int, Territory> territories;
+    private float waitTime = 2.0f;
+    private float timer = 0.0f;
+    private float visualTime = 0.0f;
+    //[SerializeField] Text time;
+    private float elapsedTime;
+    private TimeSpan timePlaying  ; 
+    private DateTime startTime;
+    private DateTime endTime ;
+    private bool timerGoing ; 
 
     private static GameState gamestate;
     MapGeneration gameMap;
@@ -25,7 +37,18 @@ public class GameState : MonoBehaviour
         gamestate = this;
         this.entities = new Dictionary<int, Entity>() ;
         this.territories = new Dictionary<int, Territory>() ;
+        
         InitGame(2);
+    }
+    void Update()
+    {
+        if (timerGoing)
+        {
+            this.elapsedTime += Time.deltaTime;
+            this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
+            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
+            time.SetText(timePlayingStr) ;
+        }
     }
 
     public static GameState GetGameState() 
@@ -34,6 +57,8 @@ public class GameState : MonoBehaviour
     }
 
     public void InitGame(int enemy_count) {
+
+        
         Destroy(gameMap?.gameObject);
         GameObject gameMapObj = Instantiate<GameObject>(gameMapPrefab);
         
@@ -77,6 +102,15 @@ public class GameState : MonoBehaviour
             entity.home = shuffledterr[counter];
             counter++;
         }
+        this.timerGoing = true;
+        this.elapsedTime = 0.0f;
+        this.timePlaying = new TimeSpan();
+    }
+
+    public void EndGame() {
+        this.timerGoing = false;
+        //time.SetText("You Win!") ; 
+        Debug.Log("You Win !") ;
     }
     public GameState ResetGameState()
     {
@@ -104,6 +138,14 @@ public class GameState : MonoBehaviour
     public void AddEntity(Entity entity)
     {
         entities.Add(entity.entityID, entity);
+    }
+    public void RemoveEntities(Entity entity) {
+        entities.Remove(entity.entityID) ;
+        if (this.entities.Count == 1) {
+            Debug.Log(this.entities.Count);
+            EndGame(); 
+        }
+        
     }
 
     public Territory GetTerrByID(int terrID)

@@ -35,7 +35,7 @@ public class Skill : MonoBehaviour
     public void AddSp() 
     {
         skillpoints++ ;
-            Debug.Log(skillpoints) ;
+            //Debug.Log(skillpoints) ;
     }
     public void MinusGold()
     {
@@ -44,15 +44,15 @@ public class Skill : MonoBehaviour
         }
         gold--;
         textGold.SetText($"Gold: {gold}");
-        Debug.Log("Minus Gold");
+        //Debug.Log("Minus Gold");
     }
     public void AddHp() 
     {
         if (skillpoints < 1 || hp >= maxHp) {
-            Debug.Log("No SP");
+            //Debug.Log("No SP");
             return ;
         }
-        Debug.Log("Add HP"); 
+        //Debug.Log("Add HP"); 
         skillpoints-- ;
         textSkillPoint.SetText($"SP: {skillpoints}");
         hp ++ ;
@@ -73,7 +73,7 @@ public class Skill : MonoBehaviour
             Debug.Log("No SP");
             return;
         }
-        Debug.Log("Add Speed");
+        //Debug.Log("Add Speed");
         skillpoints--;
         textSkillPoint.SetText($"SP: {skillpoints}");
         speed++;
@@ -94,7 +94,7 @@ public class Skill : MonoBehaviour
             Debug.Log("No SP");
             return;
         }
-        Debug.Log("Add ATK");
+        //Debug.Log("Add ATK");
         skillpoints--;
         textSkillPoint.SetText($"SP: {skillpoints}");
         atk++;
@@ -119,7 +119,7 @@ public class Skill : MonoBehaviour
         textSkillPoint.SetText($"SP: {skillpoints}");
         textHp.fontSize = 12;
         textHp.SetText($"{hp}");
-        Debug.Log("Minus HP");
+        //Debug.Log("Minus HP");
     }
     public void MinusSpeed()
     {
@@ -132,7 +132,7 @@ public class Skill : MonoBehaviour
         textSkillPoint.SetText($"SP: {skillpoints}");
         textSpeed.fontSize = 12;
         textSpeed.SetText($"{speed}");
-        Debug.Log("Minus Speed");
+        //Debug.Log("Minus Speed");
     }
         
         
@@ -147,7 +147,7 @@ public class Skill : MonoBehaviour
         textSkillPoint.SetText($"SP: {skillpoints}");
         textAtk.fontSize = 12;
         textAtk.SetText($"{atk}");
-        Debug.Log("Minus ATK");
+        //Debug.Log("Minus ATK");
     }
     void Start()
     {

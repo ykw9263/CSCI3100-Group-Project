@@ -147,10 +147,12 @@ MonoBehaviour:
   curPathObject: {fileID: 753587841786200922}
   popupObject: {fileID: 158747387056199212}
   planPathObject: {fileID: 2505971751041687696}
+  ownerID: 0
   count: 5
   cur_pos: {x: 0, y: 0, z: 0}
   des_pos: {x: 0, y: 0, z: 0}
   planned_des_pos: {x: 0, y: 0, z: 0}
+  des_terrID: -1
   is_traveling: 0
   finished_traveling: 1
   attackTarget: []

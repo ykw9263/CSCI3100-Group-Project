@@ -58,14 +58,17 @@ public class Territory : MonoBehaviour
     }
 
     public void FallTo(int entID) {
+        Entity oldOwner = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
         GameState.GetGameState().GetEntityByID(ownerID)?.LoseControl(this);
         Entity newowner = GameState.GetGameState().GetEntityByID(entID);
         newowner?.TakeControl(this);
         ownerID = entID;
-        hp = 0;
-
-        color = ownerColor = (newowner!=null)? newowner.color: Color.white;
+        hp = 0 ;
+        color = ownerColor = (newowner != null) ? newowner.color : Color.white;
         UpdateHPColor();
+
+        
+        
     }
     public void SetColor(Color color) {
         GetComponent<SpriteShapeRenderer>().color = color;

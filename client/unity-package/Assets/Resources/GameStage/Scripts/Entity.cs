@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public abstract class Entity
@@ -29,10 +30,11 @@ public abstract class Entity
         troop.des_pos = home.coordinates ;
     }
     public void AddArmy(Army troop){
-        Debug.Log(troop);
-        this.army.Add(troop) ;
-        Debug.Log(this.army[0]);
-        //troop.owner = this ;
+        //Debug.Log($"1: {troop.ownerID}");
+        //Debug.Log(this.army[0]);
+        troop.ownerID = this.entityID ; 
+        this.army.Add(troop);
+        //Debug.Log($"2: {troop.ownerID}");
         //troop.isDead = false ;
         //troop.cur_pos = home.coordinates ; 
     }
@@ -42,7 +44,21 @@ public abstract class Entity
     }
     public void LoseControl(Territory terr)
     {
+        
         territories_in_Controls.Remove(terr);
+        if (terr == home) 
+        {    
+            Debug.Log($"Enemy {this.entityID} falls");
+            foreach (Territory territory in this.territories_in_Controls) {
+                territory.FallTo(-1);
+            }
+            foreach (Army troops in this.army) {
+                troops.OwnerFall();
+            }
+            GameState.GetGameState().RemoveEntities(this); 
+        }  
+        
     }
+    
 
 }
