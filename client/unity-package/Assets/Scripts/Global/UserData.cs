@@ -7,11 +7,11 @@ public static class UserData
 {
     public static string username;
     public struct GameStat {
-        public static int playcount;
-        public static string fastestEndTime;
-        public static int maxHp;
-        public static int maxAtk;
-        public static int maxSpeed;
+        public int playcount;
+        public string fastestEndTime;
+        public int maxHp;
+        public int maxAtk;
+        public int maxSpeed;
     } 
     
     private struct UserCred {
@@ -19,7 +19,8 @@ public static class UserData
         public string accessToken ;
     }
     private static UserCred userCred = new();
-    public static Dictionary<string, string> gameStats = new();
+    public static  GameStat gameStat= new();
+    //public static Dictionary<string, string> gameStats = new();
     public static bool Activated { get; private set; }
 
     public static void Activate() {

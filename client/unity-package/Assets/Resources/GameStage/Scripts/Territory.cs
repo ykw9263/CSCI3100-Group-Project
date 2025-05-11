@@ -52,6 +52,7 @@ public class Territory : MonoBehaviour
         hp += recover;
         if (hp >= max_hp)
         {
+            owner.FullyTakeControl(this);
             hp = max_hp;
             color = (owner!=null)? owner.color: Color.white;
             SetColor(color);

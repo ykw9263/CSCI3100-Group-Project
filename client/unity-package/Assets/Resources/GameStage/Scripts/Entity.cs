@@ -10,6 +10,7 @@ public abstract class Entity
     public List<Territory> territories_in_Controls = new () ;
     public List<Army> army = new () ;
     public Territory home ;
+    
 
     public int money = 0;
     public Color color;
@@ -20,13 +21,13 @@ public abstract class Entity
     }
     
     public void SendArmy(Territory terr, Army troop){
-        Debug.Log(troop);
+        //Debug.Log(troop);
         troop.des_pos = terr.coordinates ; 
         troop.is_traveling = true ;
     }
 
     public void RetreatArmy(Army troop){
-        Debug.Log(troop);
+        //Debug.Log(troop);
         troop.des_pos = home.coordinates ;
     }
     public void AddArmy(Army troop){
@@ -39,8 +40,12 @@ public abstract class Entity
         //troop.cur_pos = home.coordinates ; 
     }
 
-    public void TakeControl(Territory terr) {
+    public virtual void TakeControl(Territory terr) {
         territories_in_Controls.Add(terr);
+    }
+    public virtual void FullyTakeControl(Territory terr)
+    {
+        
     }
     public void LoseControl(Territory terr)
     {

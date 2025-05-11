@@ -27,6 +27,7 @@ public class GameState : MonoBehaviour
     //private DateTime endTime ;
     private bool timerGoing ;
     public EndGamePanel panel ;
+    public ArmySpawner enemySpawner;
 
     private static GameState gamestate;
     MapGeneration gameMap;
@@ -115,14 +116,21 @@ public class GameState : MonoBehaviour
         player.skill.start = false ;
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
         string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
-        UserData.GameStat.playcount ++ ;
-        UserData.GameStat.fastestEndTime = timeText;
-        UserData.GameStat.maxHp = player.skill.hp ; 
-        UserData.GameStat.maxSpeed = player.skill.speed;
-        UserData.GameStat.maxAtk = player.skill.atk;
-        panel.EndGame(timeText);
+        UserData.gameStat.playcount ++ ;
+        UserData.gameStat.fastestEndTime = timeText;
+        UserData.gameStat.maxHp = player.skill.hp ; 
+        UserData.gameStat.maxSpeed = player.skill.speed;
+        UserData.gameStat.maxAtk = player.skill.atk;
+        panel.EndGame(timeText);    
         //time.SetText("You Win!") ; 
         Debug.Log("You Win !") ;
+    }
+
+    public void EnemyMove() {
+        for (int i = 1; i < this.entities.Count; i++)
+        {
+            enemySpawner.spawnEnemy(i);
+        }
     }
 
     public GameState ResetGameState()

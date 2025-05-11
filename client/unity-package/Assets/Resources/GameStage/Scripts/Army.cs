@@ -142,12 +142,12 @@ public abstract class Army : MonoBehaviour
     }
 
     public void AddAttackTarget(Army army){
-        Debug.Log($"{this.ownerID} : Add Target");
+        //Debug.Log($"{this.ownerID} : Add Target");
         if (army.ownerID == this.ownerID)
         {
             return ;
         }
-        Debug.Log("Add Target");
+        //Debug.Log("Add Target");
         attackTarget.Add(army) ;
     }
 
@@ -156,7 +156,7 @@ public abstract class Army : MonoBehaviour
         attackTarget.Remove(army) ;
     }
     public void Attack(Army army) {
-        Debug.Log($"{this.ownerID}: attacking");
+        //Debug.Log($"{this.ownerID}: attacking");
         if (!army || army.isDead) {
             RemoveAttackTarget(army);
         }
@@ -165,7 +165,7 @@ public abstract class Army : MonoBehaviour
         
     }
     public void TakeDamage(int damage){
-        Debug.Log($"{this.ownerID} : Taking Damage") ;
+        //Debug.Log($"{this.ownerID} : Taking Damage") ;
         info.hp -= damage ; 
         if(info.hp <= 0 && this)
         {

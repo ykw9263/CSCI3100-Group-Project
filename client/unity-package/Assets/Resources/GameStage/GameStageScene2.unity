@@ -206,6 +206,7 @@ MonoBehaviour:
   PopUpParent: {fileID: 843678348}
   time: {fileID: 935520303}
   panel: {fileID: 416926781}
+  enemySpawner: {fileID: 961038821}
   enemyHues:
   - 0
   - 0.044
@@ -1399,7 +1400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50337ea5edbd7e647b68007439d01e2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knight_prefab: {fileID: 1000010755293042, guid: 978fa2fb617654f5eaeff9da6fc7d116, type: 3}
+  knight_prefab: {fileID: 1000010755293042, guid: dc877d90790c8bd40b18dd0e65ddd2c2, type: 3}
   debug_dest: 2
 --- !u!1 &993840783
 GameObject:

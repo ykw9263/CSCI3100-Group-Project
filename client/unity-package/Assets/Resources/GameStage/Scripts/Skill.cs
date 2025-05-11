@@ -24,6 +24,8 @@ public class Skill : MonoBehaviour
     public int counter ;
     public bool start=true ;
 
+    //public ArmySpawner enemy ;
+
     public int gold ;
     [SerializeField] TextMeshProUGUI textHp ;
     [SerializeField] TextMeshProUGUI textAtk ;
@@ -71,7 +73,7 @@ public class Skill : MonoBehaviour
     {
         if (skillpoints < 1 || speed >= maxSpeed)
         {
-            Debug.Log("No SP");
+            //Debug.Log("No SP");
             return;
         }
         //Debug.Log("Add Speed");
@@ -92,7 +94,7 @@ public class Skill : MonoBehaviour
     {
         if (skillpoints < 1 || atk >= maxAtk)
         {
-            Debug.Log("No SP");
+            //Debug.Log("No SP");
             return;
         }
         //Debug.Log("Add ATK");
@@ -178,11 +180,16 @@ public class Skill : MonoBehaviour
         // Subtracting two is more accurate over time than resetting to zero.
         if (timer > waitTime && this.start == true)
         {
+            counter++ ;
             skillpoints++ ; 
             textSkillPoint.SetText($"SP: {skillpoints}");
             gold++;
             textGold.SetText($"Gold: {gold}");
             visualTime = timer ;
+            if (counter >= 2) {
+                GameState.GetGameState().EnemyMove();
+                counter = 0 ;
+            }
             
             // Remove the recorded 2 seconds.
             timer = timer - waitTime ;

@@ -28,14 +28,14 @@ public class ArmySpawner : MonoBehaviour
         if (ownerEnt is Player) {
             if ( ((Player)ownerEnt).skill.gold <= 0 )
             {
-                Debug.Log("No Gold");
+                //Debug.Log("No Gold");
                 Destroy(knight);
                 return;
             }
             ((Player)ownerEnt).skill.MinusGold();
             if (ownerID == 0)
             {
-                Debug.Log("spawnStats");
+                //Debug.Log("spawnStats");
                 soldier.setStats(((Player)ownerEnt).skill);
             }
         }
@@ -75,7 +75,9 @@ public class ArmySpawner : MonoBehaviour
         knight.transform.position = soldier.cur_pos;
         soldier.SetColor(ownerEnt.color);
 
-        soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
+        int random = UnityEngine.Random.Range(0, GameState.GetGameState().territories.Count);
+        soldier.SetDestination(GameState.GetGameState().territories[random]);
+        //soldier.SetDestination(GameState.GetGameState().territories[debug_dest]);
         //Debug.Log(GameState.GetGameState().territories[2].coordinates) ;
     }
 }
