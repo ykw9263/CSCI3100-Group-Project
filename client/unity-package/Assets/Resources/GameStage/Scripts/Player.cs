@@ -10,9 +10,5 @@ public class Player : Entity
         GameState gameState = GameState.GetGameState() ;
         // gameState.player = this ;
     }
-    private void Start()
-    { 
-        Debug.Log(GameState.GetGameState().player) ;
-    }
 
 }

@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.Android;
-using UnityEngine.UI;
 
 public class Skill : MonoBehaviour
 {

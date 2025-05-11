@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using static UnityEditor.PlayerSettings;
 
 [RequireComponent(typeof(Collider2D))]
 
