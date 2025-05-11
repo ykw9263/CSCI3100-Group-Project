@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+//using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -39,6 +40,7 @@ public class Territory : MonoBehaviour
         this.hp -= damage;
         if (this.hp < 0)
         {
+            //Debug.Log("Fall");
             FallTo(inflictor.entityID);
             return;
         }
@@ -50,6 +52,7 @@ public class Territory : MonoBehaviour
         hp += recover;
         if (hp >= max_hp)
         {
+            owner.FullyTakeControl(this);
             hp = max_hp;
             color = (owner!=null)? owner.color: Color.white;
             SetColor(color);
@@ -59,14 +62,17 @@ public class Territory : MonoBehaviour
     }
 
     public void FallTo(int entID) {
+        Entity oldOwner = GameState.GetGameState().entities.GetValueOrDefault(ownerID);
         GameState.GetGameState().GetEntityByID(ownerID)?.LoseControl(this);
         Entity newowner = GameState.GetGameState().GetEntityByID(entID);
         newowner?.TakeControl(this);
         ownerID = entID;
-        hp = 0;
-
-        color = ownerColor = (newowner!=null)? newowner.color: Color.white;
+        hp = 0 ;
+        color = ownerColor = (newowner != null) ? newowner.color : Color.white;
         UpdateHPColor();
+
+        
+        
     }
     public void SetColor(Color color) {
         GetComponent<SpriteShapeRenderer>().color = color;

@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //UserData.Activate();
+        //UserData.SetRefreshToken("Gdoo");
+        if (UserData.GetRefreshToken()?.Length > 0)
+        { 
+            _loginFlag = true;
+            SwitchMainMenu() ;
+        }
+
         // ResetEmail.onEndEdit.AddListener(ForgetPassword);
     }
 

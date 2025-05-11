@@ -9,9 +9,9 @@ public class Knight : Army
      void Start()
     {
         //count = 5;
-        info.hp = 10;
+        /*info.hp = 3;
         info.attack = 1;
-        info.speed = 10;
+        info.speed = 2;*/
         //Debug.Log(owner.entityID);
         //SetDestination(GameState.GetGameState().territories[owner.entityID]) ;
         //is_traveling = true ;

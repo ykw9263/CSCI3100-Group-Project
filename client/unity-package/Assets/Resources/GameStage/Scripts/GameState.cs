@@ -3,13 +3,31 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
+using static UserData;
+//using System.Diagnostics;
 
 public class GameState : MonoBehaviour
 {
     [SerializeField] GameObject gameMapPrefab;
+    [SerializeField] GameObject skillPrefab;
+    [SerializeField] GameObject PopUpParent;
+    [SerializeField] TextMeshProUGUI time ;
     public Player player;
     public Dictionary<int, Entity> entities;
     public Dictionary<int, Territory> territories;
+    private float waitTime = 2.0f;
+    private float timer = 0.0f;
+    private float visualTime = 0.0f;
+    //[SerializeField] Text time;
+    private float elapsedTime;
+    private TimeSpan timePlaying  ; 
+    //private DateTime startTime;
+    //private DateTime endTime ;
+    private bool timerGoing ;
+    public EndGamePanel panel ;
+    public ArmySpawner enemySpawner;
 
     private static GameState gamestate;
     MapGeneration gameMap;
@@ -23,7 +41,18 @@ public class GameState : MonoBehaviour
         gamestate = this;
         this.entities = new Dictionary<int, Entity>() ;
         this.territories = new Dictionary<int, Territory>() ;
+        
         InitGame(2);
+    }
+    void Update()
+    {
+        if (timerGoing)
+        {
+            this.elapsedTime += Time.deltaTime;
+            this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
+            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
+            time.SetText(timePlayingStr) ;
+        }
     }
 
     public static GameState GetGameState() 
@@ -32,8 +61,11 @@ public class GameState : MonoBehaviour
     }
 
     public void InitGame(int enemy_count) {
+
+        
         Destroy(gameMap?.gameObject);
         GameObject gameMapObj = Instantiate<GameObject>(gameMapPrefab);
+        
         gameMapObj.transform.parent = transform;
 
         gameMap = gameMapObj.GetComponent<MapGeneration>();
@@ -47,7 +79,11 @@ public class GameState : MonoBehaviour
 
         float h = 210 / 360f, s = 0.7f, v = 0.9f;
 
-        entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v)));
+        entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v))) ;
+        GameObject skillObj = Instantiate<GameObject>(skillPrefab) ;
+        player.skill = skillObj.GetComponent<Skill>() ;
+        skillObj.transform.parent = PopUpParent.transform ;
+        skillObj.transform.localPosition = new Vector3(-50, -115, 0);
         for (int i = 0; i < enemy_count; i++) {
             // h = UnityEngine.Random.Range(1f, 160f) / 360f;
             // entities.Add(new Enemy(i+1, Color.HSVToRGB(h, s, v)));
@@ -70,7 +106,33 @@ public class GameState : MonoBehaviour
             entity.home = shuffledterr[counter];
             counter++;
         }
+        this.timerGoing = true;
+        this.elapsedTime = 0.0f;
+        this.timePlaying = new TimeSpan();
     }
+
+    public void EndGame() {
+        this.timerGoing = false;
+        player.skill.start = false ;
+        this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
+        string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
+        UserData.gameStat.playcount ++ ;
+        UserData.gameStat.fastestEndTime = timeText;
+        UserData.gameStat.maxHp = player.skill.hp ; 
+        UserData.gameStat.maxSpeed = player.skill.speed;
+        UserData.gameStat.maxAtk = player.skill.atk;
+        panel.EndGame(timeText);    
+        //time.SetText("You Win!") ; 
+        Debug.Log("You Win !") ;
+    }
+
+    public void EnemyMove() {
+        for (int i = 1; i < this.entities.Count; i++)
+        {
+            enemySpawner.spawnEnemy(i);
+        }
+    }
+
     public GameState ResetGameState()
     {
         this.entities = new Dictionary<int, Entity>();
@@ -97,6 +159,14 @@ public class GameState : MonoBehaviour
     public void AddEntity(Entity entity)
     {
         entities.Add(entity.entityID, entity);
+    }
+    public void RemoveEntities(Entity entity) {
+        entities.Remove(entity.entityID) ;
+        if (this.entities.Count == 1) {
+            Debug.Log(this.entities.Count);
+            EndGame(); 
+        }
+        
     }
 
     public Territory GetTerrByID(int terrID)
