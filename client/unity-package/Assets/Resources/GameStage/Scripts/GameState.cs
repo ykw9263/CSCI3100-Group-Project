@@ -113,15 +113,13 @@ public class GameState : MonoBehaviour
     public void EndGame() {
         this.timerGoing = false;
         player.skill.start = false ;
-        UserData.playcount ++ ;
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
-        Debug.Log(this.timePlaying);
-        string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff") ;
-        Debug.Log(timeText);
-        UserData.fastestEndTime = timeText;
-        UserData.maxHp = player.skill.hp ;
-        UserData.maxSpeed = player.skill.speed;
-        UserData.maxAtk = player.skill.atk;
+        string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
+        UserData.GameStat.playcount ++ ;
+        UserData.GameStat.fastestEndTime = timeText;
+        UserData.GameStat.maxHp = player.skill.hp ; 
+        UserData.GameStat.maxSpeed = player.skill.speed;
+        UserData.GameStat.maxAtk = player.skill.atk;
         panel.EndGame(timeText);
         //time.SetText("You Win!") ; 
         Debug.Log("You Win !") ;

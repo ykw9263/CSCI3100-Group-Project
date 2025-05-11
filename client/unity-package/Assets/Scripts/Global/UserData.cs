@@ -6,11 +6,14 @@ using UnityEngine;
 public static class UserData
 {
     public static string username;
-    public static int playcount;
-    public static string fastestEndTime;
-    public static int maxHp;
-    public static int maxAtk;    
-    public static int maxSpeed;
+    public struct GameStat {
+        public static int playcount;
+        public static string fastestEndTime;
+        public static int maxHp;
+        public static int maxAtk;
+        public static int maxSpeed;
+    } 
+    
     private struct UserCred {
         public string refershToken ;
         public string accessToken ;
