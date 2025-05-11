@@ -16,7 +16,8 @@ const REG_CODE_EXPIRE = '15m';
 const SALT_ROUNDS = 10;
 
 const USERNAME_FORMAT = /^([\w.()]){4,20}$/;
-const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
+// const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
+const PASSWORD_FORMAT = /^(?=[\w]*[A-Z]).{8,16}$/;
 
 let DBwarp : IDBWarper = UserDatabase.getDB();
 

@@ -5,7 +5,8 @@ import UserDatabase, {IDBWarper, IStatementWarper} from '../modlues/userDatabase
 import AuthModule from '../modlues/auth';
 
 const USERNAME_FORMAT = /^([\w.()]){4,20}$/;
-const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
+// const PASSWORD_FORMAT = /^(?=[\w]*[A-Z])(?=[\w]*[0-9])(?=[\w]*[a-z]).{8,16}$/;
+const PASSWORD_FORMAT = /^(?=[\w]*[A-Z]).{8,16}$/;
 
 let DBwarp : IDBWarper = UserDatabase.getDB();
 
