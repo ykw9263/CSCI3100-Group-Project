@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using TMPro;
 using static UserData;
 //using System.Diagnostics;
+//using System.Diagnostics;
 
 public class GameState : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class GameState : MonoBehaviour
         {
             this.elapsedTime += Time.deltaTime;
             this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
-            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss'.'ff");
+            string timePlayingStr = "Time: " + timePlaying.ToString("mm':'ss");
             time.SetText(timePlayingStr) ;
         }
     }
@@ -115,21 +116,37 @@ public class GameState : MonoBehaviour
         this.timerGoing = false;
         player.skill.start = false ;
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
-        string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
-        UserData.gameStat.playcount ++ ;
-        UserData.gameStat.fastestEndTime = timeText;
-        UserData.gameStat.maxHp = player.skill.hp ; 
-        UserData.gameStat.maxSpeed = player.skill.speed;
-        UserData.gameStat.maxAtk = player.skill.atk;
-        panel.EndGame(timeText);    
+        string timeText = timePlaying.ToString("mm':'ss");
+        
+        UserData.gameStat.playCount ++ ;
+        if (UserData.gameStat.playCount == 1 || TimeSpan.Compare(UserData.gameStat.fastestEndTime, this.timePlaying) == 1 ) {
+            Debug.Log("Faster End Time") ;
+            Debug.Log(UserData.gameStat.fastestEndTime) ;
+            Debug.Log(this.timePlaying) ;
+            UserData.gameStat.fastestEndTime = this.timePlaying ;
+        }
+        if (UserData.gameStat.maxHp < player.skill.hp) {
+            UserData.gameStat.maxHp = player.skill.hp ;
+        }
+        if (UserData.gameStat.maxSpeed < player.skill.speed) {
+            UserData.gameStat.maxSpeed = player.skill.speed ;
+        }
+        
+        if (UserData.gameStat.maxAtk < player.skill.atk)
+        {
+            UserData.gameStat.maxAtk = player.skill.atk;
+        }
+        panel.EndGame(timeText);
         //time.SetText("You Win!") ; 
-        Debug.Log("You Win !") ;
+        //Debug.Log("You Win !") ;
     }
 
     public void EnemyMove() {
-        for (int i = 1; i < this.entities.Count; i++)
+        foreach (var ent in entities)
         {
-            enemySpawner.spawnEnemy(i);
+            if (ent.Key == 0) continue;
+            enemySpawner.spawnEnemy(ent.Key);
+
         }
     }
 
@@ -160,13 +177,13 @@ public class GameState : MonoBehaviour
     {
         entities.Add(entity.entityID, entity);
     }
+
     public void RemoveEntities(Entity entity) {
         entities.Remove(entity.entityID) ;
         if (this.entities.Count == 1) {
             Debug.Log(this.entities.Count);
             EndGame(); 
-        }
-        
+        }    
     }
 
     public Territory GetTerrByID(int terrID)

@@ -176,7 +176,7 @@ public abstract class Army : MonoBehaviour
     }
 
     public void OwnerFall() {
-        Debug.Log("OwnerFall");
+        //Debug.Log("OwnerFall");
         Destroy(this.gameObject) ;
     }
 

@@ -11,8 +11,9 @@ public class EndGamePanel : MonoBehaviour
     // Start is called before the first frame update
     public void EndGame(string endTime) {
         gameObject.SetActive(true);
-        Debug.Log(endTime) ;
-        text.text =   endTime;
+        string timeText = "Conquer the World in " + endTime ;
+        Debug.Log(timeText) ;
+        text.text =   timeText ;
         GameCanva.SetActive(false);
     }
     public void ExitButton() {

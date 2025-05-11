@@ -44,6 +44,12 @@ public class Buttons : MonoBehaviour
             case "Settings Button":
                 _gameManager.SwitchSettings();
                 break;
+            case "Achievements Button":
+                _gameManager.SwitchAchievements();
+                break;
+            case "Achievements Back MM Button":
+                _gameManager.AchievementsSwitchMM();
+                break;
             case "Exit Button":
                 _gameManager.Exit();
                 break;
