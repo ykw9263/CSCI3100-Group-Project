@@ -94,7 +94,8 @@ public static class UserData
     public static void SetGameStat(string jsonfied) {
         if (jsonfied == null) return;
         try {
-            JsonUtility.FromJson<GameStat>(jsonfied);
+            GameStat newgs = JsonUtility.FromJson<GameStat>(jsonfied);
+            if (newgs == null) return;
             gameStat = JsonUtility.FromJson<GameStat>(jsonfied);
         }
         catch (Exception ex)

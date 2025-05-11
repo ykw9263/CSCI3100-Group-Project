@@ -377,13 +377,3 @@ async function handleAccountsPost(req: any, res: any){
 }
 
 export default {handleAccountsPost};
-
-function debugDeleteUserData(){
-    let debugStmt = DBwarp.makePstmt(
-        "DELETE FROM userdata"
-    );
-    console.debug(debugStmt.run())
-
-}
-
-debugDeleteUserData();
