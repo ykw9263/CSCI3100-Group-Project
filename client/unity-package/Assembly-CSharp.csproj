@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\MainMenu\Account\Achievement.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Account\ResetPWPanel.cs" />
     <Compile Include="Assets\Scripts\MainMenu\GameManager.cs" />
+    <Compile Include="Assets\Unity.VisualScripting.Generated\VisualScripting.Core\AotStubs.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Achievements.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\InputEventsHandler.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\ArmySpawner.cs" />

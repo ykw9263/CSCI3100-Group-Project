@@ -61,6 +61,10 @@ let newVerifyCodeStmt : IStatementWarper = DBwarp.makePstmt(
     "INSERT INTO verifycode VALUES (?, ?, ?, ?)"
 );
 
+let checkExistingEmailStmt : IStatementWarper = DBwarp.makePstmt(
+    "SELECT email FROM accounts \
+    WHERE email = ?"
+);
 
 let checkUserEmailStmt : IStatementWarper = DBwarp.makePstmt(
     "SELECT userID AS userid, username, email FROM accounts \
@@ -78,8 +82,12 @@ async function userVerifyEmail(req: any, res: any){
     if(!USERNAME_FORMAT.test(username) || !IsEmail(email)){
         return res.status(400).json({ 'message': 'Incorrect Username/Email format' });
     }
+    
     try {
-        
+        if (checkExistingEmailStmt.get(email)?.email){
+            return res.status(400).json({ 'message': 'Email already used!' });
+        }
+
         let iat = (Date.now()/1000)|0;
         let exp = iat + ms(REG_CODE_EXPIRE)/1000;
         let token = crypto.randomInt(1e5, 1e6);

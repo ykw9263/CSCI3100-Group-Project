@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip BGM;
     public AudioClip ButtonClick;
 
+    public static AudioManager audioManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,14 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (audioManager == null)
+        {
+            audioManager = this;
+            DontDestroyOnLoad(this);
+        }
+        else {
+            Destroy(this.gameObject);
+        }
     }
 
     public void PlaySFX(AudioClip clip)
