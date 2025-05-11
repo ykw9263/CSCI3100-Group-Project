@@ -72,6 +72,12 @@ public static class UserData
     {
         gameStat.playcount++;
     }
+
+    public static void ResetGameStat() {
+        gameStat = new();
+        Debug.Log("GameStat Resetted: "+ gameStat);
+    }
+
     public static void SetGameStat(
         double fastestEndTime,
         int maxHp,

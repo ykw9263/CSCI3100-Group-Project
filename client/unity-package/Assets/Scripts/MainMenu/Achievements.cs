@@ -15,7 +15,7 @@ public class Achievements : MonoBehaviour
     [SerializeField] TextMeshProUGUI maxSpeed ;
     [SerializeField] TextMeshProUGUI maxAtk;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         UserData.GameStat gameStat = UserData.GetGameStat();
         playCount.SetText( $"Play Count : {gameStat.playcount.ToString()}" ) ;

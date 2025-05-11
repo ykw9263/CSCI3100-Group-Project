@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         if (UserData.GetRefreshToken()?.Length > 0)
         { 
             _loginFlag = true;
-            SwitchMainMenu() ;
+            SwitchWelcomePanel() ;
         }
 
         // ResetEmail.onEndEdit.AddListener(ForgetPassword);
@@ -47,6 +47,9 @@ public class GameManager : MonoBehaviour
         ForgetPasswordPanel.SetActive(false);
         ActivationPanel.SetActive(false);
         MainMenu.SetActive(false);
+        Settings.SetActive(false);
+        Achievements.SetActive(false);
+        RegisterPanel.gameObject.SetActive(false);
         if (UserData.GetRefreshToken()?.Length > 0)
         {
             if (UserData.Activated)
@@ -77,9 +80,13 @@ public class GameManager : MonoBehaviour
                 ID.text = "Welcome, \n" + UserData.username;
                 MainMenu.gameObject.SetActive(true);
             }
-            else {
+            else
+            {
                 ActivationPanel.SetActive(true);
             }
+        }
+        else {
+            WelcomePanel.gameObject.SetActive(true);
         }
     }
 
@@ -242,6 +249,6 @@ public class GameManager : MonoBehaviour
 
     public void Back()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SwitchWelcomePanel();
     }
 }

@@ -4,17 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Text.RegularExpressions;
+using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
+    [SerializeField] private AudioMixer Mixer;
+    [SerializeField] private Slider MusicSlider;
+    [SerializeField] private Slider SFXSlider;
     public TMP_Dropdown ResolutionDropdown;
     public TextMeshProUGUI UsernameUsedMsg, UsernameInvalidFormatMsg;
     public TMP_InputField NewUsername;
     Resolution[] Resolutions;
 
+    private GameManager _gameManager;
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
         Resolutions = Screen.resolutions;
         ResolutionDropdown.ClearOptions();
         List<string> Options = new List<string>();
@@ -33,20 +40,24 @@ public class Settings : MonoBehaviour
         ResolutionDropdown.RefreshShownValue();
 
         NewUsername.onEndEdit.AddListener(EditUsername);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //_gameManager.Settings.gameObject.SetActive(true);
+        //if (PlayerPrefs.HasKey("Music Volume") || PlayerPrefs.HasKey("SFX Volume"))
+        //{
+        //    MusicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+        //    SFXSlider.value = PlayerPrefs.GetFloat("SFX Volume");
+        //}
+        //SetMusicVolume();
+        //SetSFXVolume();
+        //_gameManager.Settings.gameObject.SetActive(false);
     }
-
 
     public void SetEnemyCount(int EnemyCount)
     {
         UserData.gameSetting.enemyCount = EnemyCount+1;
         Debug.Log("enemy count" +UserData.gameSetting.enemyCount);
     }
+
 
     public void SetSolution (int ResolutionIndex)
     {
@@ -74,5 +85,30 @@ public class Settings : MonoBehaviour
             UsernameUsedMsg.gameObject.SetActive(false);
             UsernameInvalidFormatMsg.gameObject.SetActive(false);
         }
+    }
+
+    public void SetMusicVolume()
+    {
+        float volume = MusicSlider.value;
+        Mixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("Music Volume", volume);
+    }
+
+    public void SetSFXVolume()
+    {
+        float volume = SFXSlider.value;
+        Mixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("SFX Volume", volume);
+    }
+
+    public void InitializeVolume()
+    {
+        if (PlayerPrefs.HasKey("Music Volume") || PlayerPrefs.HasKey("SFX Volume"))
+        {
+            MusicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+            SFXSlider.value = PlayerPrefs.GetFloat("SFX Volume");
+        }
+        SetMusicVolume();
+        SetSFXVolume();
     }
 }

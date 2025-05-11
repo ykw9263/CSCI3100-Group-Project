@@ -72,6 +72,7 @@
     <Compile Include="Assets\Resources\GameStage\Scripts\UI\DragPopup.cs" />
     <Compile Include="Assets\InputSystem_Actions.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Account\Logout.cs" />
+    <Compile Include="Assets\Scripts\Global\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Global\UserData.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\CameraEvents\CameraBorder.cs" />
     <Compile Include="Assets\Resources\GameStage\Scripts\Utils\ClickEventSubscriptor.cs" />

@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Buttons : MonoBehaviour
 {
     private GameManager _gameManager;
     private Button button;
+    private AudioManager _audioManager;
     // Start is called before the first frame update
     void Start()
     {
         button = GetComponent<Button>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _audioManager = GameObject.Find("Audio Manager").GetComponent<AudioManager>();
         button.onClick.AddListener(_panelSelect);
     }
 
@@ -25,6 +25,7 @@ public class Buttons : MonoBehaviour
 
     private void _panelSelect()
     {
+        _audioManager.PlaySFX(_audioManager.ButtonClick);
         switch (button.name)
         {
             case "Login Button":
@@ -72,7 +73,6 @@ public class Buttons : MonoBehaviour
             case "GamePlay Button":
                 _gameManager.SwitchGamePlaySetting();
                 break;
-                
             default:
                 break;
         }

@@ -12,7 +12,9 @@ public class Logout : MonoBehaviour
             UserData.username, UserData.GetRefreshToken(),
             (GameServerApi.ServerResponse resobj, bool result) => {
                 UserData.SetRefreshToken("");
+                UserData.SetAccessToken("");
                 UserData.username = null;
+                UserData.ResetGameStat();
                 gameManager.SwitchWelcomePanel();
             }
         ));
