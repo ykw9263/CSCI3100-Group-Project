@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4000011028196368}
   - component: {fileID: 95000011895321844}
   - component: {fileID: 6376669203586838405}
-  - component: {fileID: 7677130108094056455}
   - component: {fileID: -2118501409151339194}
   - component: {fileID: 4345161717012731590}
   - component: {fileID: -351390688522333735}
+  - component: {fileID: 2141450723602756250}
   m_Layer: 9
   m_Name: SimpleKnight
   m_TagString: ArmyObj
@@ -132,32 +132,6 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
---- !u!114 &7677130108094056455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000010755293042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d33ef08752bd5ee4e855befcd3947b60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderSprite: {fileID: 4920965244318345934}
-  curPathObject: {fileID: 753587841786200922}
-  popupObject: {fileID: 158747387056199212}
-  planPathObject: {fileID: 2505971751041687696}
-  ownerID: 0
-  count: 5
-  cur_pos: {x: 0, y: 0, z: 0}
-  des_pos: {x: 0, y: 0, z: 0}
-  planned_des_pos: {x: 0, y: 0, z: 0}
-  des_terrID: -1
-  is_traveling: 0
-  finished_traveling: 1
-  attackTarget: []
-  isDead: 0
 --- !u!60 &-2118501409151339194
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -270,6 +244,32 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2141450723602756250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010755293042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d33ef08752bd5ee4e855befcd3947b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderSprite: {fileID: 4920965244318345934}
+  curPathObject: {fileID: 753587841786200922}
+  popupObject: {fileID: 158747387056199212}
+  planPathObject: {fileID: 2505971751041687696}
+  ownerID: 0
+  count: 0
+  cur_pos: {x: 0, y: 0, z: 0}
+  des_pos: {x: 0, y: 0, z: 0}
+  planned_des_pos: {x: 0, y: 0, z: 0}
+  des_terrID: -1
+  is_traveling: 0
+  finished_traveling: 1
+  attackTarget: []
+  isDead: 0
 --- !u!1 &1000011164445256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,8 +1132,8 @@ GameObject:
   m_Component:
   - component: {fileID: 65697543683862477}
   - component: {fileID: 6509822950037192552}
-  - component: {fileID: 1141056295249694078}
   - component: {fileID: 404643274473061791}
+  - component: {fileID: 7809961885957087933}
   m_Layer: 10
   m_Name: AttackCollider
   m_TagString: Untagged
@@ -1191,18 +1191,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2
---- !u!114 &1141056295249694078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536168672407156019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6463ff319d5b2a4ab102b56bb6a9d6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &404643274473061791
 Rigidbody2D:
   serializedVersion: 4
@@ -1230,6 +1218,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7809961885957087933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1536168672407156019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6463ff319d5b2a4ab102b56bb6a9d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2505971751041687696
 GameObject:
   m_ObjectHideFlags: 0

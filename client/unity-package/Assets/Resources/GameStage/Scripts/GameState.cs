@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
-using static UserData;
+using Unity.Mathematics;
 //using System.Diagnostics;
 
 public class GameState : MonoBehaviour
@@ -82,8 +82,9 @@ public class GameState : MonoBehaviour
         entities.Add(0, player = new Player(0, Color.HSVToRGB(h, s, v))) ;
         GameObject skillObj = Instantiate<GameObject>(skillPrefab) ;
         player.skill = skillObj.GetComponent<Skill>() ;
-        skillObj.transform.parent = PopUpParent.transform ;
-        skillObj.transform.localPosition = new Vector3(-50, -115, 0);
+        skillObj.transform.SetParent(PopUpParent.transform, false);
+        //skillObj.transform.localPosition = new Vector3(-50, -115, 0);
+
         for (int i = 0; i < enemy_count; i++) {
             // h = UnityEngine.Random.Range(1f, 160f) / 360f;
             // entities.Add(new Enemy(i+1, Color.HSVToRGB(h, s, v)));
@@ -116,20 +117,21 @@ public class GameState : MonoBehaviour
         player.skill.start = false ;
         this.timePlaying = TimeSpan.FromSeconds(elapsedTime);
         string timeText = "Conquer the World in " + timePlaying.ToString("mm':'ss'.'ff");
-        UserData.gameStat.playcount ++ ;
-        UserData.gameStat.fastestEndTime = timeText;
-        UserData.gameStat.maxHp = player.skill.hp ; 
-        UserData.gameStat.maxSpeed = player.skill.speed;
-        UserData.gameStat.maxAtk = player.skill.atk;
+        
+        UserData.SetGameStat(timePlaying.TotalMilliseconds, player.skill.maxHp, player.skill.maxSpeed, player.skill.maxAtk);
+        UserData.IncrementPlayCount();
         panel.EndGame(timeText);    
         //time.SetText("You Win!") ; 
         Debug.Log("You Win !") ;
+        
     }
 
     public void EnemyMove() {
-        for (int i = 1; i < this.entities.Count; i++)
+        foreach(var ent in entities)
         {
-            enemySpawner.spawnEnemy(i);
+            if (ent.Key == 0) continue;
+            enemySpawner.spawnEnemy(ent.Key);
+
         }
     }
 

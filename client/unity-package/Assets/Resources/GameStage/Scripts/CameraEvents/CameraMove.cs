@@ -20,6 +20,7 @@ public class CameraMove : MonoBehaviour
     void Start()
     {
         cameraComp = this.GetComponent<Camera>();
+        MoveCamera(Vector3.zero);
     }
     // Update is called once per frame
     void Update()

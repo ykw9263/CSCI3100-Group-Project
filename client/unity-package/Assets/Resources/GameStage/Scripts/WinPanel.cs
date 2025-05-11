@@ -10,8 +10,12 @@ public class EndGamePanel : MonoBehaviour
     public Text text;  
     // Start is called before the first frame update
     public void EndGame(string endTime) {
+
         gameObject.SetActive(true);
-        Debug.Log(endTime) ;
+        Debug.Log(endTime);
+        string userDataJson = JsonUtility.ToJson(UserData.GetGameStat());
+        StartCoroutine(GameServerApi.SyncData(UserData.username, userDataJson, UserData.GetAccessToken()));
+
         text.text =   endTime;
         GameCanva.SetActive(false);
     }

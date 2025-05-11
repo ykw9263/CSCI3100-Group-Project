@@ -29,7 +29,7 @@ public abstract class Army : MonoBehaviour
     public stats info;
 
     public int count;
-    public Vector3 cur_pos, des_pos, planned_des_pos;
+    public Vector3 cur_pos, des_pos, planned_des_pos = Vector3.zero;
     public int des_terrID = -1;
     public bool is_traveling = false;
     public bool finished_traveling = true;
@@ -120,6 +120,7 @@ public abstract class Army : MonoBehaviour
 
     public void PlanDestination(Vector2 des_pos, bool valid)
     {
+        if (planPathObject == null) return;
         this.planned_des_pos = (Vector3)des_pos;
         Vector3 displacement = this.planned_des_pos - cur_pos;
 
@@ -134,6 +135,7 @@ public abstract class Army : MonoBehaviour
 
     public void CommitPlanDestination(Territory terr, bool commit) {
         //Debug.Log("commit plan destination" + commit);
+        if (planPathObject == null || planned_des_pos.Equals(Vector3.zero)) return;
         planPathObject.SetActive(false);
         if (commit && terr!= null)
         {

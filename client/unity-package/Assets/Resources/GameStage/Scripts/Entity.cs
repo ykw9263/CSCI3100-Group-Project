@@ -52,16 +52,24 @@ public abstract class Entity
         
         territories_in_Controls.Remove(terr);
         if (terr == home) 
-        {    
+        {
             //Debug.Log($"Enemy {this.entityID} falls");
-            
-            foreach (Army troops in this.army) {
-                troops.OwnerFall();
+            int tempArmyCount = army.Count;
+            for (int i = 0; i < tempArmyCount; i++) {
+                Army tempArmy = army[0];
+                tempArmy.OwnerFall();
+                army.Remove(tempArmy);
             }
-            foreach (Territory territory in this.territories_in_Controls)
+            Debug.Log(army.Count);
+
+            int tempTerrCount = territories_in_Controls.Count;
+            for (int i = 0; i < tempTerrCount; i++)
             {
-                territory.FallTo(-1);
+                Territory teempTerr = territories_in_Controls[0];
+                teempTerr.FallTo(-1);
             }
+            Debug.Log(territories_in_Controls.Count);
+
             GameState.GetGameState().RemoveEntities(this); 
         }  
         

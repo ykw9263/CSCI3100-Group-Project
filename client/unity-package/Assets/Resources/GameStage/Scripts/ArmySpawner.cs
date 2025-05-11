@@ -64,10 +64,6 @@ public class ArmySpawner : MonoBehaviour
         soldier.info.hp = 3;
         soldier.info.speed =2; 
         soldier.count = 1;
-        foreach (Territory terr in ownerEnt.territories_in_Controls) 
-        {
-            Debug.Log(terr.coordinates);
-        }
         
         ownerEnt.AddArmy(soldier);
         //Debug.Log($"Owner : {soldier.owner.entityID}, type:{soldier} , owner :{soldier.owner} ") ;
