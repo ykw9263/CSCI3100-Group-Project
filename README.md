@@ -4,20 +4,30 @@ The evil-minded lecturer Kei Kaiju is seeking software to aid in his quest for w
 <br />“The Evil Conqueror” serves as a stragetic simulator game to let the players act as a country
 <br /> leader to develop their military power and expand their territory by invasion. 
 
-<br /> Players register and login their accounts to Play ! 
 
-<br /> Features : 1. GamePlay : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GameSpeed Adjustment , SkillPoint System , Attack & Conquer
-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Achievements : &nbsp;&nbsp;&nbsp;Historial playStats
-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Settings : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sound, Resolution, Enemy Count
+## How To Play
+Players register and login their accounts, then activate with a license key to play! <br> 
+Spawn armies, then drag and drop armies to conquer other territories. <br>
+Make upgrades to fight other forces! <br>
+When all enemies have their home fallen, your goal has been accomplished
+
+## Major game features
+|  Features     | Description |
+| -----------   | ----------- |
+| GamePlay | Game Speed Adjustment <br>Skill Point System <br>Attack & Conquer | 
+| Achievements | Historial play statistics | 
+| Settings | Sound, Resolution, Enemy Count |
 
 
+## Developement Infomation
+Language : English <br>
+OS : Windows 10 22H2 version or above <br>
+Build Engine : Unity 2022 LTS <br>
+Backend Framework : NodeJS v22.15.0 <br>
 
 
-<br />Language : English 
-<br />OS : Windows 10 22H2 version or above
-<br />Engine : Unity 2022 LTS
-
-Game Release Log :
-<br />version &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date
-<br />&nbsp;0.1.2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/05/2025  
+## Game Release Log :
+|  version     | Date | Link |
+| ---   | --- | --- |
+| 0.1.2 | 11/05/2025 |  [Release v0.1.2](https://github.com/ykw9263/CSCI3100-Group-Project/releases/tag/v0.1.2) |
 
