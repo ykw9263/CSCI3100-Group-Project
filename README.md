@@ -1,2 +1,3 @@
 # CSCI3100 Group Project
 ## WIP
+The evil-minded lecturer Kei Kaiju is seeking software to aid in his quest for world domination. This software includes a user interface accessible to users, which is a desktop application. There will be various interactions between the software and the user. The game application “The Evil Conqueror” serves as a simulator to let the user play as a country leader to develop their military power and expand their territory by invasion. The game application also provides an achievement function of what the user has achieved. The user finishes the game application by successfully invading all territories. It provides an abstract and simple idea how users can apply different strategies to dominate the world.
