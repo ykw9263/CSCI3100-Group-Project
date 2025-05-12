@@ -25,6 +25,10 @@ OS : Windows 10 22H2 version or above <br>
 Build Engine : Unity 2022 LTS <br>
 Backend Framework : NodeJS v22.15.0 <br>
 
+### Credits / References
+* [Delaunator C#](https://github.com/nol1fe/delaunator-sharp) By nol1fe for game map generation
+* [8Bit Music - 062022](https://assetstore.unity.com/packages/audio/music/8bit-music-062022-225623) By GWriterStudio for game BGM
+* [Free UI Click Sound Pack](https://assetstore.unity.com/packages/audio/sound-fx/free-ui-click-sound-pack-244644) By SwishSwoosh for click sound effect
 
 ## Game Release Log :
 |  version     | Date | Link |
