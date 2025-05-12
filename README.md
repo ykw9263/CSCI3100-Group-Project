@@ -1,3 +1,23 @@
-# CSCI3100 Group Project
-## WIP
-The evil-minded lecturer Kei Kaiju is seeking software to aid in his quest for world domination. This software includes a user interface accessible to users, which is a desktop application. There will be various interactions between the software and the user. The game application “The Evil Conqueror” serves as a simulator to let the user play as a country leader to develop their military power and expand their territory by invasion. The game application also provides an achievement function of what the user has achieved. The user finishes the game application by successfully invading all territories. It provides an abstract and simple idea how users can apply different strategies to dominate the world.
+# CSCI3100 Group Project --- Group C1
+## The Evil Conqueror  --- Stragetic Simulation Game
+The evil-minded lecturer Kei Kaiju is seeking software to aid in his quest for world domination. 
+<br />“The Evil Conqueror” serves as a stragetic simulator game to let the players act as a country
+<br /> leader to develop their military power and expand their territory by invasion. 
+
+<br /> Players register and login their accounts to Play ! 
+
+<br /> Features : 1. GamePlay : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GameSpeed Adjustment , SkillPoint System , Attack & Conquer
+<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Achievements : &nbsp;&nbsp;&nbsp;Historial playStats
+<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Settings : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sound, Resolution, Enemy Count
+
+
+
+
+<br />Language : English 
+<br />OS : Windows 10 22H2 version or above
+<br />Engine : Unity 2022 LTS
+
+Game Release Log :
+<br />version &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date
+<br />&nbsp;0.1.2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/05/2025  
+
