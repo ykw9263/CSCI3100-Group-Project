@@ -14,6 +14,7 @@ public class Logout : MonoBehaviour
                 UserData.SetRefreshToken("");
                 UserData.SetAccessToken("");
                 UserData.username = null;
+                UserData.ClearActivate();
                 UserData.ResetGameStat();
                 gameManager.SwitchWelcomePanel();
             }

@@ -49,6 +49,10 @@ public static class UserData
     public static void Activate() {
         Activated = true;
     }
+    public static void ClearActivate()
+    {
+        Activated = true;
+    }
 
     public static void SetAccessToken(string accessToken) {
         userCred.accessToken = accessToken;
