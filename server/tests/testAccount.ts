@@ -68,6 +68,7 @@ function testAccount(){
         let pwd = 'bbbAseHello123';
         let email = 'ccc';
         let regToken = AuthModule.createAccessToken(0, username, AuthModule.REG_TOKEN_ACTION);
+        let newpwd = 'NewPassword123';
 
         let req = new TestAccount.ReqStub();
         req.body = {
@@ -84,6 +85,34 @@ function testAccount(){
 
         req = new TestAccount.ReqStub();
         res = new TestAccount.ResStub();
+        
+        req.body = {
+            method: "reset",
+            username:username, pwd:pwd, accessToken: regToken, 
+            newpwd: newpwd
+        }
+        await test("Reset password", async ()=>{
+            await accountHandler.handleAccountsPost(req, res);
+            assert.ok(res.result.httpStatus == 200);
+        }).catch(()=>{throw Error()});;
+
+        req = new TestAccount.ReqStub();
+        res = new TestAccount.ResStub();
+        let accessToken2 = AuthModule.createAccessToken(0, username, AuthModule.RESTORE_TOKEN_ACTION);
+        req.body = {
+            method: "finishRestore", 
+            username:username, accessToken: accessToken2, newpwd: newpwd
+        };
+        await test("finishRestore", async ()=>{
+            await accountHandler.handleAccountsPost(req, res);
+            assert.ok(res.result.httpStatus == 200);
+        }).catch(()=>{throw Error()});;
+
+
+        req = new TestAccount.ReqStub();
+        res = new TestAccount.ResStub();
+        pwd = newpwd;
+
         req.body = {
             method: "login", 
             username:username, pwd:pwd
