@@ -30,4 +30,5 @@ Backend Framework : NodeJS v22.15.0 <br>
 |  version     | Date | Link |
 | ---   | --- | --- |
 | 0.1.2 | 11/05/2025 |  [Release v0.1.2](https://github.com/ykw9263/CSCI3100-Group-Project/releases/tag/v0.1.2) |
+| 0.1.3 | 12/05/2025 |  [Release v0.1.3](https://github.com/ykw9263/CSCI3100-Group-Project/releases/tag/v0.1.3) |
 
