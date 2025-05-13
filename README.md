@@ -9,7 +9,8 @@ The evil-minded lecturer Kei Kaiju is seeking software to aid in his quest for w
 Players register and login their accounts, then activate with a license key to play! <br> 
 Spawn armies, then drag and drop armies to conquer other territories. <br>
 Make upgrades to fight other forces! <br>
-When all enemies have their home fallen, your goal has been accomplished
+When all enemies have their home fallen, your goal has been accomplished <br>
+*Note: The client uses `localhost:8000` as the server address by default*
 
 ## Major game features
 |  Features     | Description |
